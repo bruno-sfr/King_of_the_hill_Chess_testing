@@ -21,31 +21,31 @@ public class Chessboard {
         Knight = new BitBoard(0x4200000000000042L);
     }
 
-    public boolean makeMove(int from, int to){
+    public boolean makeMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
-    public boolean PawnMove(int from, int to){
+    public boolean PawnMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
-    public boolean KingMove(int from, int to){
+    public boolean KingMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
-    public boolean QueenMove(int from, int to){
+    public boolean QueenMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
-    public boolean KnightMove(int from, int to){
+    public boolean KnightMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
-    public boolean BishopMove(int from, int to){
+    public boolean BishopMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
-    public boolean RookMove(int from, int to){
+    public boolean RookMove(boolean whiteTurn, int from, int to){
         return false;
     }
 
