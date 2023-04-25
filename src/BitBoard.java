@@ -43,9 +43,9 @@ public class BitBoard {
                 int square = rank * 8 + file;
                 System.out.print(formattedString.charAt(Math.abs(63-square)) + " ");
             }
-            System.out.println("|" + (char)('A' + rank));
+            System.out.println("|" + (rank + 1));
         }
         System.out.println("_______________");
-        System.out.println("1 2 3 4 5 6 7 8");
+        System.out.println("A B C D E F G H");
     }
 }

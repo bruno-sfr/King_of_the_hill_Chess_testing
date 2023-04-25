@@ -31,31 +31,101 @@ public class Chessboard {
         }
 
         boolean success = false;
+        BitBoard figureboard = new BitBoard();   //reference to board of the figure that is to be moved, to change position later
         if(figAtFrom){
             if(Pawn.isSquareSet(from)){
                 success = PawnMove(whiteTurn, from, to);
+                figureboard = Pawn;
             }
             else if(King.isSquareSet(from)){
-                success = PawnMove(whiteTurn, from, to);
+                success = KingMove(whiteTurn, from, to);
+                figureboard = King;
             }
             else if(Queen.isSquareSet(from)){
-                success = PawnMove(whiteTurn, from, to);
+                success = QueenMove(whiteTurn, from, to);
+                figureboard = Queen;
             }
             else if(Knight.isSquareSet(from)){
-                success = PawnMove(whiteTurn, from, to);
+                success = KnightMove(whiteTurn, from, to);
+                figureboard = Knight;
             }
             else if(Rook.isSquareSet(from)){
-                success = PawnMove(whiteTurn, from, to);
+                success = RookMove(whiteTurn, from, to);
+                figureboard = Rook;
             }
             else if(Bishop.isSquareSet(from)){
-                success = PawnMove(whiteTurn, from, to);
+                success = BishopMove(whiteTurn, from, to);
+                figureboard = Bishop;
             }
         }
         else {
             return false;
         }
 
-        return success;
+        if(success){
+            if(whiteTurn){
+                //white moves
+                if(Black.isSquareSet(to)){
+                    //capture black piece
+                    White.clearSquare(from);
+                    figureboard.clearSquare(from);
+                    White.setSquare(to);
+                    BitBoard enemyfig = whichFig(to);
+                    enemyfig.clearSquare(to);
+                    figureboard.setSquare(to);
+                    Black.clearSquare(to);
+                }else {
+                    //not a capture just move
+                    White.clearSquare(from);
+                    figureboard.clearSquare(from);
+                    White.setSquare(to);
+                    figureboard.setSquare(to);
+                }
+            }else {
+                //black moves
+                if(White.isSquareSet(to)){
+                    //capture black piece
+                    Black.clearSquare(from);
+                    figureboard.clearSquare(from);
+                    Black.setSquare(to);
+                    BitBoard enemyfig = whichFig(to);
+                    enemyfig.clearSquare(to);
+                    figureboard.setSquare(to);
+                    White.clearSquare(to);
+                }else {
+                    //not a capture just move
+                    Black.clearSquare(from);
+                    figureboard.clearSquare(from);
+                    Black.setSquare(to);
+                    figureboard.setSquare(to);
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public BitBoard whichFig(int field){
+        if(Pawn.isSquareSet(field)){
+            return Pawn;
+        }
+        else if(Knight.isSquareSet(field)){
+            return Knight;
+        }
+        else if(King.isSquareSet(field)){
+            return King;
+        }
+        else if(Queen.isSquareSet(field)){
+            return Queen;
+        }
+        else if(Bishop.isSquareSet(field)){
+            return Bishop;
+        }
+        else if(Rook.isSquareSet(field)){
+            return Rook;
+        }
+        return null;
     }
 
     public boolean PawnMove(boolean whiteTurn, int from, int to){
@@ -84,7 +154,24 @@ public class Chessboard {
     }
 
     public boolean KnightMove(boolean whiteTurn, int from, int to){
-        return false;
+        BitBoard nMoves = new BitBoard();
+        nMoves.setSquare(from+6);
+        nMoves.setSquare(from+10);
+        nMoves.setSquare(from+15);
+        nMoves.setSquare(from+17);
+        nMoves.setSquare(from-6);
+        nMoves.setSquare(from-10);
+        nMoves.setSquare(from-15);
+        nMoves.setSquare(from-17);
+        long possibleMoves;
+        if(whiteTurn){
+            possibleMoves = nMoves.getBoard() & ~White.getBoard();
+        }
+        else{
+            possibleMoves = nMoves.getBoard() & ~Black.getBoard();
+        }
+        BitBoard check = new BitBoard(possibleMoves);
+        return check.isSquareSet(to);
     }
 
     public boolean BishopMove(boolean whiteTurn, int from, int to){
@@ -191,10 +278,10 @@ public class Chessboard {
                 int square = rank * 8 + file;
                 System.out.print(Humanboard[63-square] + " ");
             }
-            System.out.println("|" + (char)('A' + rank));
+            System.out.println("|" + (rank + 1));
         }
         System.out.println("_______________");
-        System.out.println("1 2 3 4 5 6 7 8");
+        System.out.println("A B C D E F G H");
 
     }
 }
