@@ -15,5 +15,20 @@ public class Main {
         board.printBoard();
         System.out.println(board.makeMove(true,Positions.get(1),Positions.get(2)));
         board.printBoard();
+        Positions = ChessHelper.clacPos("e2,e3");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("f2,f4");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("f7,d6");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("e7,d6");
+        System.out.println(board.makeMove(false,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("d6,e5");
+        System.out.println(board.makeMove(false,Positions.get(0),Positions.get(1)));
+        board.printBoard();
     }
 }

@@ -10,7 +10,7 @@ public class ChessHelper {
         Matcher matcher = pattern.matcher(field);
         while (matcher.find()){
             String match = matcher.group();
-            System.out.println(match);
+            //System.out.println(match);
             char letter = match.charAt(0);
             int number = Character.getNumericValue(match.charAt(1));
             int pos = (letter - 'a') + (number-1) * 8;
