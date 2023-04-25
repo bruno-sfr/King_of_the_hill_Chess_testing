@@ -22,7 +22,40 @@ public class Chessboard {
     }
 
     public boolean makeMove(boolean whiteTurn, int from, int to){
-        return false;
+        boolean figAtFrom;
+        if(whiteTurn){
+            figAtFrom = White.isSquareSet(from);
+        }
+        else{
+            figAtFrom = Black.isSquareSet(from);
+        }
+
+        boolean success = false;
+        if(figAtFrom){
+            if(Pawn.isSquareSet(from)){
+                success = PawnMove(whiteTurn, from, to);
+            }
+            else if(King.isSquareSet(from)){
+                success = PawnMove(whiteTurn, from, to);
+            }
+            else if(Queen.isSquareSet(from)){
+                success = PawnMove(whiteTurn, from, to);
+            }
+            else if(Knight.isSquareSet(from)){
+                success = PawnMove(whiteTurn, from, to);
+            }
+            else if(Rook.isSquareSet(from)){
+                success = PawnMove(whiteTurn, from, to);
+            }
+            else if(Bishop.isSquareSet(from)){
+                success = PawnMove(whiteTurn, from, to);
+            }
+        }
+        else {
+            return false;
+        }
+
+        return success;
     }
 
     public boolean PawnMove(boolean whiteTurn, int from, int to){
