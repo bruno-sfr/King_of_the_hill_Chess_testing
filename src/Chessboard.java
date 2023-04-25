@@ -21,6 +21,34 @@ public class Chessboard {
         Knight = new BitBoard(0x4200000000000042L);
     }
 
+    public boolean makeMove(int from, int to){
+        return false;
+    }
+
+    public boolean PawnMove(int from, int to){
+        return false;
+    }
+
+    public boolean KingMove(int from, int to){
+        return false;
+    }
+
+    public boolean QueenMove(int from, int to){
+        return false;
+    }
+
+    public boolean KnightMove(int from, int to){
+        return false;
+    }
+
+    public boolean BishopMove(int from, int to){
+        return false;
+    }
+
+    public boolean RookMove(int from, int to){
+        return false;
+    }
+
     public void printBoard(){
         /*
         System.out.println("Black");
