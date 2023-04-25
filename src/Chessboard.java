@@ -22,10 +22,24 @@ public class Chessboard {
     }
 
     public boolean makeMove(boolean whiteTurn, int from, int to){
+
         return false;
     }
 
     public boolean PawnMove(boolean whiteTurn, int from, int to){
+        //if pawn moves up one row -> true
+        if ((to - from) == 8)
+            if (!(Black.isSquareSet(to) || White.isSquareSet(to)))
+                return true;
+        //if pawn moves right diagonally and beats a piece -> return true
+        if (to - from == 9 && whiteTurn ? Black.isSquareSet(to) : White.isSquareSet(to) && !(from % 8 == 7))
+            return true;
+        //if pawn moves left diagonally and beats a piece -> return true
+        if (to - from == 7 && whiteTurn ? Black.isSquareSet(to) : White.isSquareSet(to) && !(from % 8 == 0))
+            return true;
+        //if pawn moves up by two, nothing is in the way and he is still on base line ->  return true
+        if (to - from == 16 && White.isSquareSet(from + 8) && Black.isSquareSet(from + 8) && White.isSquareSet(from) && Black.isSquareSet(from) && 8 <= from && from <= 15)
+            return true;
         return false;
     }
 
@@ -84,6 +98,7 @@ public class Chessboard {
         String _black_knights = black_knights.boardWithChar('n');
         String _black_bishop = black_bishop.boardWithChar('b');
         String _black_rook = black_rook.boardWithChar('r');
+        //White
         BitBoard white_pawns = new BitBoard(White.getBoard() & Pawn.getBoard());
         BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
         BitBoard white_queen = new BitBoard(White.getBoard() & Queen.getBoard());
@@ -96,6 +111,7 @@ public class Chessboard {
         String _white_knights = white_knights.boardWithChar('N');
         String _white_bishop = white_bishop.boardWithChar('B');
         String _white_rook = white_rook.boardWithChar('R');
+
         for(int i = 0;i<64;i++){
             if(_black_pawns.charAt(i)!='0'){
                 Humanboard[i] = _black_pawns.charAt(i);
