@@ -129,18 +129,27 @@ public class Chessboard {
     }
 
     public boolean PawnMove(boolean whiteTurn, int from, int to){
-        //if pawn moves up one row -> true
-        if ((to - from) == 8)
-            if (!(Black.isSquareSet(to) || White.isSquareSet(to)))
+        //if pawn moves up or down one row (in respect to color) -> true
+        if (((to - from) == 8 && whiteTurn) || (to - from) == -8 && !whiteTurn)
+            if (!Black.isSquareSet(to) && !White.isSquareSet(to))
                 return true;
-        //if pawn moves right diagonally and beats a piece -> return true
-        if (to - from == 9 && whiteTurn ? Black.isSquareSet(to) : White.isSquareSet(to) && !(from % 8 == 7))
+        //if white pawn moves right diagonally and beats a piece -> return true
+        if (to - from == 9 && Black.isSquareSet(to) && !(from % 8 == 7))
             return true;
-        //if pawn moves left diagonally and beats a piece -> return true
-        if (to - from == 7 && whiteTurn ? Black.isSquareSet(to) : White.isSquareSet(to) && !(from % 8 == 0))
+        //if white pawn moves left diagonally and beats a piece -> return true
+        if (to - from == 7 &&  Black.isSquareSet(to) && !(from % 8 == 0))
             return true;
-        //if pawn moves up by two, nothing is in the way and he is still on base line ->  return true
+        //if black pawn moves right diagonally and beats a piece -> return true
+        if (to - from == -7 && White.isSquareSet(to) && !(from % 8 == 7))
+            return true;
+        //if black pawn moves left diagonally and beats a piece -> return true
+        if (to - from == -9 &&  White.isSquareSet(to) && !(from % 8 == 0))
+            return true;
+        //if white pawn moves up by two, nothing is in the way and he is still on base line ->  return true
         if (to - from == 16 && !White.isSquareSet(from + 8) && !Black.isSquareSet(from + 8) && !White.isSquareSet(to) && !Black.isSquareSet(to) && 8 <= from && from <= 15)
+            return true;
+        //if black pawn moves up by two, nothing is in the way and he is still on base line ->  return true
+        if (to - from == -16 && !White.isSquareSet(from - 8) && !Black.isSquareSet(from - 8) && !White.isSquareSet(to) && !Black.isSquareSet(to) && 48 <= from && from <= 55)
             return true;
         return false;
     }

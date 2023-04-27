@@ -18,16 +18,18 @@ public class Main {
             if (input.equals("exit"))
                    break;
             LinkedList<Integer> move = ChessHelper.calcPos(input);
-            if (board.makeMove(true,move.get(0),move.get(1)))
+            if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
                 board.printBoard();
+                WhiteTurn = !WhiteTurn;
+            }
             else {
                 if (WhiteTurn) {
                     System.out.println("Invalid move provided. It's white's turn.");
                 } else {
                     System.out.println("Invalid move provided. It's black's turn.");
                 }
+                board.printBoard();
             }
         }
-
     }
 }
