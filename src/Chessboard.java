@@ -146,7 +146,20 @@ public class Chessboard {
     }
 
     public boolean KingMove(boolean whiteTurn, int from, int to){
-        return false;
+        BitBoard KingSet = new BitBoard();
+        KingSet.setSquare(from);
+        BitBoard KingAttacks = new BitBoard();
+        KingAttacks.setBoard(KingSet.getBoard() << 1 | KingSet.getBoard() >> 1);
+        KingSet.setBoard(KingSet.getBoard() | KingAttacks.getBoard());
+        KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8 | KingSet.getBoard() >> 8);
+        BitBoard possibleMoves = new BitBoard();
+        if(whiteTurn){
+            possibleMoves.setBoard(KingAttacks.getBoard() & ~White.getBoard());
+        }
+        else {
+            possibleMoves.setBoard(KingAttacks.getBoard() & ~Black.getBoard());
+        }
+        return possibleMoves.isSquareSet(to);
     }
 
     public boolean QueenMove(boolean whiteTurn, int from, int to){
