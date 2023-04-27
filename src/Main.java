@@ -4,10 +4,49 @@ public class Main {
     public static void main(String[] args) {
         Chessboard board = new Chessboard();
         board.printBoard();
-        LinkedList<Integer> Positions = ChessHelper.clacPos("g1,f3");
+        LinkedList<Integer> Positions = ChessHelper.clacPos("e2,e3");
         System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
         board.printBoard();
-        Positions = ChessHelper.clacPos("f3,e3");
+        Positions = ChessHelper.clacPos("d1,h5");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("f1,c4");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("h5,a5");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("c4,c5");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("h2,h3");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("h3,h4");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("h1,h3");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("h3,g4");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("h3,f3");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("a5,a8");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("a5,a7");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("a7,c7");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        Positions = ChessHelper.clacPos("a7,b7");
+        System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
+        board.printBoard();
+        /*Positions = ChessHelper.clacPos("f3,e3");
         System.out.println(board.makeMove(true,Positions.get(0),Positions.get(1)));
         board.printBoard();
         Positions = ChessHelper.clacPos("f3,g5,f7");
@@ -29,6 +68,6 @@ public class Main {
         board.printBoard();
         Positions = ChessHelper.clacPos("d6,e5");
         System.out.println(board.makeMove(false,Positions.get(0),Positions.get(1)));
-        board.printBoard();
+        board.printBoard();*/
     }
 }
