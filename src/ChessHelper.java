@@ -1,10 +1,9 @@
 import java.util.LinkedList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChessHelper {
-    public static LinkedList<Integer> clacPos(String field){
+    public static LinkedList<Integer> calcPos(String field){
         LinkedList<Integer> Positions = new LinkedList<Integer>();
         Pattern pattern = Pattern.compile("([a-h][1-8])");
         Matcher matcher = pattern.matcher(field);

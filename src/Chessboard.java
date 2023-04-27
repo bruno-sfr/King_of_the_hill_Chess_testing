@@ -140,7 +140,7 @@ public class Chessboard {
         if (to - from == 7 && whiteTurn ? Black.isSquareSet(to) : White.isSquareSet(to) && !(from % 8 == 0))
             return true;
         //if pawn moves up by two, nothing is in the way and he is still on base line ->  return true
-        if (to - from == 16 && White.isSquareSet(from + 8) && Black.isSquareSet(from + 8) && White.isSquareSet(from) && Black.isSquareSet(from) && 8 <= from && from <= 15)
+        if (to - from == 16 && !White.isSquareSet(from + 8) && !Black.isSquareSet(from + 8) && !White.isSquareSet(to) && !Black.isSquareSet(to) && 8 <= from && from <= 15)
             return true;
         return false;
     }
