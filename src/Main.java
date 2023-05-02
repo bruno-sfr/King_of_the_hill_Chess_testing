@@ -14,6 +14,7 @@ public class Main {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         while(true) {
+            System.out.println(board.isCheck(WhiteTurn));
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
