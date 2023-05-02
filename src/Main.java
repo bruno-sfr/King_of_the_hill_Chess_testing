@@ -14,7 +14,9 @@ public class Main {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         while(true) {
-            System.out.println(board.isCheck(WhiteTurn));
+            System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
+            System.out.println("Is check? " + board.isCheck(WhiteTurn));
+            System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
