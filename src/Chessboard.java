@@ -687,6 +687,8 @@ public class Chessboard {
             }
         }
 
+        System.out.println("A B C D E F G H");
+        System.out.println("‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾");
         for (int rank = 7; rank >= 0; rank--) {
             for (int file = 0; file < 8; file++) {
                 int square = rank * 8 + file;
