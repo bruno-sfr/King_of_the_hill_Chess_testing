@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class BitBoard {
     private long board;
 
@@ -10,19 +12,38 @@ public class BitBoard {
     }
 
     public void setSquare(int square) {
+        if(square > 63 | square < 0){
+            return;
+        }
         board |= (1L << square);
     }
 
     public void clearSquare(int square) {
+        if(square > 63 | square < 0){
+            return;
+        }
         board &= ~(1L << square);
     }
 
     public boolean isSquareSet(int square) {
+        if(square > 63 | square < 0){
+            return false;
+        }
         return ((board & (1L << square)) != 0);
     }
 
     public long getBoard() {
         return board;
+    }
+
+    public LinkedList<Integer> allSetSquares(){
+        LinkedList<Integer> list = new LinkedList<>();
+        for(int i=0; i<64; i++){
+            if(this.isSquareSet(i)) {
+                list.add(i);
+            }
+        }
+        return list;
     }
 
     public void setBoard(long board) {
