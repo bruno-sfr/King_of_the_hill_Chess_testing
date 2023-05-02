@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +5,7 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    static boolean WhiteTurn;
+    public static boolean WhiteTurn;
     public static void main(String[] args) throws IOException {
         Chessboard board = new Chessboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
         board.printBoard();
