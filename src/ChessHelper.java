@@ -17,4 +17,20 @@ public class ChessHelper {
         }
         return Positions;
     }
+
+    public static boolean isNorthBorder(int Pos){
+        return Pos>55;
+    }
+
+    public static boolean isSouthBorder(int Pos){
+        return Pos<8;
+    }
+
+    public static boolean isWestBorder(int Pos){
+        return Pos%8 == 0;
+    }
+
+    public static boolean isEastBorder(int Pos){
+        return Pos%8 == 7;
+    }
 }
