@@ -23,15 +23,22 @@ public class Chessboard {
 
     public boolean makeMove(boolean whiteTurn, int from, int to){
         boolean figAtFrom;
+        BitBoard Attacker;
+        BitBoard Defender;
         if(whiteTurn){
             figAtFrom = White.isSquareSet(from);
+            Attacker = White;
+            Defender = Black;
         }
         else{
             figAtFrom = Black.isSquareSet(from);
+            Attacker = Black;
+            Defender = White;
         }
 
         boolean success = false;
         BitBoard figureboard = new BitBoard();   //reference to board of the figure that is to be moved, to change position later
+        BitBoard possibleMoves;
         if(figAtFrom){
             if(Pawn.isSquareSet(from)){
                 success = PawnMove(whiteTurn, from, to);
@@ -42,19 +49,23 @@ public class Chessboard {
                 figureboard = King;
             }
             else if(Queen.isSquareSet(from)){
-                success = QueenMove(whiteTurn, from, to);
+                possibleMoves = QueenMove(whiteTurn, from, to, Attacker, Defender);
+                success = possibleMoves.isSquareSet(to);
                 figureboard = Queen;
             }
             else if(Knight.isSquareSet(from)){
-                success = KnightMove(whiteTurn, from, to);
+                possibleMoves = KnightMove(whiteTurn, from, to, Attacker, Defender);
+                success = possibleMoves.isSquareSet(to);
                 figureboard = Knight;
             }
             else if(Rook.isSquareSet(from)){
-                success = RookMove(whiteTurn, from, to);
+                possibleMoves = RookMove(whiteTurn, from, to, Attacker, Defender);
+                success = possibleMoves.isSquareSet(to);
                 figureboard = Rook;
             }
             else if(Bishop.isSquareSet(from)){
-                success = BishopMove(whiteTurn, from, to);
+                possibleMoves = BishopMove(whiteTurn, from, to, Attacker, Defender);
+                success = possibleMoves.isSquareSet(to);
                 figureboard = Bishop;
             }
         }
@@ -171,205 +182,106 @@ public class Chessboard {
         return possibleMoves.isSquareSet(to);
     }
 
-    public boolean QueenMove(boolean whiteTurn, int from, int to){
+    public BitBoard QueenMove(boolean whiteTurn, int from, int to, BitBoard Attacker, BitBoard Defender){
         BitBoard possibleMoves = new BitBoard();
-        if(whiteTurn){
-            //west direction so a change of -1
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i)){
-                    break;
-                } else if (Black.isSquareSet(from-i)) {
-                    possibleMoves.setSquare(from-i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i);
-                }
-            }
-
-            //east direction so a change of +1
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i)){
-                    break;
-                } else if (Black.isSquareSet(from+i)) {
-                    possibleMoves.setSquare(from+i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i);
-                }
-            }
-
-            //south direction so a change of -8
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i*8)){
-                    break;
-                } else if (Black.isSquareSet(from-i*8)) {
-                    possibleMoves.setSquare(from-i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*8);
-                }
-            }
-
-            //north direction so a change of +8
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i*8)){
-                    break;
-                } else if (Black.isSquareSet(from+i*8)) {
-                    possibleMoves.setSquare(from+i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*8);
-                }
-            }
-            //north-west direction so a change of +7
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i*7)){
-                    break;
-                } else if (Black.isSquareSet(from+i*7)) {
-                    possibleMoves.setSquare(from+i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*7);
-                }
-            }
-
-            //north-east direction so a change of +9
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i*9)){
-                    break;
-                } else if (Black.isSquareSet(from+i*9)) {
-                    possibleMoves.setSquare(from+i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*9);
-                }
-            }
-
-            //south-west direction so a change of -9
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i*9)){
-                    break;
-                } else if (Black.isSquareSet(from-i*9)) {
-                    possibleMoves.setSquare(from-i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*9);
-                }
-            }
-
-            //south-east direction so a change of -7
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i*7)){
-                    break;
-                } else if (Black.isSquareSet(from-i*7)) {
-                    possibleMoves.setSquare(from-i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*7);
-                }
+        //west direction so a change of -1
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i)){
+                break;
+            } else if (Defender.isSquareSet(from-i)) {
+                possibleMoves.setSquare(from-i);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i);
             }
         }
-        else {
-            //west direction so a change of -1
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i)){
-                    break;
-                } else if (White.isSquareSet(from-i)) {
-                    possibleMoves.setSquare(from-i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i);
-                }
-            }
 
-            //east direction so a change of +1
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i)){
-                    break;
-                } else if (White.isSquareSet(from+i)) {
-                    possibleMoves.setSquare(from+i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i);
-                }
-            }
-
-            //south direction so a change of -8
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i*8)){
-                    break;
-                } else if (White.isSquareSet(from-i*8)) {
-                    possibleMoves.setSquare(from-i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*8);
-                }
-            }
-
-            //north direction so a change of +8
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i*8)){
-                    break;
-                } else if (White.isSquareSet(from+i*8)) {
-                    possibleMoves.setSquare(from+i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*8);
-                }
-            }
-
-            //north-west direction so a change of +7
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i*7)){
-                    break;
-                } else if (White.isSquareSet(from+i*7)) {
-                    possibleMoves.setSquare(from+i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*7);
-                }
-            }
-
-            //north-east direction so a change of +9
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i*9)){
-                    break;
-                } else if (White.isSquareSet(from+i*9)) {
-                    possibleMoves.setSquare(from+i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*9);
-                }
-            }
-
-            //south-west direction so a change of -9
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i*9)){
-                    break;
-                } else if (White.isSquareSet(from-i*9)) {
-                    possibleMoves.setSquare(from-i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*9);
-                }
-            }
-
-            //south-east direction so a change of -7
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i*7)){
-                    break;
-                } else if (White.isSquareSet(from-i*7)) {
-                    possibleMoves.setSquare(from-i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*7);
-                }
+        //east direction so a change of +1
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i)){
+                break;
+            } else if (Defender.isSquareSet(from+i)) {
+                possibleMoves.setSquare(from+i);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i);
             }
         }
-        return possibleMoves.isSquareSet(to);
+
+        //south direction so a change of -8
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i*8)){
+                break;
+            } else if (Defender.isSquareSet(from-i*8)) {
+                possibleMoves.setSquare(from-i*8);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i*8);
+            }
+        }
+
+        //north direction so a change of +8
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i*8)){
+                break;
+            } else if (Defender.isSquareSet(from+i*8)) {
+                possibleMoves.setSquare(from+i*8);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i*8);
+            }
+        }
+        //north-west direction so a change of +7
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i*7)){
+                break;
+            } else if (Defender.isSquareSet(from+i*7)) {
+                possibleMoves.setSquare(from+i*7);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i*7);
+            }
+        }
+
+        //north-east direction so a change of +9
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i*9)){
+                break;
+            } else if (Defender.isSquareSet(from+i*9)) {
+                possibleMoves.setSquare(from+i*9);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i*9);
+            }
+        }
+
+        //south-west direction so a change of -9
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i*9)){
+                break;
+            } else if (Defender.isSquareSet(from-i*9)) {
+                possibleMoves.setSquare(from-i*9);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i*9);
+            }
+        }
+
+        //south-east direction so a change of -7
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i*7)){
+                break;
+            } else if (Defender.isSquareSet(from-i*7)) {
+                possibleMoves.setSquare(from-i*7);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i*7);
+            }
+        }
+        return possibleMoves;
     }
 
-    public boolean KnightMove(boolean whiteTurn, int from, int to){
+    public BitBoard KnightMove(boolean whiteTurn, int from, int to, BitBoard Attacker, BitBoard Defender){
         BitBoard nMoves = new BitBoard();
         nMoves.setSquare(from+6);
         nMoves.setSquare(from+10);
@@ -380,220 +292,112 @@ public class Chessboard {
         nMoves.setSquare(from-15);
         nMoves.setSquare(from-17);
         long possibleMoves;
-        if(whiteTurn){
-            possibleMoves = nMoves.getBoard() & ~White.getBoard();
-        }
-        else{
-            possibleMoves = nMoves.getBoard() & ~Black.getBoard();
-        }
-        BitBoard check = new BitBoard(possibleMoves);
-        return check.isSquareSet(to);
+        possibleMoves = nMoves.getBoard() & ~Attacker.getBoard();
+        return new BitBoard(possibleMoves);
     }
 
-    public boolean BishopMove(boolean whiteTurn, int from, int to){
+    public BitBoard BishopMove(boolean whiteTurn, int from, int to, BitBoard Attacker, BitBoard Defender){
         BitBoard possibleMoves = new BitBoard();
-        if(whiteTurn){
-            //north-west direction so a change of +7
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i*7)){
-                    break;
-                } else if (Black.isSquareSet(from+i*7)) {
-                    possibleMoves.setSquare(from+i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*7);
-                }
-            }
-
-            //north-east direction so a change of +9
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i*9)){
-                    break;
-                } else if (Black.isSquareSet(from+i*9)) {
-                    possibleMoves.setSquare(from+i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*9);
-                }
-            }
-
-            //south-west direction so a change of -9
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i*9)){
-                    break;
-                } else if (Black.isSquareSet(from-i*9)) {
-                    possibleMoves.setSquare(from-i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*9);
-                }
-            }
-
-            //south-east direction so a change of -7
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i*7)){
-                    break;
-                } else if (Black.isSquareSet(from-i*7)) {
-                    possibleMoves.setSquare(from-i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*7);
-                }
+        //north-west direction so a change of +7
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i*7)){
+                break;
+            } else if (Defender.isSquareSet(from+i*7)) {
+                possibleMoves.setSquare(from+i*7);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i*7);
             }
         }
-        else{
-            //north-west direction so a change of +7
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i*7)){
-                    break;
-                } else if (White.isSquareSet(from+i*7)) {
-                    possibleMoves.setSquare(from+i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*7);
-                }
-            }
 
-            //north-east direction so a change of +9
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i*9)){
-                    break;
-                } else if (White.isSquareSet(from+i*9)) {
-                    possibleMoves.setSquare(from+i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*9);
-                }
-            }
-
-            //south-west direction so a change of -9
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i*9)){
-                    break;
-                } else if (White.isSquareSet(from-i*9)) {
-                    possibleMoves.setSquare(from-i*9);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*9);
-                }
-            }
-
-            //south-east direction so a change of -7
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i*7)){
-                    break;
-                } else if (White.isSquareSet(from-i*7)) {
-                    possibleMoves.setSquare(from-i*7);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*7);
-                }
+        //north-east direction so a change of +9
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i*9)){
+                break;
+            } else if (Defender.isSquareSet(from+i*9)) {
+                possibleMoves.setSquare(from+i*9);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i*9);
             }
         }
-        return possibleMoves.isSquareSet(to);
+
+        //south-west direction so a change of -9
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i*9)){
+                break;
+            } else if (Defender.isSquareSet(from-i*9)) {
+                possibleMoves.setSquare(from-i*9);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i*9);
+            }
+        }
+
+        //south-east direction so a change of -7
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i*7)){
+                break;
+            } else if (Defender.isSquareSet(from-i*7)) {
+                possibleMoves.setSquare(from-i*7);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i*7);
+            }
+        }
+        return possibleMoves;
     }
 
-    public boolean RookMove(boolean whiteTurn, int from, int to){
+    public BitBoard RookMove(boolean whiteTurn, int from, int to, BitBoard Attacker, BitBoard Defender){
         BitBoard possibleMoves = new BitBoard();
-        if(whiteTurn){
-            //west direction so a change of -1
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i)){
-                    break;
-                } else if (Black.isSquareSet(from-i)) {
-                    possibleMoves.setSquare(from-i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i);
-                }
-            }
-
-            //east direction so a change of +1
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i)){
-                    break;
-                } else if (Black.isSquareSet(from+i)) {
-                    possibleMoves.setSquare(from+i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i);
-                }
-            }
-
-            //south direction so a change of -8
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from-i*8)){
-                    break;
-                } else if (Black.isSquareSet(from-i*8)) {
-                    possibleMoves.setSquare(from-i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*8);
-                }
-            }
-
-            //north direction so a change of +8
-            for(int i=1;i<8;i++){
-                if(White.isSquareSet(from+i*8)){
-                    break;
-                } else if (Black.isSquareSet(from+i*8)) {
-                    possibleMoves.setSquare(from+i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*8);
-                }
+        //west direction so a change of -1
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i)){
+                break;
+            } else if (Defender.isSquareSet(from-i)) {
+                possibleMoves.setSquare(from-i);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i);
             }
         }
-        else {
-            //west direction so a change of -1
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i)){
-                    break;
-                } else if (White.isSquareSet(from-i)) {
-                    possibleMoves.setSquare(from-i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i);
-                }
-            }
 
-            //east direction so a change of +1
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i)){
-                    break;
-                } else if (White.isSquareSet(from+i)) {
-                    possibleMoves.setSquare(from+i);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i);
-                }
-            }
-
-            //south direction so a change of -8
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from-i*8)){
-                    break;
-                } else if (White.isSquareSet(from-i*8)) {
-                    possibleMoves.setSquare(from-i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from-i*8);
-                }
-            }
-
-            //north direction so a change of +8
-            for(int i=1;i<8;i++){
-                if(Black.isSquareSet(from+i*8)){
-                    break;
-                } else if (White.isSquareSet(from+i*8)) {
-                    possibleMoves.setSquare(from+i*8);
-                    break;
-                } else {
-                    possibleMoves.setSquare(from+i*8);
-                }
+        //east direction so a change of +1
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i)){
+                break;
+            } else if (Defender.isSquareSet(from+i)) {
+                possibleMoves.setSquare(from+i);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i);
             }
         }
-        return possibleMoves.isSquareSet(to);
+
+        //south direction so a change of -8
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from-i*8)){
+                break;
+            } else if (Defender.isSquareSet(from-i*8)) {
+                possibleMoves.setSquare(from-i*8);
+                break;
+            } else {
+                possibleMoves.setSquare(from-i*8);
+            }
+        }
+
+        //north direction so a change of +8
+        for(int i=1;i<8;i++){
+            if(Attacker.isSquareSet(from+i*8)){
+                break;
+            } else if (Defender.isSquareSet(from+i*8)) {
+                possibleMoves.setSquare(from+i*8);
+                break;
+            } else {
+                possibleMoves.setSquare(from+i*8);
+            }
+        }
+        return possibleMoves;
     }
 
     public void printBoard(){
