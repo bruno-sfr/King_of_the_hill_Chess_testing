@@ -9,6 +9,23 @@ public class Chessboard {
     BitBoard Queen;
     BitBoard Knight;
     BitBoard Bishop;
+    final BitBoard row1 = new BitBoard(0xffL);
+    final BitBoard row2 = new BitBoard(0xff00L);
+    final BitBoard row3 = new BitBoard(0xff0000L);
+    final BitBoard row4 = new BitBoard(0xff000000L);
+    final BitBoard row5 = new BitBoard(0xff00000000L);
+    final BitBoard row6 = new BitBoard(0xff0000000000L);
+    final BitBoard row7 = new BitBoard(0xff000000000000L);
+    final BitBoard row8 = new BitBoard(0xff00000000000000L);
+    final BitBoard colA = new BitBoard(0x8080808080808080L);
+    final BitBoard colB = new BitBoard(0x4040404040404040L);
+    final BitBoard colC = new BitBoard(0x2020202020202020L);
+    final BitBoard colD = new BitBoard(0x1010101010101010L);
+    final BitBoard colE = new BitBoard(0x88888888L);
+    final BitBoard colF = new BitBoard(0x44444444L);
+    final BitBoard colG = new BitBoard(0x22222222L);
+    final BitBoard colH = new BitBoard(0x11111111L);
+
 
     public Chessboard(){
         Black = new BitBoard(0xffff000000000000L);
@@ -41,7 +58,8 @@ public class Chessboard {
         BitBoard possibleMoves;
         if(figAtFrom){
             if(Pawn.isSquareSet(from)){
-                success = PawnMove(whiteTurn, from, to);
+                possibleMoves = PawnMove(whiteTurn, from);
+                success = possibleMoves.isSquareSet(to);
                 figureboard = Pawn;
             }
             else if(King.isSquareSet(from)){
@@ -139,30 +157,45 @@ public class Chessboard {
         return null;
     }
 
-    public boolean PawnMove(boolean whiteTurn, int from, int to){
-        //if pawn moves up or down one row (in respect to color) -> true
-        if (((to - from) == 8 && whiteTurn) || (to - from) == -8 && !whiteTurn)
-            if (!Black.isSquareSet(to) && !White.isSquareSet(to))
-                return true;
-        //if white pawn moves right diagonally and beats a piece -> return true
-        if (to - from == 9 && Black.isSquareSet(to) && !(from % 8 == 7))
-            return true;
-        //if white pawn moves left diagonally and beats a piece -> return true
-        if (to - from == 7 &&  Black.isSquareSet(to) && !(from % 8 == 0))
-            return true;
-        //if black pawn moves right diagonally and beats a piece -> return true
-        if (to - from == -7 && White.isSquareSet(to) && !(from % 8 == 7))
-            return true;
-        //if black pawn moves left diagonally and beats a piece -> return true
-        if (to - from == -9 &&  White.isSquareSet(to) && !(from % 8 == 0))
-            return true;
-        //if white pawn moves up by two, nothing is in the way and he is still on base line ->  return true
-        if (to - from == 16 && !White.isSquareSet(from + 8) && !Black.isSquareSet(from + 8) && !White.isSquareSet(to) && !Black.isSquareSet(to) && 8 <= from && from <= 15)
-            return true;
-        //if black pawn moves up by two, nothing is in the way and he is still on base line ->  return true
-        if (to - from == -16 && !White.isSquareSet(from - 8) && !Black.isSquareSet(from - 8) && !White.isSquareSet(to) && !Black.isSquareSet(to) && 48 <= from && from <= 55)
-            return true;
-        return false;
+    public BitBoard PawnMove(boolean whiteTurn, int from){
+
+        BitBoard pawnPos = new BitBoard();
+        pawnPos.setSquare(from);
+        /*if (!whiteTurn) {
+            pawnPos.setBoard(Long.reverse(pawnPos.getBoard()));     TRYING TO REVERSE BOARD WHEN BLACKS TURN TO REUSE WHITE CODE
+        }*/
+        BitBoard possibleMoves = new BitBoard();
+        if (whiteTurn) {
+            if ((pawnPos.getBoard() << 8 & (White.getBoard() | Black.getBoard())) == 0) {
+                possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() << 8);
+
+                if ((pawnPos.getBoard() & row2.getBoard()) != 0 && (((pawnPos.getBoard() << 8 | pawnPos.getBoard() << 16) & (White.getBoard() | Black.getBoard())) == 0))
+                    possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() << 16);
+
+                int nw = from + 7;
+                if (Black.isSquareSet(nw))
+                    possibleMoves.setSquare(nw);
+
+                int ne = from + 9;
+                if (Black.isSquareSet(ne))
+                    possibleMoves.setSquare(ne);
+            }
+        } else {
+            if ((pawnPos.getBoard() >> 8 & (White.getBoard() | Black.getBoard())) == 0) {
+                possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() >> 8);
+
+                if ((pawnPos.getBoard() & row7.getBoard()) != 0 & (((pawnPos.getBoard() >> 8 | pawnPos.getBoard() >> 16) & (White.getBoard() | Black.getBoard())) == 0))
+                    possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() >> 16);
+            }
+                int sw = from - 9;
+                if (White.isSquareSet(sw))
+                    possibleMoves.setSquare(sw);
+
+                int se = from - 7;
+                if (White.isSquareSet(se))
+                    possibleMoves.setSquare(se);
+        }
+        return possibleMoves;
     }
 
     public boolean KingMove(boolean whiteTurn, int from, int to){
