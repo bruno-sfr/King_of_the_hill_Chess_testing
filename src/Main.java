@@ -5,9 +5,9 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    public static boolean WhiteTurn;
+    static boolean WhiteTurn;
     public static void main(String[] args) throws IOException {
-        Chessboard board = new Chessboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+        Chessboard board = new Chessboard();
         board.printBoard();
         WhiteTurn = true;
 
