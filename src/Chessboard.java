@@ -7,14 +7,7 @@ public class Chessboard {
     Boolean BlackRightCastle;
     Boolean WhiteLeftCastle;
     Boolean WhiteRightCastle;
-    BitBoard Black;
-    BitBoard White;
-    BitBoard Pawn;
-    BitBoard Rook;
-    BitBoard King;
-    BitBoard Queen;
-    BitBoard Knight;
-    BitBoard Bishop;
+    BitBoard Black, White, Pawn, Rook, King, Queen, Knight, Bishop;
     final BitBoard row1 = new BitBoard(0xffL);
     final BitBoard row2 = new BitBoard(0xff00L);
     final BitBoard row3 = new BitBoard(0xff0000L);
@@ -64,7 +57,7 @@ public class Chessboard {
         WhiteRightCastle = true;
     }
 
-    //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
+    //checks if player whose current turn it is, is in a check. The Person who is in check is considered to be the defender
     public boolean isCheck(boolean whiteTurn){
         BitBoard Attacker;
         BitBoard Defender;
@@ -438,13 +431,13 @@ public class Chessboard {
                 if ((pawnPos.getBoard() & row2.getBoard()) != 0 && (((pawnPos.getBoard() << 8 | pawnPos.getBoard() << 16) & (White.getBoard() | Black.getBoard())) == 0))
                     possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() << 16);
 
-                int nw = from + 7;
-                if (Black.isSquareSet(nw))
-                    possibleMoves.setSquare(nw);
+            int nw = from + 7;
+            if (Black.isSquareSet(nw))
+                possibleMoves.setSquare(nw);
 
-                int ne = from + 9;
-                if (Black.isSquareSet(ne))
-                    possibleMoves.setSquare(ne);
+            int ne = from + 9;
+            if (Black.isSquareSet(ne))
+                possibleMoves.setSquare(ne);
             }
         } else {
             if ((pawnPos.getBoard() >> 8 & (White.getBoard() | Black.getBoard())) == 0) {
@@ -453,13 +446,37 @@ public class Chessboard {
                 if ((pawnPos.getBoard() & row7.getBoard()) != 0 & (((pawnPos.getBoard() >> 8 | pawnPos.getBoard() >> 16) & (White.getBoard() | Black.getBoard())) == 0))
                     possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() >> 16);
             }
-                int sw = from - 9;
-                if (White.isSquareSet(sw))
-                    possibleMoves.setSquare(sw);
+            int sw = from - 9;
+            if (White.isSquareSet(sw))
+                possibleMoves.setSquare(sw);
 
-                int se = from - 7;
-                if (White.isSquareSet(se))
-                    possibleMoves.setSquare(se);
+            int se = from - 7;
+            if (White.isSquareSet(se))
+                possibleMoves.setSquare(se);
+        }
+        return possibleMoves;
+    }
+
+    public BitBoard PawnAttack(boolean whiteTurn, int from) {
+        BitBoard pawnPos = new BitBoard();
+        pawnPos.setSquare(from);
+        BitBoard possibleMoves = new BitBoard();
+        if (whiteTurn) {
+            int nw = from + 7;
+            if (Black.isSquareSet(nw))
+                possibleMoves.setSquare(nw);
+
+            int ne = from + 9;
+            if (Black.isSquareSet(ne))
+                possibleMoves.setSquare(ne);
+        } else {
+        int sw = from - 9;
+        if (White.isSquareSet(sw))
+            possibleMoves.setSquare(sw);
+
+        int se = from - 7;
+        if (White.isSquareSet(se))
+            possibleMoves.setSquare(se);
         }
         return possibleMoves;
     }
