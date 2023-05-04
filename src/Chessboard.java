@@ -131,6 +131,93 @@ public class Chessboard {
         }
     }
 
+    public LinkedList<ChessMove>[] allMoves(boolean WhiteTurn){
+        //Moves in Order Pawn / bishop / knight / rook / queen / king
+        LinkedList<ChessMove>[] Moves = new LinkedList[6];
+        for(int i = 0; i<Moves.length; i++){
+            Moves[i]=new LinkedList<>();
+        }
+        BitBoard Attacker;
+        BitBoard Defender;
+        if(WhiteTurn){
+            Attacker = White;
+            Defender = Black;
+        }
+        else{
+            Attacker = Black;
+            Defender = White;
+        }
+        BitBoard AttackPawn = new BitBoard(Attacker.getBoard() & Pawn.getBoard());
+        BitBoard AttackRook = new BitBoard(Attacker.getBoard() & Rook.getBoard());
+        BitBoard AttackKnight = new BitBoard(Attacker.getBoard() & Knight.getBoard());
+        BitBoard AttackKing = new BitBoard(Attacker.getBoard() & King.getBoard());
+        BitBoard AttackQueen = new BitBoard(Attacker.getBoard() & Queen.getBoard());
+        BitBoard AttackBishop = new BitBoard(Attacker.getBoard() & Bishop.getBoard());
+        LinkedList<Integer> FigPos;
+
+        //Pawn
+        FigPos = AttackPawn.allSetSquares();
+        for(int pos:FigPos){
+            BitBoard targets = PawnMove(WhiteTurn,pos);
+            LinkedList<Integer> targets_list = targets.allSetSquares();
+            for(int target:targets_list){
+                Moves[0].add(new ChessMove(pos,target));
+            }
+        }
+
+        //Bishop
+        FigPos = AttackBishop.allSetSquares();
+        for(int pos:FigPos){
+            BitBoard targets = BishopMove(pos, Attacker, Defender);
+            LinkedList<Integer> targets_list = targets.allSetSquares();
+            for(int target:targets_list){
+                Moves[1].add(new ChessMove(pos,target));
+            }
+        }
+
+        //Knight
+        FigPos = AttackKnight.allSetSquares();
+        for(int pos:FigPos){
+            BitBoard targets = KnightMove(pos, Attacker, Defender);
+            LinkedList<Integer> targets_list = targets.allSetSquares();
+            for(int target:targets_list){
+                Moves[2].add(new ChessMove(pos,target));
+            }
+        }
+
+        //Rook
+        FigPos = AttackRook.allSetSquares();
+        for(int pos:FigPos){
+            BitBoard targets = RookMove(pos, Attacker, Defender);
+            LinkedList<Integer> targets_list = targets.allSetSquares();
+            for(int target:targets_list){
+                Moves[3].add(new ChessMove(pos,target));
+            }
+        }
+
+        //Queen
+        FigPos = AttackQueen.allSetSquares();
+        for(int pos:FigPos){
+            BitBoard targets = QueenMove(pos, Attacker, Defender);
+            LinkedList<Integer> targets_list = targets.allSetSquares();
+            for(int target:targets_list){
+                Moves[4].add(new ChessMove(pos,target));
+            }
+        }
+
+        //King
+        FigPos = AttackKing.allSetSquares();
+        for(int pos:FigPos){
+            BitBoard targets = KingMove(pos, Attacker, Defender);
+            LinkedList<Integer> targets_list = targets.allSetSquares();
+            for(int target:targets_list){
+                Moves[5].add(new ChessMove(pos,target));
+            }
+        }
+
+        return Moves;
+    }
+
     //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
     public boolean isCheck(boolean whiteTurn){
         BitBoard Attacker;
