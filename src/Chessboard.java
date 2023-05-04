@@ -222,6 +222,80 @@ public class Chessboard {
         return Moves;
     }
 
+    public Chessboard(String fen){
+        Black = new BitBoard();
+        White = new BitBoard();
+        Pawn = new BitBoard();
+        Rook = new BitBoard();
+        King = new BitBoard();
+        Queen = new BitBoard();
+        Bishop = new BitBoard();
+        Knight = new BitBoard();
+        String[] lines = fen.split("/");
+        //go through all ranks, note that the last array entry in lines is the bottom 0 rank
+        for (int r = 0; r<8; r++) {
+            int file = 0; //place in line
+            for(int i =0; i<lines[7-r].length();i++) {
+                char c = lines[7-r].charAt(i);
+                if(Character.isDigit(c)){
+                    file += Character.getNumericValue(c);
+                }else {
+                    switch (c) {
+                        case 'P' -> {
+                            Pawn.setSquare(r * 8 + file);
+                            White.setSquare(r * 8 + file);
+                        }
+                        case 'p' -> {
+                            Pawn.setSquare(r * 8 + file);
+                            Black.setSquare(r * 8 + file);
+                        }
+                        case 'N' -> {
+                            Knight.setSquare(r * 8 + file);
+                            White.setSquare(r * 8 + file);
+                        }
+                        case 'n' -> {
+                            Knight.setSquare(r * 8 + file);
+                            Black.setSquare(r * 8 + file);
+                        }
+                        case 'B' -> {
+                            Bishop.setSquare(r * 8 + file);
+                            White.setSquare(r * 8 + file);
+                        }
+                        case 'b' -> {
+                            Bishop.setSquare(r * 8 + file);
+                            Black.setSquare(r * 8 + file);
+                        }
+                        case 'R' -> {
+                            Rook.setSquare(r * 8 + file);
+                            White.setSquare(r * 8 + file);
+                        }
+                        case 'r' -> {
+                            Rook.setSquare(r * 8 + file);
+                            Black.setSquare(r * 8 + file);
+                        }
+                        case 'Q' -> {
+                            Queen.setSquare(r * 8 + file);
+                            White.setSquare(r * 8 + file);
+                        }
+                        case 'q' -> {
+                            Queen.setSquare(r * 8 + file);
+                            Black.setSquare(r * 8 + file);
+                        }
+                        case 'K' -> {
+                            King.setSquare(r * 8 + file);
+                            White.setSquare(r * 8 + file);
+                        }
+                        case 'k' -> {
+                            King.setSquare(r * 8 + file);
+                            Black.setSquare(r * 8 + file);
+                        }
+                    }
+                    file++;
+                }
+            }
+        }
+    }
+
     //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
     public boolean isCheck(boolean whiteTurn){
         BitBoard Attacker;
