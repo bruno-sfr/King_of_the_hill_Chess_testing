@@ -2,6 +2,11 @@ import java.lang.reflect.Array;
 import java.util.LinkedList;
 
 public class Chessboard {
+    //true means castle possible
+    Boolean BlackLeftCastle;
+    Boolean BlackRightCastle;
+    Boolean WhiteLeftCastle;
+    Boolean WhiteRightCastle;
     BitBoard Black;
     BitBoard White;
     BitBoard Pawn;
@@ -37,6 +42,10 @@ public class Chessboard {
         Queen = new BitBoard(0x0800000000000008L);
         Bishop = new BitBoard(0x2400000000000024L);
         Knight = new BitBoard(0x4200000000000042L);
+        BlackLeftCastle = true;
+        BlackRightCastle = true;
+        WhiteLeftCastle = true;
+        WhiteRightCastle = true;
     }
 
     //copy construtor
@@ -49,6 +58,10 @@ public class Chessboard {
         this.Bishop = new BitBoard(toCopy.Bishop.getBoard());
         this.Pawn = new BitBoard(toCopy.Pawn.getBoard());
         this.Knight = new BitBoard(toCopy.Knight.getBoard());
+        BlackLeftCastle = true;
+        BlackRightCastle = true;
+        WhiteLeftCastle = true;
+        WhiteRightCastle = true;
     }
 
     //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
@@ -246,6 +259,39 @@ public class Chessboard {
             else if(King.isSquareSet(from)){
                 possibleMoves = KingMove(from, Attacker, Defender);
                 success = possibleMoves.isSquareSet(to);
+                if(success) {
+                    //white king moves so set castle flags and check if its a castle
+                    if(Attacker == White) {
+                        if (to == 2 & WhiteLeftCastle) {
+                            //move rook according to castle
+                            White.clearSquare(0);
+                            White.setSquare(3);
+                            Rook.clearSquare(0);
+                            Rook.setSquare(3);
+                        } else if (to == 6 & WhiteRightCastle) {
+                            White.clearSquare(7);
+                            White.setSquare(5);
+                            Rook.clearSquare(7);
+                            Rook.setSquare(5);
+                        }
+                        WhiteLeftCastle = false;
+                        WhiteRightCastle = false;
+                    } else {
+                        if (to == 58 & BlackLeftCastle) {
+                            Black.clearSquare(56);
+                            Black.setSquare(59);
+                            Rook.clearSquare(56);
+                            Rook.setSquare(59);
+                        } else if (to == 62 & BlackRightCastle) {
+                            Black.clearSquare(63);
+                            Black.setSquare(61);
+                            Rook.clearSquare(63);
+                            Rook.setSquare(61);
+                        }
+                        BlackLeftCastle = false;
+                        BlackRightCastle = false;
+                    }
+                }
                 figureboard = King;
             }
             else if(Queen.isSquareSet(from)){
@@ -261,6 +307,22 @@ public class Chessboard {
             else if(Rook.isSquareSet(from)){
                 possibleMoves = RookMove(from, Attacker, Defender);
                 success = possibleMoves.isSquareSet(to);
+                //check for first rook move, disable caslte accordingly
+                if(success){
+                    if(Attacker == White){
+                        if(from == 0){
+                            WhiteLeftCastle = false;
+                        } else if (from == 7) {
+                            WhiteRightCastle = false;
+                        }
+                    } else {
+                        if(from == 56){
+                            BlackLeftCastle = false;
+                        } else if (from == 63) {
+                            BlackRightCastle = false;
+                        }
+                    }
+                }
                 figureboard = Rook;
             }
             else if(Bishop.isSquareSet(from)){
@@ -403,6 +465,35 @@ public class Chessboard {
     }
 
     public BitBoard KingMove(int from, BitBoard Attacker, BitBoard Defender){
+        BitBoard possibleCastle = new BitBoard();
+        //white king at starting position, so check for castleing
+        if(from == 4 && Attacker == White){
+            if(WhiteLeftCastle){
+                long figbetween = 0x000000000000000eL;
+                if((White.getBoard() & figbetween) == 0){
+                    possibleCastle.setSquare(2);
+                }
+            }
+            if(WhiteRightCastle){
+                long figbetween = 0x0000000000000060L;
+                if((White.getBoard() & figbetween) == 0){
+                    possibleCastle.setSquare(6);
+                }
+            }
+        } else if (from == 60 && Attacker == Black) {
+            if(BlackLeftCastle){
+                long figbetween = 0x0e00000000000000L;
+                if((White.getBoard() & figbetween) == 0){
+                    possibleCastle.setSquare(58);
+                }
+            }
+            if(WhiteRightCastle){
+                long figbetween = 0x6000000000000000L;
+                if((White.getBoard() & figbetween) == 0){
+                    possibleCastle.setSquare(62);
+                }
+            }
+        }
         BitBoard KingSet = new BitBoard();
         KingSet.setSquare(from);
         BitBoard KingAttacks = new BitBoard();
@@ -410,7 +501,7 @@ public class Chessboard {
         KingSet.setBoard(KingSet.getBoard() | KingAttacks.getBoard());
         KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8 | KingSet.getBoard() >> 8);
         BitBoard possibleMoves = new BitBoard();
-        possibleMoves.setBoard(KingAttacks.getBoard() & ~Attacker.getBoard());
+        possibleMoves.setBoard((KingAttacks.getBoard() & ~Attacker.getBoard()) | possibleCastle.getBoard());
         return possibleMoves;
     }
 
