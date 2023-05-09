@@ -736,30 +736,6 @@ public class Chessboard {
             if (Black.isSquareSet(ne))
                 possibleMoves.setSquare(ne);
         } else {
-        int sw = from - 9;
-        if (White.isSquareSet(sw))
-            possibleMoves.setSquare(sw);
-
-        int se = from - 7;
-        if (White.isSquareSet(se))
-            possibleMoves.setSquare(se);
-        }
-        return possibleMoves;
-    }
-
-    public BitBoard PawnAttack(boolean whiteTurn, int from) {
-        BitBoard pawnPos = new BitBoard();
-        pawnPos.setSquare(from);
-        BitBoard possibleMoves = new BitBoard();
-        if (whiteTurn) {
-            int nw = from + 7;
-            if (Black.isSquareSet(nw))
-                possibleMoves.setSquare(nw);
-
-            int ne = from + 9;
-            if (Black.isSquareSet(ne))
-                possibleMoves.setSquare(ne);
-        } else {
             int sw = from - 9;
             if (White.isSquareSet(sw))
                 possibleMoves.setSquare(sw);
