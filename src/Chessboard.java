@@ -386,7 +386,17 @@ public class Chessboard {
         return true;
     }
 
-    public LinkedList<Integer[]> allPossibleMoves(boolean whiteTurn, BitBoard Attacker, BitBoard Defender){
+    public LinkedList<Integer[]> allPossibleMoves(boolean whiteTurn){
+        BitBoard Attacker;
+        BitBoard Defender;
+        if(whiteTurn){
+            Attacker = White;
+            Defender = Black;
+        }
+        else{
+            Attacker = Black;
+            Defender = White;
+        }
         LinkedList<Integer[]> possibleMoves = new LinkedList<>();
         long pawnPositions = Attacker.getBoard() & Pawn.getBoard();
         for (int i = 0; i < 8; i++) {
@@ -490,7 +500,7 @@ public class Chessboard {
             Defender = White;
         }
 
-        LinkedList<Integer[]> res = allPossibleMoves(whiteTurn, Attacker, Defender);
+        //LinkedList<Integer[]> res = allPossibleMoves(whiteTurn, Attacker, Defender);
 
         boolean success = false;
         BitBoard figureboard = new BitBoard();   //reference to board of the figure that is to be moved, to change position later
