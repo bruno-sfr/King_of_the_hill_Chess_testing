@@ -686,9 +686,7 @@ public class Chessboard {
 
         BitBoard pawnPos = new BitBoard();
         pawnPos.setSquare(from);
-        /*if (!whiteTurn) {
-            pawnPos.setBoard(Long.reverse(pawnPos.getBoard()));     TRYING TO REVERSE BOARD WHEN BLACKS TURN TO REUSE WHITE CODE
-        }*/
+
         BitBoard possibleMoves = new BitBoard();
         if (whiteTurn) {
             if ((pawnPos.getBoard() << 8 & (White.getBoard() | Black.getBoard())) == 0) {
@@ -696,14 +694,16 @@ public class Chessboard {
 
                 if ((pawnPos.getBoard() & row2.getBoard()) != 0 && (((pawnPos.getBoard() << 8 | pawnPos.getBoard() << 16) & (White.getBoard() | Black.getBoard())) == 0))
                     possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() << 16);
-
-            int nw = from + 7;
-            if (Black.isSquareSet(nw))
-                possibleMoves.setSquare(nw);
-
-            int ne = from + 9;
-            if (Black.isSquareSet(ne))
-                possibleMoves.setSquare(ne);
+            }
+            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+                int nw = from + 7;
+                if (Black.isSquareSet(nw))
+                    possibleMoves.setSquare(nw);
+            }
+            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+                int ne = from + 9;
+                if (Black.isSquareSet(ne))
+                    possibleMoves.setSquare(ne);
             }
         } else {
             if ((pawnPos.getBoard() >> 8 & (White.getBoard() | Black.getBoard())) == 0) {
@@ -712,13 +712,16 @@ public class Chessboard {
                 if ((pawnPos.getBoard() & row7.getBoard()) != 0 & (((pawnPos.getBoard() >> 8 | pawnPos.getBoard() >> 16) & (White.getBoard() | Black.getBoard())) == 0))
                     possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() >> 16);
             }
-            int sw = from - 9;
-            if (White.isSquareSet(sw))
-                possibleMoves.setSquare(sw);
-
-            int se = from - 7;
-            if (White.isSquareSet(se))
-                possibleMoves.setSquare(se);
+            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+                int sw = from - 9;
+                if (White.isSquareSet(sw))
+                    possibleMoves.setSquare(sw);
+            }
+            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+                int se = from - 7;
+                if (White.isSquareSet(se))
+                    possibleMoves.setSquare(se);
+            }
         }
         return possibleMoves;
     }
@@ -728,21 +731,27 @@ public class Chessboard {
         pawnPos.setSquare(from);
         BitBoard possibleMoves = new BitBoard();
         if (whiteTurn) {
-            int nw = from + 7;
-            if (Black.isSquareSet(nw))
-                possibleMoves.setSquare(nw);
-
-            int ne = from + 9;
-            if (Black.isSquareSet(ne))
-                possibleMoves.setSquare(ne);
+            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+                int nw = from + 7;
+                if (Black.isSquareSet(nw))
+                    possibleMoves.setSquare(nw);
+            }
+            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+                int ne = from + 9;
+                if (Black.isSquareSet(ne))
+                    possibleMoves.setSquare(ne);
+            }
         } else {
-            int sw = from - 9;
-            if (White.isSquareSet(sw))
-                possibleMoves.setSquare(sw);
-
-            int se = from - 7;
-            if (White.isSquareSet(se))
-                possibleMoves.setSquare(se);
+            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+                int sw = from - 9;
+                if (White.isSquareSet(sw))
+                    possibleMoves.setSquare(sw);
+            }
+            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+                int se = from - 7;
+                if (White.isSquareSet(se))
+                    possibleMoves.setSquare(se);
+            }
         }
         return possibleMoves;
     }
