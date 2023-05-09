@@ -66,6 +66,10 @@ public class Chessboard {
         Queen = new BitBoard();
         Bishop = new BitBoard();
         Knight = new BitBoard();
+        BlackLeftCastle = true;
+        BlackRightCastle = true;
+        WhiteLeftCastle = true;
+        WhiteRightCastle = true;
         String[] lines = fen.split("/");
         //go through all ranks, note that the last array entry in lines is the bottom 0 rank
         for (int r = 0; r<8; r++) {
