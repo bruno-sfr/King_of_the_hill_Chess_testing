@@ -1,0 +1,722 @@
+
+{
+  "Stellungen": [
+    {
+        "comment": "Prof Vorgabe",
+        "FEN": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+        "Zug": [
+        16,
+        0,
+        4,
+        0,
+        0,
+        0
+        ],
+        "White": true
+    },
+    {
+        "comment":"Gruppe AI",
+        "FEN": "rnbqkbnr/1pppppp1/p6p/8/2B1P3/5N2/PPPP1PPP/RNBQK2R",
+        "Zug": [
+        14,
+        0,
+        2,
+        2,
+        0,
+        0
+        ],
+        "White": false
+    },
+    {
+        "comment":"Gruppe AI",
+        "FEN": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR",
+        "Zug": [
+          15,
+          5,
+          5,
+          0,
+          2,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe B",
+        "FEN": "rnbqkbnr/pp1p1ppp/4p3/1Pp5/8/2N5/P1PPPPPP/R1BQKBNR",
+        "Zug": [
+          13,
+          2,
+          6,
+          1,
+          0,
+          0
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe B",
+        "FEN": "4kr2/4b3/8/2p1R2p/4n1p1/3q2P1/7P/4K3",
+        "Zug": [
+          2,
+          0,
+          0,
+          8,
+          0,
+          0
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe H, King moves: 3 + 2 castling",
+        "FEN": "1rbqk2r/3nBppp/p2p4/3Qp3/Pp2P3/6PB/1PP1NP1P/R3K2R",
+        "Zug": [
+          7,
+          10,
+          5,
+          7,
+          14,
+          5
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe E",
+        "FEN": "rnb1kbnr/pp1ppppp/2p5/q7/8/3P1P2/PPP1P1PP/RNBQKBNR",
+        "Zug": [
+          2,
+          1,
+          2,
+          0,
+          1,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe E, Gruppe gibt 24 Züge an, sind aber 25. Wahrscheinlich Probleme, da zwei Q auf dem Spielfeld und sie gleiches Feld erreichen können",
+        "FEN": "7k/7q/5pqp/6p1/NP3P1P/1KP3P1/2B5/8",
+        "Zug": [
+          5,
+          0,
+          0,
+          0,
+          18,
+          2
+        ],
+        "White": false
+      },
+      {
+        "comment": "Gruppe F",
+        "FEN": "r2kq3/3r4/8/8/7b/p7/P3BN2/R3K2R",
+        "Zug": [
+          0,
+          0,
+          0,
+          8,
+          2,
+          0
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe F, pawn zu queen",
+        "FEN": "r7/P1P5/p7/P4k2/n7/P1P2K2/1BP2PBN/1QR2R1n",
+        "Zug": [
+          2,
+          3,
+          1,
+          6,
+          2,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe G",
+        "FEN": "B3k2r/p1pqbppp/n2p3n/4p3/6b1/1PPPP1P1/P4P1P/RNBQK1NR",
+        "Zug": [
+          8,
+          12,
+          5,
+          2,
+          7,
+          3
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe G",
+        "FEN": "rnb1kbnr/ppp2ppp/8/K2pP2q/5p2/3P4/PPP1B1PP/RNBQ2NR",
+        "Zug": [
+          12,
+          7,
+          5,
+          0,
+          3,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe H, eig noch ein zusätzlicher en passant move (letzter Zug p->G5)",
+        "FEN": "r1bq1r2/pp2n3/4N2k/3pPppP/1b1n2Q1/2N5/PP3PP1/R1B1K2R",
+        "Zug": [
+          6,
+          4,
+          15,
+          6,
+          11,
+          4
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe R",
+        "FEN": "6k1/B5q1/KR6/8/8/8/6p1/8",
+        "Zug": [
+          0,
+          1,
+          0,
+          13,
+          0,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe R, Pawn to Queen, Gruppe hat alle Mögl. angegeben daher keine Übereinstimmung bei Anzahl Züge (28 vs 25), außerdem moves mit +",
+        "FEN": "6k1/B5q1/KR6/8/8/8/6p1/8",
+        "Zug": [
+          1,
+          0,
+          0,
+          0,
+          20,
+          4
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe AF",
+        "FEN": "r3k2r/ppp1npbp/b3p1p1/8/8/4P3/PPP2PPP/R3K2R",
+        "Zug": [
+          13,
+          0,
+          0,
+          5,
+          0,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe O",
+        "FEN": "r1b3k1/ppb2ppp/8/2B1p1P1/1P2N2P/P3P3/2P2P2/3rK2R",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe O",
+        "FEN": "8/8/6k1/5n2/5P2/7p/2KN4/8",
+        "Zug": [
+          0,
+          0,
+          6,
+          0,
+          0,
+          8
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe V, King moves: 4 + 1 castle",
+        "FEN": "r3k1nr/pp3ppp/3p4/3P4/8/3P4/PP3PPP/RN2K2R",
+        "Zug": [
+          11,
+          0,
+          3,
+          2,
+          0,
+          5
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe V",
+        "FEN": "8/8/1k6/8/8/8/6K1/8",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          8
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe L, King of the Hill, moves mit +",
+        "FEN": "1r6/8/2pbk1p1/p4p2/2KPnP2/4P3/PB4PP/5R2",
+        "Zug": [
+          7,
+          4,
+          0,
+          9,
+          0,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe L, moves mit +",
+        "FEN": "2R5/2r2bkp/2n4p/1p6/4p2N/2K1n3/7B/8",
+        "Zug": [
+          0,
+          6,
+          4,
+          8,
+          0,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe J",
+        "FEN": "3k4/8/8/8/8/8/7r/3K4",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe M",
+        "FEN": "rnq1kb1r/p1ppppp1/1p6/7p/2PPb1nP/5N2/PP3P2/RNBQKBR1",
+        "Zug": [
+          6,
+          9,
+          7,
+          4,
+          6,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe M",
+        "FEN": "1rbqk3/p1p3p1/np1p1n1r/B1b1pp1p/2P4P/3PP1P1/PP1QBP2/RN3KNR",
+        "Zug": [
+          8,
+          7,
+          7,
+          5,
+          2,
+          4
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe J, angeblich 26 legale Züge, aber nur 22 angegeben?",
+        "FEN": "r1bqkbnr/pppppppp/2n5/8/8/2N5/PPPPPPPP/R1BQKBNR",
+        "Zug": [
+          14,
+          0,
+          7,
+          1,
+          0,
+          0
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe A",
+        "FEN": "2bqk2r/ppp4p/3npp2/n7/2pPPbBR/1Pr2N2/PBP4P/RN1QK3",
+        "Zug": [
+          7,
+          11,
+          7,
+          0,
+          4,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe A",
+        "FEN": "7k/1P4pp/4B3/3b1n2/6P1/5P2/3P2N1/3KQ3",
+        "Zug": [
+          9,
+          6,
+          3,
+          0,
+          10,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe C, Abweichungen von Gruppe, en passant Zug entfernt",
+        "FEN": "rnbkqbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBKQBNR",
+        "Zug": [
+          14,
+          5,
+          5,
+          0,
+          4,
+          1
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe C, King of the Hill, Zusatzinfos im Wiki, moves mit +",
+        "FEN": "r3kb1r/1p1nqp1p/p2p1np1/P3p3/2PQP3/2N1K1PP/1P3P2/R1B2B1R",
+        "Zug": [
+          7,
+          2,
+          8,
+          5,
+          2,
+          1
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe D, Remi",
+        "FEN": "8/8/7k/7p/4B2P/6R1/8/4K3",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe D, moves mit +",
+        "FEN": "8/8/7k/7p/4B2P/6R1/8/4K3",
+        "Zug": [
+          0,
+          0,
+          0,
+          2,
+          0,
+          2
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe Q",
+        "FEN": "5k1r/8/4B3/8/8/8/P7/KQ1N4",
+        "Zug": [
+          2,
+          10,
+          4,
+          0,
+          14,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe Q",
+        "FEN": "5k1r/8/4B3/p7/PP6/8/P7/KQ1N4",
+        "Zug": [
+          1,
+          0,
+          0,
+          8,
+          0,
+          5
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe S",
+        "FEN": "rnbqkb1r/ppp1pppp/5n2/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR",
+        "Zug": [
+          13,
+          5,
+          8,
+          1,
+          4,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe S",
+        "FEN": "8/8/8/8/2R5/6pk/1r6/6K1",
+        "Zug": [
+          0,
+          0,
+          0,
+          14,
+          0,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe K",
+        "FEN": "4K3/PP3PP1/8/8/1p2n1P1/7R/3k4/2R5",
+        "Zug": [
+          9,
+          0,
+          0,
+          28,
+          0,
+          4
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe K",
+        "FEN": "R3K2R/P5PP/2P3QN/7k/6p1/2n4n/p5pp/7r",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe W",
+        "FEN": "2k5/p1P4r/1p3p1p/8/P3P3/2P3b1/8/5K2",
+        "Zug": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe W, schreiben: legale Züge 27, aber listen nur 26 auf?",
+        "FEN": "5b2/1pkP2p1/8/4P2P/2Pn3P/3B4/3P4/3QK2R",
+        "Zug": [
+          4,
+          8,
+          0,
+          4,
+          8,
+          2
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe T",
+        "FEN": "r1bqk1nr/ppp2ppp/2n1p3/3p4/1b1P1B2/4PN2/PPP2PPP/RN1QKB1R",
+        "Zug": [
+          1,
+          0,
+          3,
+          0,
+          1,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe T, forciertes unentschieden",
+        "FEN": "8/8/4k3/3pP3/3K4/8/8/8",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe X",
+        "FEN": "8/6P1/5K1k/6N1/5N2/8/8/8",
+        "Zug": [
+          1,
+          0,
+          14,
+          0,
+          0,
+          5
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe X",
+        "FEN": "rnbqk1nr/pppp1ppp/4p3/8/1bPP4/8/PP2PPPP/RNBQKBNR",
+        "Zug": [
+          0,
+          1,
+          2,
+          0,
+          1,
+          0
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe F, zählen beide Rochaden als jew. 2 Züge (26 vs 24 Züge)",
+        "FEN": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N2N2/PP2PPPP/R1BQKB1R",
+        "Zug": [
+          13,
+          2,
+          7,
+          0,
+          0,
+          2
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe F",
+        "FEN": "3r2k1/p6p/6p1/4b3/2P5/8/P1K3PP/5R2",
+        "Zug": [
+          7,
+          0,
+          0,
+          14,
+          0,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe AD",
+        "FEN": "r3rbk1/p4pp1/q1p1nnb1/B3pN1p/PpN1P1P1/1P5P/2P1QPB1/R2R2K1",
+        "Zug": [
+          6,
+          5,
+          11,
+          7,
+          6,
+          1
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe AA",
+        "FEN": "8/5k1K/1q5P/2p5/8/5pp1/8/8",
+        "Zug": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe AA",
+        "FEN": "K7/8/8/pP6/8/4R3/2Pq1k2/8",
+        "Zug": [
+          3,
+          0,
+          0,
+          14,
+          0,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe V",
+        "FEN": "r1bq1rk1/ppp2ppp/2nb1n2/3pp3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1",
+        "Zug": [
+          12,
+          6,
+          9,
+          2,
+          6,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe V",
+        "FEN": "2kr1b1r/pp2pppp/2p5/1B6/2PPn3/8/PP3PPP/R1B1R1K1",
+        "Zug": [
+          13,
+          0,
+          8,
+          6,
+          0,
+          3
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe I",
+        "FEN": "R1BQKB1R/PPPP1PPP/2N2N2/4n3/4p3/2n5/pppp1ppp/r1bqkb1r",
+        "Zug": [
+          21,
+          5,
+          0,
+          2,
+          1,
+          1
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe I",
+        "FEN": "R3K2R/PP3PPP/3P1NB1/3pP3/1ppQ4/2n5/p2k2pp/r2q1b1r",
+        "Zug": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          3
+        ],
+        "White": false
+      },
+      {
+        "comment":"Gruppe G - comment: long castling in king moves",
+        "FEN": "8/8/1k6/8/8/8/6K1/8",
+        "Zug": [
+          5,
+          3,
+          7,
+          5,
+          0,
+          3
+        ],
+        "White": true
+      },
+      {
+        "comment":"Gruppe G - long castling in king moves",
+        "FEN": "r1bqkr2/pp1pbpQp/8/2p1P3/2B5/2N5/PPP2PPP/R1B1K2R",
+        "Zug": [
+          10,
+          4,
+          0,
+          3,
+          3,
+          1
+        ],
+        "White": false
+      }
+      
+
+  ]
+}
