@@ -222,68 +222,6 @@ public class Chessboard {
         return Moves;
     }
 
-    //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
-    public boolean isCheck(boolean whiteTurn){
-        BitBoard Attacker;
-        BitBoard Defender;
-        int KingPos;
-        if(whiteTurn){
-            Attacker = Black;
-            Defender = White;
-        }
-        else{
-            Attacker = White;
-            Defender = Black;
-        }
-        BitBoard DefenderKing = new BitBoard(Defender.getBoard() & King.getBoard());
-        LinkedList<Integer> KingPoses = DefenderKing.allSetSquares();
-        KingPos = KingPoses.get(0);
-        BitBoard allEnemyMoves = new BitBoard();
-
-        //Bishop Moves
-        BitBoard AttackerBishop = new BitBoard(Attacker.getBoard() & Bishop.getBoard());
-        LinkedList<Integer> BishopPositions = AttackerBishop.allSetSquares();
-        for (int Pos: BishopPositions) {
-            BitBoard temp = BishopMove(Pos, Attacker, Defender);
-            allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
-        }
-
-        //Queen Moves
-        BitBoard AttackerQueen = new BitBoard(Attacker.getBoard() & Queen.getBoard());
-        LinkedList<Integer> QueenPositions = AttackerQueen.allSetSquares();
-        for (int Pos: QueenPositions) {
-            BitBoard temp = QueenMove(Pos, Attacker, Defender);
-            allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
-        }
-
-        //Rook Moves
-        BitBoard AttackerRook = new BitBoard(Attacker.getBoard() & Rook.getBoard());
-        LinkedList<Integer> RookPositions = AttackerRook.allSetSquares();
-        for (int Pos: RookPositions) {
-            BitBoard temp = RookMove(Pos,Attacker, Defender);
-            allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
-        }
-
-        //Knight Moves
-        BitBoard AttackerKnight = new BitBoard(Attacker.getBoard() & Knight.getBoard());
-        LinkedList<Integer> KnightPositions = AttackerKnight.allSetSquares();
-        for (int Pos: KnightPositions) {
-            BitBoard temp = KnightMove(Pos, Attacker, Defender);
-            allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
-        }
-
-        //Pawn Moves
-        BitBoard AttackerPawn = new BitBoard(Attacker.getBoard() & Pawn.getBoard());
-        LinkedList<Integer> PawnPositions = AttackerPawn.allSetSquares();
-        for (int Pos: PawnPositions) {
-            BitBoard temp = PawnAttack(!whiteTurn, Pos);
-            allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
-        }
-
-        //allEnemyMoves.printBoard();
-        return allEnemyMoves.isSquareSet(KingPos);
-    }
-
     //check if the player whose turn it is, is in check mate
     public boolean isCheckmate(boolean whiteTurn){
         BitBoard Attacker;
