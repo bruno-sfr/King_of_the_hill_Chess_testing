@@ -177,7 +177,7 @@ public class Chessboard {
         BitBoard AttackerPawn = new BitBoard(Attacker.getBoard() & Pawn.getBoard());
         LinkedList<Integer> PawnPositions = AttackerPawn.allSetSquares();
         for (int Pos: PawnPositions) {
-            BitBoard temp = PawnMove(!whiteTurn, Pos);
+            BitBoard temp = PawnAttack(!whiteTurn, Pos);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -221,7 +221,7 @@ public class Chessboard {
         //Pawn
         LinkedList<Integer> PawnPos = Attacker_pawns.allSetSquares();
         for(int pawn:PawnPos){
-            BitBoard Moves = PawnMove(whiteTurn,pawn);
+            BitBoard Moves = PawnAttack(whiteTurn,pawn);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
@@ -291,6 +291,95 @@ public class Chessboard {
         return true;
     }
 
+    public LinkedList<Integer[]> allPossibleMoves(boolean whiteTurn, BitBoard Attacker, BitBoard Defender){
+        LinkedList<Integer[]> possibleMoves = new LinkedList<>();
+        long pawnPositions = Attacker.getBoard() & Pawn.getBoard();
+        for (int i = 0; i < 8; i++) {
+            int from = Long.numberOfTrailingZeros(pawnPositions);             //get index of first piece
+            if (from == 64)
+                break;
+            pawnPositions = pawnPositions & ~Long.lowestOneBit(pawnPositions);     //delete piece from board
+            LinkedList<Integer> pawnTos = PawnMove(whiteTurn, from).allSetSquares();
+
+            for (int to : pawnTos) {                                //save discovered moves in possibleMoves
+                Integer[] move = new Integer[]{from, to};
+                possibleMoves.add(move);
+            }
+        }
+
+        long bishopPositions = Attacker.getBoard() & Bishop.getBoard();
+        for (int i = 0; i < 2; i++) {
+            int from = Long.numberOfTrailingZeros(bishopPositions);             //get index of first piece
+            if (from == 64)
+                break;
+            bishopPositions = bishopPositions & ~Long.lowestOneBit(bishopPositions);     //delete piece from board
+            LinkedList<Integer> bishopTos = BishopMove(from, Attacker, Defender).allSetSquares();
+
+            for (int to : bishopTos) {                                //save discovered moves in possibleMoves
+                Integer[] move = new Integer[]{from, to};
+                possibleMoves.add(move);
+            }
+        }
+
+        long rookPositions = Attacker.getBoard() & Rook.getBoard();
+        for (int i = 0; i < 2; i++) {
+            int from = Long.numberOfTrailingZeros(rookPositions);             //get index of first piece
+            if (from == 64)
+                break;
+            rookPositions = rookPositions & ~Long.lowestOneBit(rookPositions);     //delete piece from board
+            LinkedList<Integer> rookTos = RookMove(from, Attacker, Defender).allSetSquares();
+
+            for (int to : rookTos) {                                //save discovered moves in possibleMoves
+                Integer[] move = new Integer[]{from, to};
+                possibleMoves.add(move);
+            }
+        }
+
+        long knightPositions = Attacker.getBoard() & Knight.getBoard();
+        for (int i = 0; i < 2; i++) {
+            int from = Long.numberOfTrailingZeros(knightPositions);             //get index of first piece
+            if (from == 64)
+                break;
+            knightPositions = knightPositions & ~Long.lowestOneBit(knightPositions);     //delete piece from board
+            LinkedList<Integer> knightTos = KnightMove(from, Attacker, Defender).allSetSquares();
+
+            for (int to : knightTos) {                                //save discovered moves in possibleMoves
+                Integer[] move = new Integer[]{from, to};
+                possibleMoves.add(move);
+            }
+        }
+
+        long QueenPositions = Attacker.getBoard() & Queen.getBoard();
+        for (int i = 0; i < 1; i++) {
+            int from = Long.numberOfTrailingZeros(QueenPositions);             //get index of first piece
+            if (from == 64)
+                break;
+            QueenPositions = QueenPositions & ~Long.lowestOneBit(QueenPositions);     //delete piece from board
+            LinkedList<Integer> QueenTos = QueenMove(from, Attacker, Defender).allSetSquares();
+
+            for (int to : QueenTos) {                                //save discovered moves in possibleMoves
+                Integer[] move = new Integer[]{from, to};
+                possibleMoves.add(move);
+            }
+        }
+
+        long KingPositions = Attacker.getBoard() & King.getBoard();
+        for (int i = 0; i < 1; i++) {
+            int from = Long.numberOfTrailingZeros(KingPositions);             //get index of first piece
+            if (from == 64)
+                break;
+            KingPositions = KingPositions & ~Long.lowestOneBit(KingPositions);     //delete piece from board
+            LinkedList<Integer> KingTos = KingMove(from, Attacker, Defender).allSetSquares();
+
+            for (int to : KingTos) {                                //save discovered moves in possibleMoves
+                Integer[] move = new Integer[]{from, to};
+                possibleMoves.add(move);
+            }
+        }
+
+        return possibleMoves;
+    }
+
     public boolean makeMove(boolean whiteTurn, int from, int to){
         boolean figAtFrom;
         BitBoard Attacker;
@@ -305,6 +394,8 @@ public class Chessboard {
             Attacker = Black;
             Defender = White;
         }
+
+        LinkedList<Integer[]> res = allPossibleMoves(whiteTurn, Attacker, Defender);
 
         boolean success = false;
         BitBoard figureboard = new BitBoard();   //reference to board of the figure that is to be moved, to change position later
@@ -473,6 +564,31 @@ public class Chessboard {
         }
         return possibleMoves;
     }
+
+    public BitBoard PawnAttack(boolean whiteTurn, int from) {
+        BitBoard pawnPos = new BitBoard();
+        pawnPos.setSquare(from);
+        BitBoard possibleMoves = new BitBoard();
+        if (whiteTurn) {
+            int nw = from + 7;
+            if (Black.isSquareSet(nw))
+                possibleMoves.setSquare(nw);
+
+            int ne = from + 9;
+            if (Black.isSquareSet(ne))
+                possibleMoves.setSquare(ne);
+        } else {
+            int sw = from - 9;
+            if (White.isSquareSet(sw))
+                possibleMoves.setSquare(sw);
+
+            int se = from - 7;
+            if (White.isSquareSet(se))
+                possibleMoves.setSquare(se);
+        }
+        return possibleMoves;
+    }
+
 
     public BitBoard KingMove(int from, BitBoard Attacker, BitBoard Defender){
         BitBoard KingSet = new BitBoard();
@@ -738,14 +854,29 @@ public class Chessboard {
 
     public BitBoard KnightMove(int from, BitBoard Attacker, BitBoard Defender){
         BitBoard nMoves = new BitBoard();
-        nMoves.setSquare(from+6);
-        nMoves.setSquare(from+10);
-        nMoves.setSquare(from+15);
-        nMoves.setSquare(from+17);
-        nMoves.setSquare(from-6);
-        nMoves.setSquare(from-10);
-        nMoves.setSquare(from-15);
-        nMoves.setSquare(from-17);
+        if ((from % 8 > 1) & (from < 56))
+            nMoves.setSquare(from+6);
+
+        if ((from % 8 < 6) & (from < 56))
+            nMoves.setSquare(from + 10);
+
+        if ((from % 8 > 0) & (from < 48))
+            nMoves.setSquare(from+15);
+
+        if ((from % 8 < 7) & (from < 48))
+            nMoves.setSquare(from + 17);
+
+        if ((from % 8 < 6) & (from > 7))
+            nMoves.setSquare(from - 6);
+
+        if ((from % 8 > 1) & (from > 7))
+            nMoves.setSquare(from - 10);
+
+        if ((from % 8 < 7) & (from > 15))
+            nMoves.setSquare(from - 15);
+        
+        if ((from % 8 > 0) & (from > 15))
+            nMoves.setSquare(from - 17);
         long possibleMoves;
         possibleMoves = nMoves.getBoard() & ~Attacker.getBoard();
         return new BitBoard(possibleMoves);
