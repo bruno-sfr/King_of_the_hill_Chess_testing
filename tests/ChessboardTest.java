@@ -29,12 +29,16 @@ class ChessboardTest {
             while (iterator.hasNext()) {
                 JSONObject stellung = iterator.next();
                 String FEN = (String) stellung.get("FEN");
+                System.out.println(FEN);
+                System.out.println("0 Pawn / 1 bishop / 2 knight / 3 rook / 4 queen / 5 king");
                 JSONArray zugArray = (JSONArray) stellung.get("Zug");
                 boolean isWhite = (boolean) stellung.get("White");
+                System.out.println("WhiteTurn:"+isWhite);
                 Chessboard board = new Chessboard(FEN);
-                LinkedList<ChessMove>[] moves = board.allMoves(isWhite);
+                board.printBoard();
+                LinkedList<ChessMove>[] moves = board.allMoves_withCheck(isWhite);
                 for(int i=0; i<6; i++){
-                    System.out.println("Moves:" + moves[i].size() + " Expected:" + zugArray.get(i));
+                    System.out.println(i+ " Moves:" + moves[i].size() + " Expected:" + zugArray.get(i));
                     Assertions.assertEquals((long) moves[i].size(), (long) zugArray.get(i));
                 }
             }
