@@ -328,12 +328,14 @@ public class Chessboard {
         FigPos = AttackPawn.allSetSquares();
         for(int pos:FigPos){
             BitBoard targets = PawnMove(WhiteTurn,pos);
+            targets.printBoard();
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
-                test.makeMove(WhiteTurn,pos,target);
-                if(!test.isCheck(WhiteTurn)){
-                    Moves[0].add(new ChessMove(pos,target));
+                if(test.makeMove(WhiteTurn,pos,target)) {
+                    if (!test.isCheck(WhiteTurn)) {
+                        Moves[0].add(new ChessMove(pos, target));
+                    }
                 }
             }
         }
@@ -390,9 +392,11 @@ public class Chessboard {
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
+                //System.out.println("testing queenmove:" + new ChessMove(pos, target));
                 if(test.makeMove(WhiteTurn,pos,target)) {
                     if (!test.isCheck(WhiteTurn)) {
                         Moves[4].add(new ChessMove(pos, target));
+                        //System.out.println("added");
                     }
                 }
             }
@@ -471,6 +475,14 @@ public class Chessboard {
         LinkedList<Integer> PawnPositions = AttackerPawn.allSetSquares();
         for (int Pos: PawnPositions) {
             BitBoard temp = PawnAttack(!whiteTurn, Pos);
+            allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
+        }
+
+        //King Moves
+        BitBoard AttackerKing = new BitBoard(Attacker.getBoard() & King.getBoard());
+        LinkedList<Integer> KingPositions = AttackerKing.allSetSquares();
+        for (int Pos: KingPositions) {
+            BitBoard temp = KingMove(Pos, Attacker, Defender);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -986,7 +998,7 @@ public class Chessboard {
         BitBoard KingAttacks = new BitBoard();
         KingAttacks.setBoard(KingSet.getBoard() << 1 | KingSet.getBoard() >> 1);
         KingSet.setBoard(KingSet.getBoard() | KingAttacks.getBoard());
-        KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8 | KingSet.getBoard() >> 8);
+        KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8 | KingSet.getBoard() >>> 8);
         BitBoard possibleMoves = new BitBoard();
         possibleMoves.setBoard((KingAttacks.getBoard() & ~Attacker.getBoard()) | possibleCastle.getBoard());
         return possibleMoves;

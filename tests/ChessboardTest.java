@@ -31,6 +31,7 @@ class ChessboardTest {
                 String FEN = (String) stellung.get("FEN");
                 System.out.println(FEN);
                 System.out.println("0 Pawn / 1 bishop / 2 knight / 3 rook / 4 queen / 5 king");
+                System.out.println((String) stellung.get("comment"));
                 JSONArray zugArray = (JSONArray) stellung.get("Zug");
                 boolean isWhite = (boolean) stellung.get("White");
                 System.out.println("WhiteTurn:"+isWhite);

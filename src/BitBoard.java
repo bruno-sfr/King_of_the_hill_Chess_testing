@@ -38,7 +38,7 @@ public class BitBoard {
 
     public LinkedList<Integer> allSetSquares(){
         LinkedList<Integer> list = new LinkedList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 64; i++) {
             int index = Long.numberOfTrailingZeros(board);             //get index of first piece
             if (index == 64)
                 break;
