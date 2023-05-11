@@ -955,26 +955,26 @@ public class Chessboard {
         BitBoard possibleCastle = new BitBoard();
         //white king at starting position, so check for castleing
         if(from == 4 && Attacker == White){
-            if(WhiteLeftCastle){
+            if(WhiteLeftCastle && (0x1L & Rook.getBoard() & White.getBoard()) != 0) {
                 long figbetween = 0x000000000000000eL;
                 if((White.getBoard() & figbetween) == 0){
                     possibleCastle.setSquare(2);
                 }
             }
-            if(WhiteRightCastle){
+            if(WhiteRightCastle && (0x80L & Rook.getBoard() & White.getBoard()) != 0) {
                 long figbetween = 0x0000000000000060L;
                 if((White.getBoard() & figbetween) == 0){
                     possibleCastle.setSquare(6);
                 }
             }
         } else if (from == 60 && Attacker == Black) {
-            if(BlackLeftCastle){
+            if(BlackLeftCastle && (0x0100000000000000L & Rook.getBoard() & Black.getBoard()) != 0) {
                 long figbetween = 0x0e00000000000000L;
                 if((Black.getBoard() & figbetween) == 0){
                     possibleCastle.setSquare(58);
                 }
             }
-            if(BlackRightCastle){
+            if(BlackRightCastle && (0x8000000000000000L & Rook.getBoard() & Black.getBoard()) != 0) {
                 long figbetween = 0x6000000000000000L;
                 if((Black.getBoard() & figbetween) == 0){
                     possibleCastle.setSquare(62);
