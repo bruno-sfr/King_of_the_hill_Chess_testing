@@ -993,9 +993,11 @@ public class Chessboard {
     }
 
     public BitBoard QueenMove(int from, BitBoard Attacker, BitBoard Defender){
-        BitBoard possibleMoves = new BitBoard();
+        BitBoard BishopMoves = BishopMove(from,Attacker,Defender);
+        BitBoard RookMoves = RookMove(from,Attacker,Defender);
+        return new BitBoard(BishopMoves.getBoard() | RookMoves.getBoard());
         //west direction so a change of -1
-        for(int i=1;i<8;i++){
+        /*for(int i=1;i<8;i++){
             //calc next field in north-west direction
             int Pos = from+i*7;
             //check if Bishop is on the north or west border so movement in north/west dirction is not possible
@@ -1147,7 +1149,7 @@ public class Chessboard {
         }
         return possibleMoves;
 
-        /*for(int i=1;i<8;i++){
+        for(int i=1;i<8;i++){
             if(Attacker.isSquareSet(from-i)){
                 break;
             } else if (Defender.isSquareSet(from-i)) {

@@ -34,4 +34,9 @@ public class ChessMove {
             throw new RuntimeException("Chess Position not in 63 to 0 Bounds");
         }
     }
+
+    @Override
+    public String toString() {
+        return "from: " + this.from + " to: " + this.to;
+    }
 }

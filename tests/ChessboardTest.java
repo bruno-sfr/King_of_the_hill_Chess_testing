@@ -21,7 +21,7 @@ class ChessboardTest {
     void PostionsTest() throws IOException{
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader("./tests/unittests.json"));
+            Object obj = parser.parse(new FileReader("./tests/Stellungen.json"));
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray stellungenArray = (JSONArray) jsonObject.get("Stellungen");
 
@@ -39,6 +39,11 @@ class ChessboardTest {
                 LinkedList<ChessMove>[] moves = board.allMoves_withCheck(isWhite);
                 for(int i=0; i<6; i++){
                     System.out.println(i+ " Moves:" + moves[i].size() + " Expected:" + zugArray.get(i));
+                    if((long) moves[i].size() != (long) zugArray.get(i)){
+                        for(int i2=0; i2<moves[i].size(); i2++){
+                            System.out.println(moves[i].get(i2));
+                        }
+                    }
                     Assertions.assertEquals((long) moves[i].size(), (long) zugArray.get(i));
                 }
             }
