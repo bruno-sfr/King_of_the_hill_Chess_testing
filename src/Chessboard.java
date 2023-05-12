@@ -1289,7 +1289,7 @@ public class Chessboard {
     public BitBoard BishopMove(int from, BitBoard Attacker, BitBoard Defender){
         BitBoard possibleMoves = new BitBoard();
         //check if Bishop is on the north or west border so movement in north/west dirction is not possible
-        if(!ChessHelper.isNorthBorder(from) | ChessHelper.isWestBorder(from)){
+        if(!(ChessHelper.isNorthBorder(from) | ChessHelper.isWestBorder(from))){
             //north-west direction so a change of +7
             for(int i=1;i<8;i++) {
                 //calc next field in north-west direction
@@ -1314,7 +1314,7 @@ public class Chessboard {
             //same procedure for all bishop direction also rook and queen
         }
 
-        if(!ChessHelper.isNorthBorder(from) | ChessHelper.isEastBorder(from)) {
+        if(!(ChessHelper.isNorthBorder(from) | ChessHelper.isEastBorder(from))) {
             //north-east direction so a change of +9
             for (int i = 1; i < 8; i++) {
                 int Pos = from + i * 9;
@@ -1332,7 +1332,7 @@ public class Chessboard {
             }
         }
 
-        if(!ChessHelper.isSouthBorder(from) | ChessHelper.isWestBorder(from)) {
+        if(!(ChessHelper.isSouthBorder(from) | ChessHelper.isWestBorder(from))) {
             //south-west direction so a change of -9
             for (int i = 1; i < 8; i++) {
                 int Pos = from - i * 9;
@@ -1350,7 +1350,7 @@ public class Chessboard {
             }
         }
 
-        if(!ChessHelper.isSouthBorder(from) | ChessHelper.isEastBorder(from)) {
+        if(!(ChessHelper.isSouthBorder(from) | ChessHelper.isEastBorder(from))) {
             //south-east direction so a change of -7
             for (int i = 1; i < 8; i++) {
                 int Pos = from - i * 7;
