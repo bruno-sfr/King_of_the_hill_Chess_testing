@@ -22,7 +22,7 @@ public class Main {
             Starttime = System.nanoTime();
             LinkedList<Integer[]> test2 = board.allPossibleMoves(WhiteTurn);
             endtime = System.nanoTime();
-            System.out.println("Duration_Niko:" + (endtime-Starttime));
+            System.out.println("Duration_Nico:" + (endtime-Starttime));
             System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
             System.out.println("Is check? " + board.isCheck(WhiteTurn));
             System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
@@ -30,16 +30,20 @@ public class Main {
             if (input.equals("exit"))
                    break;
             LinkedList<Integer> move = ChessHelper.calcPos(input);
-            if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
-                board.printBoard();
-                WhiteTurn = !WhiteTurn;
-            }
-            else {
-                if (WhiteTurn) {
-                    System.out.println("Invalid move provided. It's white's turn.");
+            try {
+                if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
+                    board.printBoard();
+                    WhiteTurn = !WhiteTurn;
                 } else {
-                    System.out.println("Invalid move provided. It's black's turn.");
+                    if (WhiteTurn) {
+                        System.out.println("Invalid move provided. It's white's turn.");
+                    } else {
+                        System.out.println("Invalid move provided. It's black's turn.");
+                    }
+                    board.printBoard();
                 }
+            } catch(IndexOutOfBoundsException e) {
+                System.out.println("Invalid move provided. Please use small letters in the following format: a2,a3 OR a2a3.");
                 board.printBoard();
             }
         }

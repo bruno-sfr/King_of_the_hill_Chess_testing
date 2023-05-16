@@ -16,10 +16,10 @@ public class Chessboard {
     final BitBoard row6 = new BitBoard(0xff0000000000L);
     final BitBoard row7 = new BitBoard(0xff000000000000L);
     final BitBoard row8 = new BitBoard(0xff00000000000000L);
-    final BitBoard colA = new BitBoard(0x11111111L);
-    final BitBoard colB = new BitBoard(0x22222222L);
-    final BitBoard colC = new BitBoard(0x44444444L);
-    final BitBoard colD = new BitBoard(0x88888888L);
+    final BitBoard colA = new BitBoard(0x101010101010101L);
+    final BitBoard colB = new BitBoard(0x202020202020202L);
+    final BitBoard colC = new BitBoard(0x404040404040404L);
+    final BitBoard colD = new BitBoard(0x808080808080808L);
     final BitBoard colE = new BitBoard(0x1010101010101010L);
     final BitBoard colF = new BitBoard(0x2020202020202020L);
     final BitBoard colG = new BitBoard(0x4040404040404040L);
