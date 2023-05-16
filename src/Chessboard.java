@@ -1276,8 +1276,8 @@ public class Chessboard {
         eval = eval + white_king.allSetSquares().size() * 100000;
 
         //available moves
-        LinkedList<ChessMove>[] whiteMoves = this.allMoves(true);
-        LinkedList<ChessMove>[] blackMoves = this.allMoves(false);
+        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
+        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
 
         for(int i=0; i<6; i++){
             eval = eval + whiteMoves[i].size() * 0.1;
