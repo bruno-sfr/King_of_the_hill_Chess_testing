@@ -9,7 +9,6 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import static org.junit.Assert.*;
-//import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
