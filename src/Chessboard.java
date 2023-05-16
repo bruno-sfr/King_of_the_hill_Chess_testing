@@ -1285,14 +1285,18 @@ public class Chessboard {
         }
 
         //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
-        LinkedList<Integer> _whiteKing = white_king.allSetSquares();
-        int whiteKingPos = _whiteKing.getFirst();
-        LinkedList<Integer> _blackKing = white_king.allSetSquares();
-        int blackKingPos = _blackKing.getFirst();
-        int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-        int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
-        eval = eval + white_distance;
-        eval = eval - black_distance;
+        if(white_king.getBoard()>0){
+            LinkedList<Integer> _whiteKing = white_king.allSetSquares();
+            int whiteKingPos = _whiteKing.getFirst();
+            int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
+            eval = eval + white_distance;
+        }
+        if(black_king.getBoard()>0) {
+            LinkedList<Integer> _blackKing = black_king.allSetSquares();
+            int blackKingPos = _blackKing.getFirst();
+            int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
+            eval = eval - black_distance;
+        }
 
         return eval;
     }

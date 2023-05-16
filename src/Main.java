@@ -14,7 +14,11 @@ public class Main {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         while(true) {
-            long Starttime = System.nanoTime();
+            Game_Vs_AI game = new Game_Vs_AI(board);
+            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
+            ReturnObject result = game.alphabeta(-999999, 999999, 6, true, board, object);
+            System.out.println(result);
+            /*long Starttime = System.nanoTime();
             LinkedList<ChessMove>[] test = board.allMovesWithPieces(WhiteTurn);
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
@@ -45,7 +49,7 @@ public class Main {
             } catch(IndexOutOfBoundsException e) {
                 System.out.println("Invalid move provided. Please use small letters in the following format: a2,a3 OR a2a3.");
                 board.printBoard();
-            }
+            }*/
         }
     }
 }
