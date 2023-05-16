@@ -722,6 +722,18 @@ public class Chessboard {
                 figureboard = Pawn;
             }
             else if(King.isSquareSet(from)){
+                if(whiteTurn){
+                    if(isCheck(true)){
+                        WhiteLeftCastle = false;
+                        WhiteRightCastle = false;
+                    }
+                }else {
+                    if(isCheck(false)){
+                        BlackRightCastle = false;
+                        BlackLeftCastle = false;
+                    }
+                }
+
                 possibleMoves = KingMove(from, Attacker, Defender);
                 success = possibleMoves.isSquareSet(to);
                 if(success) {
