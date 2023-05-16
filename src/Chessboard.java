@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.LinkedList;
 
 public class Chessboard {
@@ -213,7 +212,7 @@ public class Chessboard {
         }
     }
 
-    public LinkedList<ChessMove>[] allMoves(boolean WhiteTurn){
+    public LinkedList<ChessMove>[] allMovesWithPieces(boolean WhiteTurn){
         //Moves in Order Pawn / bishop / knight / rook / queen / king
         LinkedList<ChessMove>[] Moves = new LinkedList[6];
         for(int i = 0; i<Moves.length; i++){
@@ -599,7 +598,7 @@ public class Chessboard {
         return true;
     }
 
-    public LinkedList<Integer[]> allPossibleMoves(boolean whiteTurn){
+    public LinkedList<Integer[]> allMovesWithoutPieces(boolean whiteTurn){
         BitBoard Attacker;
         BitBoard Defender;
         if(whiteTurn){

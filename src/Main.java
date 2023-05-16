@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,11 +15,11 @@ public class Main {
                 new InputStreamReader(System.in));
         while(true) {
             long Starttime = System.nanoTime();
-            LinkedList<ChessMove>[] test = board.allMoves(WhiteTurn);
+            LinkedList<ChessMove>[] test = board.allMovesWithPieces(WhiteTurn);
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
             Starttime = System.nanoTime();
-            LinkedList<Integer[]> test2 = board.allPossibleMoves(WhiteTurn);
+            LinkedList<Integer[]> test2 = board.allMovesWithoutPieces(WhiteTurn);
             endtime = System.nanoTime();
             System.out.println("Duration_Nico:" + (endtime-Starttime));
             System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
