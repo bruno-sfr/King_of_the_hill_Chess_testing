@@ -475,6 +475,9 @@ public class Chessboard {
         LinkedList<Integer> PawnPositions = AttackerPawn.allSetSquares();
         for (int Pos: PawnPositions) {
             BitBoard temp = PawnAttack(!whiteTurn, Pos);
+            /*if(temp.getBoard()>0){
+                temp.printBoard();
+            }*/
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -913,12 +916,14 @@ public class Chessboard {
                 if ((pawnPos.getBoard() & row2.getBoard()) != 0 && (((pawnPos.getBoard() << 8 | pawnPos.getBoard() << 16) & (White.getBoard() | Black.getBoard())) == 0))
                     possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() << 16);
             }
-            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            if (!ChessHelper.isWestBorder(from)) {
                 int nw = from + 7;
                 if (Black.isSquareSet(nw))
                     possibleMoves.setSquare(nw);
             }
-            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            if (!ChessHelper.isEastBorder(from)) {
                 int ne = from + 9;
                 if (Black.isSquareSet(ne))
                     possibleMoves.setSquare(ne);
@@ -930,12 +935,14 @@ public class Chessboard {
                 if ((pawnPos.getBoard() & row7.getBoard()) != 0 & (((pawnPos.getBoard() >> 8 | pawnPos.getBoard() >> 16) & (White.getBoard() | Black.getBoard())) == 0))
                     possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() >> 16);
             }
-            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            if (!ChessHelper.isWestBorder(from)) {
                 int sw = from - 9;
                 if (White.isSquareSet(sw))
                     possibleMoves.setSquare(sw);
             }
-            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            if (!ChessHelper.isEastBorder(from)) {
                 int se = from - 7;
                 if (White.isSquareSet(se))
                     possibleMoves.setSquare(se);
@@ -949,23 +956,27 @@ public class Chessboard {
         pawnPos.setSquare(from);
         BitBoard possibleMoves = new BitBoard();
         if (whiteTurn) {
-            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            if (!ChessHelper.isWestBorder(from)) {
                 int nw = from + 7;
                 if (Black.isSquareSet(nw))
                     possibleMoves.setSquare(nw);
             }
-            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            if (!ChessHelper.isEastBorder(from)) {
                 int ne = from + 9;
                 if (Black.isSquareSet(ne))
                     possibleMoves.setSquare(ne);
             }
         } else {
-            if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
+            if (!ChessHelper.isWestBorder(from)) {
                 int sw = from - 9;
                 if (White.isSquareSet(sw))
                     possibleMoves.setSquare(sw);
             }
-            if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            //if ((pawnPos.getBoard() & colH.getBoard()) == 0) {
+            if (!ChessHelper.isEastBorder(from)) {
                 int se = from - 7;
                 if (White.isSquareSet(se))
                     possibleMoves.setSquare(se);
@@ -1032,252 +1043,6 @@ public class Chessboard {
         BitBoard BishopMoves = BishopMove(from,Attacker,Defender);
         BitBoard RookMoves = RookMove(from,Attacker,Defender);
         return new BitBoard(BishopMoves.getBoard() | RookMoves.getBoard());
-        //west direction so a change of -1
-        /*for(int i=1;i<8;i++){
-            //calc next field in north-west direction
-            int Pos = from+i*7;
-            //check if Bishop is on the north or west border so movement in north/west dirction is not possible
-            if(ChessHelper.isNorthBorder(from) | ChessHelper.isWestBorder(from)){
-                break;
-            }
-            //check if figure of same color is in the position, so move and further moves in that direction are not possible
-            else if(Attacker.isSquareSet(Pos)){
-                break;
-            }
-            //check if figure of other color is in the position, capture possible but not more moves in that direction
-            else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            }
-            //by elimination of case should a free field, so move is possible. check if field is on border so no further move are possible
-            else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isNorthBorder(Pos) | ChessHelper.isWestBorder(Pos)){
-                    break;
-                }
-            }
-            //same procedure for all bishop direction also rook and queen
-        }
-
-        //north-east direction so a change of +9
-        for(int i=1;i<8;i++){
-            int Pos = from+i*9;
-            if(ChessHelper.isNorthBorder(from) | ChessHelper.isEastBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isNorthBorder(Pos) | ChessHelper.isEastBorder(Pos)){
-                    break;
-                }
-            }
-        }
-
-        //south-west direction so a change of -9
-        for(int i=1;i<8;i++){
-            int Pos = from-i*9;
-            if(ChessHelper.isSouthBorder(from) | ChessHelper.isWestBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isSouthBorder(Pos) | ChessHelper.isWestBorder(Pos)){
-                    break;
-                }
-            }
-        }
-
-        //south-east direction so a change of -7
-        for(int i=1;i<8;i++){
-            int Pos = from-i*7;
-            if(ChessHelper.isSouthBorder(from) | ChessHelper.isEastBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isSouthBorder(Pos) | ChessHelper.isEastBorder(Pos)) {
-                    break;
-                }
-            }
-        }
-
-        for(int i=1;i<8;i++){
-            int Pos = from-i;
-            if(ChessHelper.isWestBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isWestBorder(Pos)){
-                    break;
-                }
-            }
-        }
-
-        //east direction so a change of +1
-        for(int i=1;i<8;i++){
-            int Pos = from+i;
-            if(ChessHelper.isEastBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isEastBorder(Pos)){
-                    break;
-                }
-            }
-        }
-
-        //south direction so a change of -8
-        for(int i=1;i<8;i++){
-            int Pos = from-i*8;
-            if(ChessHelper.isSouthBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isSouthBorder(Pos)){
-                    break;
-                }
-            }
-        }
-
-        //north direction so a change of +8
-        for(int i=1;i<8;i++){
-            int Pos = from+i*8;
-            if(ChessHelper.isNorthBorder(from)){
-                break;
-            }else if(Attacker.isSquareSet(Pos)){
-                break;
-            } else if (Defender.isSquareSet(Pos)) {
-                possibleMoves.setSquare(Pos);
-                break;
-            } else {
-                possibleMoves.setSquare(Pos);
-                if(ChessHelper.isNorthBorder(Pos)){
-                    break;
-                }
-            }
-        }
-        return possibleMoves;
-
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from-i)){
-                break;
-            } else if (Defender.isSquareSet(from-i)) {
-                possibleMoves.setSquare(from-i);
-                break;
-            } else {
-                possibleMoves.setSquare(from-i);
-            }
-        }
-
-        //east direction so a change of +1
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from+i)){
-                break;
-            } else if (Defender.isSquareSet(from+i)) {
-                possibleMoves.setSquare(from+i);
-                break;
-            } else {
-                possibleMoves.setSquare(from+i);
-            }
-        }
-
-        //south direction so a change of -8
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from-i*8)){
-                break;
-            } else if (Defender.isSquareSet(from-i*8)) {
-                possibleMoves.setSquare(from-i*8);
-                break;
-            } else {
-                possibleMoves.setSquare(from-i*8);
-            }
-        }
-
-        //north direction so a change of +8
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from+i*8)){
-                break;
-            } else if (Defender.isSquareSet(from+i*8)) {
-                possibleMoves.setSquare(from+i*8);
-                break;
-            } else {
-                possibleMoves.setSquare(from+i*8);
-            }
-        }
-        //north-west direction so a change of +7
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from+i*7)){
-                break;
-            } else if (Defender.isSquareSet(from+i*7)) {
-                possibleMoves.setSquare(from+i*7);
-                break;
-            } else {
-                possibleMoves.setSquare(from+i*7);
-            }
-        }
-
-        //north-east direction so a change of +9
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from+i*9)){
-                break;
-            } else if (Defender.isSquareSet(from+i*9)) {
-                possibleMoves.setSquare(from+i*9);
-                break;
-            } else {
-                possibleMoves.setSquare(from+i*9);
-            }
-        }
-
-        //south-west direction so a change of -9
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from-i*9)){
-                break;
-            } else if (Defender.isSquareSet(from-i*9)) {
-                possibleMoves.setSquare(from-i*9);
-                break;
-            } else {
-                possibleMoves.setSquare(from-i*9);
-            }
-        }
-
-        //south-east direction so a change of -7
-        for(int i=1;i<8;i++){
-            if(Attacker.isSquareSet(from-i*7)){
-                break;
-            } else if (Defender.isSquareSet(from-i*7)) {
-                possibleMoves.setSquare(from-i*7);
-                break;
-            } else {
-                possibleMoves.setSquare(from-i*7);
-            }
-        }*/
     }
 
     public BitBoard KnightMove(int from, BitBoard Attacker, BitBoard Defender){
