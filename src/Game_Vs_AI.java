@@ -6,10 +6,6 @@ import java.util.concurrent.*;
 public class Game_Vs_AI {
 
     Chessboard board;
-    private static final long DURATION = 3000; // Duration in milliseconds
-    private static final long DELAY = 1000; // Delay before starting the function in milliseconds
-    private static final long INTERVAL = 100; // Interval between function calls in milliseconds
-
     private ReturnObject lastResult;
     private int Depth;
 
@@ -17,15 +13,37 @@ public class Game_Vs_AI {
         this.board=board;
     }
 
-    public ReturnObject runFunction(boolean whiteTurn) {
+    //current player and duration in ms
+    public ReturnObject runFunction(boolean whiteTurn, long DURATION) {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + DURATION;
         lastResult = new ReturnObject(0, new LinkedList<ChessMove>());
         Depth = 1;
 
         while (System.currentTimeMillis() < endTime) {
-            lastResult = alphabeta(-99999,99999, Depth, whiteTurn, board, new ReturnObject(0, new LinkedList<ChessMove>())); // Call your alphabeta function here
-            Depth++;
+            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
+                @Override
+                public ReturnObject call() throws Exception {
+                    //return randomMove(board,!board.lastPlayer);
+                    return alphabeta(-99999,99999,Depth,whiteTurn,board, object);
+                }
+            });
+            try {
+                //wait for result but with only the time that is left as a limit: endtime - current time
+                lastResult = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                Depth++;
+            } catch (TimeoutException f) {
+                future.cancel(true);
+                //throw new RuntimeException("Timeout", f);
+            } catch (ExecutionException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                executor.shutdownNow();
+            }
+            /*lastResult = alphabeta(-99999,99999, Depth, whiteTurn, board, new ReturnObject(0, new LinkedList<ChessMove>())); // Call your alphabeta function here
+            Depth++;*/
             /*try {
                 Thread.sleep(INTERVAL);
             } catch (InterruptedException e) {
@@ -84,10 +102,16 @@ public class Game_Vs_AI {
     public static void main(String[] args) {
         Game_Vs_AI runner = new Game_Vs_AI(new Chessboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"));
         long startTime = System.currentTimeMillis();
-        ReturnObject result = runner.runFunction(true);
+        ReturnObject result = runner.runFunction(true, 10000);
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken in ms:"+(endTime-startTime));
         System.out.println("Result: " + result);
+        boolean whiteturn = true;
+        for(ChessMove move: result.moves){
+            runner.board.makeMove(whiteturn, move.getFrom(), move.getTo());
+            whiteturn = !whiteturn;
+        }
+        runner.board.printBoard();
     }
 
 
