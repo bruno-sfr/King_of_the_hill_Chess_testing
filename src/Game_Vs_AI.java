@@ -27,7 +27,7 @@ public class Game_Vs_AI {
 
                     Chessboard child = new Chessboard(board);
                     child.makeMove(true,move.getFrom(),move.getTo());
-                    LinkedList<ChessMove> Movelist=object.moves;
+                    LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
                     ReturnObject eval=alphabeta(alpha,beta,depthleft-1,false,child,new ReturnObject(object.eval,Movelist));
