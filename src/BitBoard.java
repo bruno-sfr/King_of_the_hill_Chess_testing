@@ -38,11 +38,12 @@ public class BitBoard {
 
     public LinkedList<Integer> allSetSquares(){
         LinkedList<Integer> list = new LinkedList<>();
+        long _board = board;
         for (int i = 0; i < 64; i++) {
-            int index = Long.numberOfTrailingZeros(board);             //get index of first piece
+            int index = Long.numberOfTrailingZeros(_board);             //get index of first piece
             if (index == 64)
                 break;
-            board = board & ~Long.lowestOneBit(board);     //delete piece from board
+            _board = _board & ~Long.lowestOneBit(_board);     //delete piece from board
             list.add(index);
         }
         return list;

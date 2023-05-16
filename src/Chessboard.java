@@ -1235,6 +1235,69 @@ public class Chessboard {
         return possibleMoves;
     }
 
+    //postive value means white has the advantage and negative means black has the advantage
+    //pawn has a value of 1
+    //knight and bishop have a value of 3
+    //rook has a value of 5
+    //queen has a value of 9
+    //king has insane high value
+    //an available move is worth 0.1
+    //and euclidean distance of king to center is valuable
+    public double eval_func(){
+        double eval = 0.0;
+        //Black
+        BitBoard black_pawns = new BitBoard(Black.getBoard() & Pawn.getBoard());
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        BitBoard black_queen = new BitBoard(Black.getBoard() & Queen.getBoard());
+        BitBoard black_knights = new BitBoard(Black.getBoard() & Knight.getBoard());
+        BitBoard black_bishop = new BitBoard(Black.getBoard() & Bishop.getBoard());
+        BitBoard black_rook = new BitBoard(Black.getBoard() & Rook.getBoard());
+        //White
+        BitBoard white_pawns = new BitBoard(White.getBoard() & Pawn.getBoard());
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        BitBoard white_queen = new BitBoard(White.getBoard() & Queen.getBoard());
+        BitBoard white_knights = new BitBoard(White.getBoard() & Knight.getBoard());
+        BitBoard white_bishop = new BitBoard(White.getBoard() & Bishop.getBoard());
+        BitBoard white_rook = new BitBoard(White.getBoard() & Rook.getBoard());
+
+        //black value
+        eval = eval - black_pawns.allSetSquares().size();
+        eval = eval - black_bishop.allSetSquares().size() * 3;
+        eval = eval - black_knights.allSetSquares().size() * 3;
+        eval = eval - black_rook.allSetSquares().size() * 5;
+        eval = eval - black_queen.allSetSquares().size() * 9;
+        eval = eval - black_king.allSetSquares().size() * 100000;
+
+        //white value
+        eval = eval + white_pawns.allSetSquares().size();
+        eval = eval + white_bishop.allSetSquares().size() * 3;
+        eval = eval + white_knights.allSetSquares().size() * 3;
+        eval = eval + white_rook.allSetSquares().size() * 5;
+        eval = eval + white_queen.allSetSquares().size() * 9;
+        eval = eval + white_king.allSetSquares().size() * 100000;
+
+        //available moves
+        LinkedList<ChessMove>[] whiteMoves = this.allMoves(true);
+        LinkedList<ChessMove>[] blackMoves = this.allMoves(false);
+
+        for(int i=0; i<6; i++){
+            eval = eval + whiteMoves[i].size() * 0.1;
+            eval = eval - blackMoves[i].size() * 0.1;
+        }
+
+        //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
+        LinkedList<Integer> _whiteKing = white_king.allSetSquares();
+        int whiteKingPos = _whiteKing.getFirst();
+        LinkedList<Integer> _blackKing = white_king.allSetSquares();
+        int blackKingPos = _blackKing.getFirst();
+        int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
+        int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
+        eval = eval + white_distance;
+        eval = eval - black_distance;
+
+        return eval;
+    }
+
     public void printBoard(){
         /*
         System.out.println("Black");
