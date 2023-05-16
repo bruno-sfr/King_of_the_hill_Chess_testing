@@ -328,7 +328,7 @@ public class Chessboard {
         FigPos = AttackPawn.allSetSquares();
         for(int pos:FigPos){
             BitBoard targets = PawnMove(WhiteTurn,pos);
-            targets.printBoard();
+            //targets.printBoard();
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
@@ -996,9 +996,21 @@ public class Chessboard {
         BitBoard KingSet = new BitBoard();
         KingSet.setSquare(from);
         BitBoard KingAttacks = new BitBoard();
-        KingAttacks.setBoard(KingSet.getBoard() << 1 | KingSet.getBoard() >> 1);
+        if(!ChessHelper.isEastBorder(from)){
+            KingAttacks.setBoard(KingSet.getBoard() << 1);
+        }
+        if(!ChessHelper.isWestBorder(from)){
+            KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() >> 1);
+        }
+        //KingAttacks.setBoard(KingSet.getBoard() << 1 | KingSet.getBoard() >> 1);
         KingSet.setBoard(KingSet.getBoard() | KingAttacks.getBoard());
-        KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8 | KingSet.getBoard() >>> 8);
+        if(!ChessHelper.isSouthBorder(from)){
+            KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() >>> 8);
+        }
+        if(!ChessHelper.isNorthBorder(from)){
+            KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8);
+        }
+        //KingAttacks.setBoard(KingAttacks.getBoard() | KingSet.getBoard() << 8 | KingSet.getBoard() >>> 8);
         BitBoard possibleMoves = new BitBoard();
         possibleMoves.setBoard((KingAttacks.getBoard() & ~Attacker.getBoard()) | possibleCastle.getBoard());
         return possibleMoves;
