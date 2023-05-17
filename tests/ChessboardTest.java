@@ -34,19 +34,48 @@ class ChessboardTest {
                 System.out.println((String) stellung.get("comment"));
                 JSONArray zugArray = (JSONArray) stellung.get("Zug");
                 boolean isWhite = (boolean) stellung.get("White");
-                //System.out.println("WhiteTurn:"+isWhite);
                 Chessboard board = new Chessboard(FEN);
-                //board.printBoard();
                 LinkedList<ChessMove>[] moves = board.allMoves_withCheck(isWhite);
                 for(int i=0; i<6; i++){
-                    /*System.out.println(i+ " Moves:" + moves[i].size() + " Expected:" + zugArray.get(i));
-                    if((long) moves[i].size() != (long) zugArray.get(i)){
-                        for(int i2=0; i2<moves[i].size(); i2++){
-                            System.out.println(moves[i].get(i2));
-                        }
-                    }*/
                     Assertions.assertEquals((long) moves[i].size(), (long) zugArray.get(i));
                 }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void Alpha_Beta_Test() throws IOException{
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("./tests/StellungenSuchtiefe.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray stellungenArray = (JSONArray) jsonObject.get("Stellungen");
+
+            Iterator<JSONObject> iterator = stellungenArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject stellung = iterator.next();
+                String FEN = (String) stellung.get("FEN");
+                JSONArray zugArray = (JSONArray) stellung.get("Zug");
+                boolean isWhite = (boolean) stellung.get("White");
+                long Suchtiefe = (long) stellung.get("Suchtiefe");
+                System.out.println(FEN);
+                System.out.println((String) stellung.get("comment"));
+                Chessboard chessboard = new Chessboard(FEN);
+                chessboard.printBoard();
+                Game_Vs_AI game = new Game_Vs_AI(chessboard);
+                ReturnObject result = game.alphabeta(-9999999,9999999,(int) (Suchtiefe) ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
+                System.out.println(result.eval);
+                if(isWhite){
+                    //50000 seems big enough to be bigger than normal eval but smaller than 100000 if black king is slayn
+                    Assertions.assertTrue(result.eval>50000);
+                }else {
+                    Assertions.assertTrue(result.eval<-50000);
+                }
+                /*int actual = result.moves.getFirst().getTo();
+                int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
+                Assertions.assertEquals(expected, actual);*/
             }
         } catch (Exception e) {
             e.printStackTrace();

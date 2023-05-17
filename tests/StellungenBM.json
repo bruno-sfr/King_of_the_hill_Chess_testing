@@ -1,0 +1,87 @@
+
+{
+  "Stellungen": [
+    {
+      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
+      "FEN": "r1bqkbnr/p2ppppp/2p5/1p4N1/2B1P3/8/PPQP1PPP/RNB1K2R",
+      "Zug": [
+        "Bf7"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
+      "FEN": "8/6k1/8/8/8/8/1K6/8",
+      "Zug": [
+        "Kf6"
+      ],
+      "White": false,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe Q",
+      "FEN": "4krn1/1r1p3b/6q1/8/1PR1P3/8/2K5/2B2BN1",
+      "Zug": [
+        "Rc8"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe Q",
+      "FEN": "r1bqkb1r/p2p1ppp/np3n2/8/8/NP1QPN2/P4PPP/R1B1KB1R",
+      "Zug": [
+        "Nc4"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe D",
+      "FEN": "1kr4r/p4ppp/1p3q2/2p5/2P1NP2/3R2P1/PP5P/3R1K2",
+      "Zug": [
+        "Nf6"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe ?",
+      "FEN": "rnb1kbnr/p4ppp/1p1pp3/2p3q1/3P4/NQP1PNPB/PP3P1P/R1B1K2R",
+      "Zug": [
+        "Qb4"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe R",
+      "FEN": "2b1k3/4b3/2p1p2p/1p1pPp2/1P1q1P2/QK6/3N3P/4BB2",
+      "Zug": [
+        "qe3"
+      ],
+      "White": false,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe R",
+      "FEN": "1K1R4/PPP5/5r1P/3P4/8/2np2Q1/ppp1p3/6qk",
+      "Zug": [
+        "Qh3"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
+      "comment": "Gruppe L - Angegeben Matt in 1,  w: Dc2 b: dxc2 # ",
+      "FEN": "r3k2r/pp3ppp/3p1nb1/3Pp3/1PP5/2q5/P5PP/R1KQ1B1R",
+      "Zug": [
+        "Dc2"
+      ],
+      "White": true,
+      "Schach_in": 0
+    }
+
+  ]
+}

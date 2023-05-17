@@ -1285,19 +1285,37 @@ public class Chessboard {
         }
 
         //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
-        if(white_king.getBoard()>0){
+        if(white_king.allSetSquares().size()>0){
             LinkedList<Integer> _whiteKing = white_king.allSetSquares();
             int whiteKingPos = _whiteKing.getFirst();
+            if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+                //white has won via king of the hill
+                eval = eval + 100000;
+            }
             int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
             eval = eval + white_distance;
         }
-        if(black_king.getBoard()>0) {
+        if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
             int blackKingPos = _blackKing.getFirst();
+            if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+                //black has won via king of the hill
+                eval = eval -100000;
+            }
             int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
             eval = eval - black_distance;
         }
 
+        if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
+            //System.out.println("checking checkmate in eval");
+            if (this.isCheckmate(true)) {
+                //white in ckeckmate so black win
+                eval = eval - 100000;
+            }
+            if (this.isCheckmate(false)) {
+                eval = eval + 100000;
+            }
+        }
         return eval;
     }
 

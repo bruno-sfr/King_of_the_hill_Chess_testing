@@ -7,18 +7,18 @@ public class Main {
 
     static boolean WhiteTurn;
     public static void main(String[] args) throws IOException {
-        Chessboard board = new Chessboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+        Chessboard board = new Chessboard("r3kb1r/1p1nqp1p/p2p1np1/P1p1p3/2P1P3/2N1K1PP/1P1P1P2/R1BQ1B1R");
         board.printBoard();
         WhiteTurn = true;
 
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         while(true) {
-            Game_Vs_AI game = new Game_Vs_AI(board);
+            /*Game_Vs_AI game = new Game_Vs_AI(board);
             ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
             ReturnObject result = game.alphabeta(-999999, 999999, 6, true, board, object);
-            System.out.println(result);
-            /*long Starttime = System.nanoTime();
+            System.out.println(result);*/
+            long Starttime = System.nanoTime();
             LinkedList<ChessMove>[] test = board.allMovesWithPieces(WhiteTurn);
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
@@ -49,7 +49,7 @@ public class Main {
             } catch(IndexOutOfBoundsException e) {
                 System.out.println("Invalid move provided. Please use small letters in the following format: a2,a3 OR a2a3.");
                 board.printBoard();
-            }*/
+            }
         }
     }
 }
