@@ -20,6 +20,15 @@
       "Schach_in": 0
     },
     {
+      "comment": "Gruppe E - Schachmatt in Suchtiefe 4, aber nur eigene foglenden Züge angegeben d7e8, h8e8",
+      "FEN": "7k/5ppp/8/R7/5n2/3B4/2K5/8",
+      "Zug": [
+        "pg6"
+      ],
+      "White": false,
+      "Suchtiefe": 5
+    },
+    {
       "comment": "Gruppe Q",
       "FEN": "4krn1/1r1p3b/6q1/8/1PR1P3/8/2K5/2B2BN1",
       "Zug": [

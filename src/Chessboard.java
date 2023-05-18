@@ -755,34 +755,38 @@ public class Chessboard {
                 if(success) {
                     //white king moves so set castle flags and check if its a castle
                     if(Attacker == White) {
-                        if (to == 2 & WhiteLeftCastle) {
-                            //move rook according to castle
-                            White.clearSquare(0);
-                            White.setSquare(3);
-                            Rook.clearSquare(0);
-                            Rook.setSquare(3);
-                        } else if (to == 6 & WhiteRightCastle) {
-                            White.clearSquare(7);
-                            White.setSquare(5);
-                            Rook.clearSquare(7);
-                            Rook.setSquare(5);
+                        if(from == 4) {
+                            if (to == 2 & WhiteLeftCastle) {
+                                //move rook according to castle
+                                White.clearSquare(0);
+                                White.setSquare(3);
+                                Rook.clearSquare(0);
+                                Rook.setSquare(3);
+                            } else if (to == 6 & WhiteRightCastle) {
+                                White.clearSquare(7);
+                                White.setSquare(5);
+                                Rook.clearSquare(7);
+                                Rook.setSquare(5);
+                            }
+                            WhiteLeftCastle = false;
+                            WhiteRightCastle = false;
                         }
-                        WhiteLeftCastle = false;
-                        WhiteRightCastle = false;
                     } else {
-                        if (to == 58 & BlackLeftCastle) {
-                            Black.clearSquare(56);
-                            Black.setSquare(59);
-                            Rook.clearSquare(56);
-                            Rook.setSquare(59);
-                        } else if (to == 62 & BlackRightCastle) {
-                            Black.clearSquare(63);
-                            Black.setSquare(61);
-                            Rook.clearSquare(63);
-                            Rook.setSquare(61);
+                        if(from == 60) {
+                            if (to == 58 & BlackLeftCastle) {
+                                Black.clearSquare(56);
+                                Black.setSquare(59);
+                                Rook.clearSquare(56);
+                                Rook.setSquare(59);
+                            } else if (to == 62 & BlackRightCastle) {
+                                Black.clearSquare(63);
+                                Black.setSquare(61);
+                                Rook.clearSquare(63);
+                                Rook.setSquare(61);
+                            }
+                            BlackLeftCastle = false;
+                            BlackRightCastle = false;
                         }
-                        BlackLeftCastle = false;
-                        BlackRightCastle = false;
                     }
                 }
                 figureboard = King;
@@ -831,21 +835,30 @@ public class Chessboard {
         if(success){
             if(Defender.isSquareSet(to)){
                 //capture black piece
-                Attacker.clearSquare(from);
-                figureboard.clearSquare(from);
-                Attacker.setSquare(to);
                 BitBoard enemyfig = whichFig(to);
-                if(enemyfig == null){
+                /*if(enemyfig == null){
                     System.out.println("Defender board");
                     Defender.printBoard();
-                }
+                    Knight.printBoard();
+                    King.printBoard();
+                    Pawn.printBoard();
+                    Bishop.printBoard();
+                    Queen.printBoard();
+                    Rook.printBoard();
+                }*/
                 //enemyfig.clearSquare(to);
                 try {
                     enemyfig.clearSquare(to);
                 } catch (Exception e){
                     System.out.println(e);
+                    //System.out.println("From:"+ from +" to:"+ to);
+                    //Defender.printBoard();
+                    //this.printBoard();
                     return false;
                 }
+                Attacker.clearSquare(from);
+                figureboard.clearSquare(from);
+                Attacker.setSquare(to);
                 figureboard.setSquare(to);
                 Defender.clearSquare(to);
             }else {
@@ -880,8 +893,8 @@ public class Chessboard {
         else if(Rook.isSquareSet(field)){
             return Rook;
         }
-        System.out.println("field:" + field);
-        this.printBoard();
+        //System.out.println("field:" + field);
+        //this.printBoard();
         return null;
     }
 
@@ -1276,7 +1289,7 @@ public class Chessboard {
                 eval = eval + 100000;
             }
             int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-            eval = eval + white_distance;
+            eval = eval - (white_distance/20);
         }
         if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
@@ -1286,7 +1299,7 @@ public class Chessboard {
                 eval = eval -100000;
             }
             int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
-            eval = eval - black_distance;
+            eval = eval + (black_distance/20);
         }
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {

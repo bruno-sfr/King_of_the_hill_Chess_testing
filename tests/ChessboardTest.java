@@ -46,7 +46,7 @@ class ChessboardTest {
     }
 
     @Test
-    void Alpha_Beta_Test() throws IOException{
+    void Alpha_Beta_Checkmate_Test() throws IOException{
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader("./tests/StellungenSuchtiefe.json"));
@@ -76,6 +76,40 @@ class ChessboardTest {
                 /*int actual = result.moves.getFirst().getTo();
                 int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
                 Assertions.assertEquals(expected, actual);*/
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void Alpha_Beta_Best_move_Test() throws IOException{
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("./tests/StellungenBM.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray stellungenArray = (JSONArray) jsonObject.get("Stellungen");
+
+            Iterator<JSONObject> iterator = stellungenArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject stellung = iterator.next();
+                String FEN = (String) stellung.get("FEN");
+                JSONArray zugArray = (JSONArray) stellung.get("Zug");
+                boolean isWhite = (boolean) stellung.get("White");
+                System.out.println(FEN);
+                System.out.println((String) stellung.get("comment"));
+                Chessboard chessboard = new Chessboard(FEN);
+                chessboard.printBoard();
+                Game_Vs_AI game = new Game_Vs_AI(chessboard);
+                ReturnObject result = game.alphabeta(-9999999,9999999,5 ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
+                System.out.println(result.eval);
+                int actual = result.moves.getFirst().getTo();
+                if(result.moves.size()>=2){
+                    System.out.println(result.moves.getFirst());
+                    System.out.println(result.moves.get(1));
+                }
+                int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
+                Assertions.assertEquals(expected, actual);
             }
         } catch (Exception e) {
             e.printStackTrace();
