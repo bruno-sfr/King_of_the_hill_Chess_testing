@@ -67,6 +67,10 @@ class ChessboardTest {
                 Game_Vs_AI game = new Game_Vs_AI(chessboard);
                 ReturnObject result = game.alphabeta(-9999999,9999999,(int) (Suchtiefe) ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println(result.eval);
+                if(result.moves.size()>=2){
+                    System.out.println(result.moves.getFirst());
+                    System.out.println(result.moves.get(1));
+                }
                 if(isWhite){
                     //50000 seems big enough to be bigger than normal eval but smaller than 100000 if black king is slayn
                     Assertions.assertTrue(result.eval>50000);

@@ -1289,7 +1289,7 @@ public class Chessboard {
                 eval = eval + 100000;
             }
             //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos)/10;
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos)/20;
         }
         if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
@@ -1299,7 +1299,7 @@ public class Chessboard {
                 eval = eval -100000;
             }
             int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
-            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos)/10);
+            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos)/20);
         }
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {

@@ -132,22 +132,13 @@
         "Qd7"
       ],
       "White": true,
-      "Suchtiefe": 3
+      "Suchtiefe": 5
     },
     {
       "comment": "Gruppe V - Matt in 3, aber Züge nicht angegeben",
       "FEN": "2Q5/6K1/1p2N3/1r1p1k2/1r2R1N1/5n2/2p5/8",
       "Zug": [
         "Kh6"
-      ],
-      "White": true,
-      "Suchtiefe": 3
-    },
-    {
-      "comment": "Gruppe A - Suchtiefe 5 (Schach in 3)",
-      "FEN": "r1bqk1nr/ppp2pbp/2np2p1/4p3/2P5/2NP2P1/PP2PPBP/R1BQK1NR",
-      "Zug": [
-        "Pf4"
       ],
       "White": true,
       "Suchtiefe": 5
@@ -162,19 +153,6 @@
       "Suchtiefe": 7
     },
     {
-      "comment": "Gruppe D",
-      "FEN": "6k1/1Q3ppp/1p6/2p5/P1Pp4/1Pn1r3/3N1PPP/6K1",
-      "Zug": [
-        "re1",
-        "Nf1",
-        "ne2",
-        "Kh1",
-        "rf1"
-      ],
-      "White": false,
-      "Suchtiefe": 5
-    },
-    {
       "comment": "Gruppe AN",
       "FEN": "3q3r/1pp2pb1/3pkn2/1B6/3P4/4PN1P/5K1P/7R",
       "Zug": [
@@ -182,15 +160,6 @@
       ],
       "White": false,
       "Suchtiefe": 1
-    },
-    {
-      "comment": "Gruppe O - Schach in 3? Suchtiefe 5",
-      "FEN": "2kr1b1r/pp3p1p/3p4/1qp1p1N1/4P3/1P1P4/P1P1NPPP/R2Q1RK1",
-      "Zug": [
-        "rg8"
-      ],
-      "White": false,
-      "Suchtiefe": 5
     },
     {
       "comment": "Gruppe S - angeblich weiß am Zug, aber in der Zugauflistung isses schwarz",
@@ -228,6 +197,19 @@
       ],
       "White": true,
       "Suchtiefe": 7
+    },
+    {
+      "comment": "Gruppe D",
+      "FEN": "6k1/1Q3ppp/1p6/2p5/P1Pp4/1Pn1r3/3N1PPP/6K1",
+      "Zug": [
+        "re1",
+        "Nf1",
+        "ne2",
+        "Kh1",
+        "rf1"
+      ],
+      "White": false,
+      "Suchtiefe": 3
     }
   ]
 }

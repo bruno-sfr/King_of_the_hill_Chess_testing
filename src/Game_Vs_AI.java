@@ -148,6 +148,7 @@ public class Game_Vs_AI {
             ReturnObject maxEval = new ReturnObject(-9999999,new LinkedList<ChessMove>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
+            //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
 
             for(LinkedList<ChessMove> moves:allMoves){
                 boolean breakstate=false;
@@ -186,6 +187,7 @@ public class Game_Vs_AI {
             ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
+            //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
 
             for(LinkedList<ChessMove> moves:allMoves){
                 boolean breakstate=false;
