@@ -1288,8 +1288,8 @@ public class Chessboard {
                 //white has won via king of the hill
                 eval = eval + 100000;
             }
-            int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-            eval = eval - (white_distance/20);
+            //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
         }
         if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
@@ -1299,7 +1299,7 @@ public class Chessboard {
                 eval = eval -100000;
             }
             int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
-            eval = eval + (black_distance/20);
+            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos)/10);
         }
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {

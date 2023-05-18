@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.lang.Math;
 
 public class ChessHelper {
     public static LinkedList<Integer> calcPos(String field){
@@ -33,4 +34,12 @@ public class ChessHelper {
     public static boolean isEastBorder(int Pos){
         return Pos%8 == 7;
     }
+
+    public static double euclidDistanceToMiddle(int Pos) {
+        int x = Pos%8;
+        int y = Pos/8;
+        return Math.sqrt(Math.pow(x-3.5, 2) + Math.pow(y-3.5, 2))/10;
+    }
+
+
 }
