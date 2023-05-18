@@ -432,6 +432,13 @@ public class Chessboard {
             Attacker = White;
             Defender = Black;
         }
+
+        if(new BitBoard((Attacker.getBoard() & King.getBoard())).allSetSquares().size()==0){
+            return false;
+        } else if(new BitBoard((Defender.getBoard() & King.getBoard())).allSetSquares().size()==0){
+            return true;
+        }
+
         BitBoard DefenderKing = new BitBoard(Defender.getBoard() & King.getBoard());
         LinkedList<Integer> KingPoses = DefenderKing.allSetSquares();
         KingPos = KingPoses.get(0);
@@ -510,6 +517,13 @@ public class Chessboard {
         BitBoard Attacker_knights = new BitBoard(Attacker.getBoard() & Knight.getBoard());
         BitBoard Attacker_bishop = new BitBoard(Attacker.getBoard() & Bishop.getBoard());
         BitBoard Attacker_rook = new BitBoard(Attacker.getBoard() & Rook.getBoard());
+
+        //if any of the kings is missing game state s quite clear
+        if(Attacker_king.allSetSquares().size()==0){
+            return true;
+        } else if(new BitBoard((Defender.getBoard() & King.getBoard())).allSetSquares().size()==0){
+            return false;
+        }
 
         //king
         LinkedList<Integer> kingPos = Attacker_king.allSetSquares();
@@ -821,7 +835,17 @@ public class Chessboard {
                 figureboard.clearSquare(from);
                 Attacker.setSquare(to);
                 BitBoard enemyfig = whichFig(to);
-                enemyfig.clearSquare(to);
+                if(enemyfig == null){
+                    System.out.println("Defender board");
+                    Defender.printBoard();
+                }
+                //enemyfig.clearSquare(to);
+                try {
+                    enemyfig.clearSquare(to);
+                } catch (Exception e){
+                    System.out.println(e);
+                    return false;
+                }
                 figureboard.setSquare(to);
                 Defender.clearSquare(to);
             }else {
@@ -835,49 +859,6 @@ public class Chessboard {
         }else{
             return false;
         }
-        
-        /*if(success){
-            if(whiteTurn){
-                //white moves
-                if(Black.isSquareSet(to)){
-                    //capture black piece
-                    White.clearSquare(from);
-                    figureboard.clearSquare(from);
-                    White.setSquare(to);
-                    BitBoard enemyfig = whichFig(to);
-                    enemyfig.clearSquare(to);
-                    figureboard.setSquare(to);
-                    Black.clearSquare(to);
-                }else {
-                    //not a capture just move
-                    White.clearSquare(from);
-                    figureboard.clearSquare(from);
-                    White.setSquare(to);
-                    figureboard.setSquare(to);
-                }
-            }else {
-                //black moves
-                if(White.isSquareSet(to)){
-                    //capture black piece
-                    Black.clearSquare(from);
-                    figureboard.clearSquare(from);
-                    Black.setSquare(to);
-                    BitBoard enemyfig = whichFig(to);
-                    enemyfig.clearSquare(to);
-                    figureboard.setSquare(to);
-                    White.clearSquare(to);
-                }else {
-                    //not a capture just move
-                    Black.clearSquare(from);
-                    figureboard.clearSquare(from);
-                    Black.setSquare(to);
-                    figureboard.setSquare(to);
-                }
-            }
-            return true;
-        }else{
-            return false;
-        }*/
     }
 
     public BitBoard whichFig(int field){
@@ -899,6 +880,8 @@ public class Chessboard {
         else if(Rook.isSquareSet(field)){
             return Rook;
         }
+        System.out.println("field:" + field);
+        this.printBoard();
         return null;
     }
 
@@ -1320,24 +1303,6 @@ public class Chessboard {
     }
 
     public void printBoard(){
-        /*
-        System.out.println("Black");
-        Black.printBoard();
-        System.out.println("White");
-        White.printBoard();
-        System.out.println("Pawn");
-        Pawn.printBoard();
-        System.out.println("Rook");
-        Rook.printBoard();
-        System.out.println("King");
-        King.printBoard();
-        System.out.println("Queen");
-        Queen.printBoard();
-        System.out.println("Knight");
-        Knight.printBoard();
-        System.out.println("Bishop");
-        Bishop.printBoard();
-        */
 
         char[] Humanboard = new char[64];
 
