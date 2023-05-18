@@ -1289,7 +1289,7 @@ public class Chessboard {
                 eval = eval + 100000;
             }
             //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos)/10;
         }
         if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();

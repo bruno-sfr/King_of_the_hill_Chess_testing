@@ -36,9 +36,9 @@ public class ChessHelper {
     }
 
     public static double euclidDistanceToMiddle(int Pos) {
-        int x = Pos%8;
-        int y = Pos/8;
-        return Math.sqrt(Math.pow(x-3.5, 2) + Math.pow(y-3.5, 2))/10;
+        float x = Pos%8;
+        float y = (float)Pos/8;
+        return Math.sqrt(Math.pow(x-3.5, 2) + Math.pow(y-3.5, 2));
     }
 
 
