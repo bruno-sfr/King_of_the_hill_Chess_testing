@@ -19,6 +19,13 @@ public class ChessHelper {
         return Positions;
     }
 
+    public String indexToHuman(int index){
+        float row = (float)index/8;
+        int column = index%8;
+        char letter = (char) (column + 'a');
+        row += 1;
+        return letter + "" + row;
+    }
     public static boolean isNorthBorder(int Pos){
         return Pos>55;
     }
