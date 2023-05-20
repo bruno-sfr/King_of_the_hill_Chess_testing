@@ -2,6 +2,24 @@
 {
   "Stellungen": [
     {
+      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
+      "FEN": "r1bqkbnr/p2ppppp/2p5/1p4N1/2B1P3/8/PPQP1PPP/RNB1K2R",
+      "Zug": [
+        "Bf7"
+      ],
+      "White": true,
+      "Suchtiefe": 1
+    },
+    {
+      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
+      "FEN": "8/6k1/8/8/8/8/1K6/8",
+      "Zug": [
+        "Kf6"
+      ],
+      "White": false,
+      "Suchtiefe": 3
+    },
+    {
       "comment": "Gruppe H",
       "FEN": "3qr1k1/p6p/3p2p1/2p1br2/1p6/3PB2P/PPPQ2K1/R2N2R1",
       "Zug": [

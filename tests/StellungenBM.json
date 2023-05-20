@@ -2,24 +2,6 @@
 {
   "Stellungen": [
     {
-      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
-      "FEN": "r1bqkbnr/p2ppppp/2p5/1p4N1/2B1P3/8/PPQP1PPP/RNB1K2R",
-      "Zug": [
-        "Bf7"
-      ],
-      "White": true,
-      "Schach_in": 0
-    },
-    {
-      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
-      "FEN": "8/6k1/8/8/8/8/1K6/8",
-      "Zug": [
-        "Kf6"
-      ],
-      "White": false,
-      "Schach_in": 0
-    },
-    {
       "comment": "Gruppe E - Schachmatt in Suchtiefe 4, aber nur eigene foglenden Züge angegeben d7e8, h8e8",
       "FEN": "7k/5ppp/8/R7/5n2/3B4/2K5/8",
       "Zug": [

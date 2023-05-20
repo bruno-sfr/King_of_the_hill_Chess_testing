@@ -1288,8 +1288,10 @@ public class Chessboard {
                 //white has won via king of the hill
                 eval = eval + 100000;
             }
+            //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
             //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos)/20;
+            //System.out.println("white dis:" + ChessHelper.euclidDistanceToMiddle(whiteKingPos));
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
         }
         if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
@@ -1298,8 +1300,9 @@ public class Chessboard {
                 //black has won via king of the hill
                 eval = eval -100000;
             }
-            int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
-            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos)/20);
+            //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
+            //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
+            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
