@@ -189,16 +189,6 @@
       "Suchtiefe": 5
     },
     {
-      "comment": "Gruppe L - w: g5 f7 b: e8 f7 w: d3 c4 b: f7 e8 w: c4 f7 b: e8 f7 w: d1 d8",
-      "FEN": "rn1qkbnr/ppp1p1pp/5p2/5bN1/8/3B4/PPP2PPP/RNBQK2R",
-      "Zug": [
-        "Nf7"
-
-      ],
-      "White": true,
-      "Suchtiefe": 7
-    },
-    {
       "comment": "Gruppe D",
       "FEN": "6k1/1Q3ppp/1p6/2p5/P1Pp4/1Pn1r3/3N1PPP/6K1",
       "Zug": [
@@ -209,7 +199,7 @@
         "rf1"
       ],
       "White": false,
-      "Suchtiefe": 3
+      "Suchtiefe": 5
     }
   ]
 }

@@ -142,6 +142,12 @@ public class Game_Vs_AI {
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
             return new ReturnObject(board.eval_func(),object.moves);
+        }else if(board.isCheckmate(player)){
+            if(player){
+                return new ReturnObject(-100000,object.moves);
+            }else {
+                return new ReturnObject(100000,object.moves);
+            }
         }
 
         if(player){

@@ -1304,6 +1304,14 @@ public class Chessboard {
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
+            if(this.isCheck(true)){
+                //white in ckeck
+                eval = eval - 10;
+            }
+            if(this.isCheck(false)){
+                //black in ckeck
+                eval = eval + 10;
+            }
             if (this.isCheckmate(true)) {
                 //white in ckeckmate so black win
                 eval = eval - 100000;

@@ -37,6 +37,6 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        return "from: " + this.from + " to: " + this.to;
+        return "from: " + ChessHelper.indexToHuman(this.from) + " to: " + ChessHelper.indexToHuman(this.to);
     }
 }

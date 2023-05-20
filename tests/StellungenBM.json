@@ -74,6 +74,15 @@
       "Schach_in": 0
     },
     {
+      "comment": "Gruppe L - w: g5 f7 b: e8 f7 w: d3 c4 b: f7 e8 w: c4 f7 b: e8 f7 w: d1 d8",
+      "FEN": "rn1qkbnr/ppp1p1pp/5p2/5bN1/8/3B4/PPP2PPP/RNBQK2R",
+      "Zug": [
+        "Nf7"
+      ],
+      "White": true,
+      "Schach_in": 0
+    },
+    {
       "comment": "Gruppe O - Schach in 3? Suchtiefe 5",
       "FEN": "2kr1b1r/pp3p1p/3p4/1qp1p1N1/4P3/1P1P4/P1P1NPPP/R2Q1RK1",
       "Zug": [
