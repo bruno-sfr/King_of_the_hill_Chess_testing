@@ -20,7 +20,7 @@ public class ChessHelper {
     }
 
     public static String indexToHuman(int index){
-        float row = (float)index/8;
+        int row = (int)index/8;
         int column = index%8;
         char letter = (char) (column + 'a');
         row += 1;

@@ -7,7 +7,7 @@ public class Main {
 
     static boolean WhiteTurn;
     public static void main(String[] args) throws IOException {
-        Chessboard board = new Chessboard("8/6k1/8/8/8/8/1K6/8");
+        Chessboard board = new Chessboard("7k/5ppp/8/R7/5n2/3B4/2K5/8f4");
         board.printBoard();
         WhiteTurn = false;
 

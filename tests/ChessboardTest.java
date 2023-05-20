@@ -109,12 +109,67 @@ class ChessboardTest {
                 ReturnObject result = game.alphabeta(-9999999,9999999,5 ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println(result.eval);
                 int actual = result.moves.getFirst().getTo();
-                if(result.moves.size()>=2){
+                for(ChessMove move : result.moves){
+                    System.out.println(move);
+                }
+                /*if(result.moves.size()>=2){
                     System.out.println(result.moves.getFirst());
                     System.out.println(result.moves.get(1));
-                }
+                }*/
                 int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
                 Assertions.assertEquals(expected, actual);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void Mini_Max_Checkmate_Test() throws IOException{
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("./tests/StellungenSuchtiefe.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray stellungenArray = (JSONArray) jsonObject.get("Stellungen");
+
+            Iterator<JSONObject> iterator = stellungenArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject stellung = iterator.next();
+                String FEN = (String) stellung.get("FEN");
+                JSONArray zugArray = (JSONArray) stellung.get("Zug");
+                boolean isWhite = (boolean) stellung.get("White");
+                long Suchtiefe = (long) stellung.get("Suchtiefe");
+                System.out.println(FEN);
+                System.out.println((String) stellung.get("comment"));
+                Chessboard chessboard = new Chessboard(FEN);
+                //chessboard.printBoard();
+                new Chessboard("2k5/6q1/3P1P2/4N3/8/1K6/8/8").printBoard();
+                /*LinkedList<ChessMove>[] moves = new Chessboard("2k5/6q1/3P1P2/4N3/8/1K6/8/8").allMovesWithPieces(true);
+                for(int i = 0; i<6; i++){
+                    System.out.println(i);
+                    LinkedList<ChessMove> piecemove = moves[i];
+                    for(ChessMove move : piecemove){
+                        System.out.println(move);
+                    }
+                }*/
+                Game_Vs_AI game = new Game_Vs_AI(chessboard);
+                ReturnObject_MiniMax result = game.minimax(2 ,true, new Chessboard("2k5/6q1/3P1P2/4N3/8/1K6/8/8"),new ReturnObject(0, new LinkedList<ChessMove>()));
+                System.out.println("Evaluation:"+result.eval);
+                System.out.println("Num Pos:" + result.NumPositons);
+                System.out.println(result.moves.getFirst());
+                /*if(result.moves.size()>=2){
+                    System.out.println(result.moves.getFirst());
+                    System.out.println(result.moves.get(1));
+                }*/
+                /*if(isWhite){
+                    //50000 seems big enough to be bigger than normal eval but smaller than 100000 if black king is slayn
+                    Assertions.assertTrue(result.eval>50000);
+                }else {
+                    Assertions.assertTrue(result.eval<-50000);
+                }*/
+                /*int actual = result.moves.getFirst().getTo();
+                int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
+                Assertions.assertEquals(expected, actual);*/
             }
         } catch (Exception e) {
             e.printStackTrace();
