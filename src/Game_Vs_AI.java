@@ -252,7 +252,7 @@ public class Game_Vs_AI {
         }
 
         if(player){
-            ReturnObject_MiniMax maxEval = new ReturnObject_MiniMax(-9999999,0,new LinkedList<ChessMove>());
+            ReturnObject_MiniMax maxEval = new ReturnObject_MiniMax(-9999999,1,new LinkedList<ChessMove>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
 
@@ -288,7 +288,7 @@ public class Game_Vs_AI {
             return maxEval;
 
         }else{
-            ReturnObject_MiniMax minEval = new ReturnObject_MiniMax(9999999,0,new LinkedList<ChessMove>());
+            ReturnObject_MiniMax minEval = new ReturnObject_MiniMax(9999999,1,new LinkedList<ChessMove>());
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
             for(LinkedList<ChessMove> moves:allMoves){
                 for(ChessMove move:moves){
@@ -327,4 +327,117 @@ public class Game_Vs_AI {
 
     }
 
+    public ReturnObject_MiniMax alphabeta_withNumPostions(double alpha, double beta, int depthleft, boolean player, Chessboard board, ReturnObject object){
+        if(depthleft==0){
+            //object.eval=board.eval_func();
+            //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
+            return new ReturnObject_MiniMax(board.eval_func(),1,object.moves);
+        }/*else if(board.isCheckmate(player)){
+            if(player){
+                return new ReturnObject(-100000,object.moves);
+            }else {
+                return new ReturnObject(100000,object.moves);
+            }
+        }*/
+        if(board.isCheckmate(true)){
+            return new ReturnObject_MiniMax(-100000,1,object.moves);
+        }else if(board.isCheckmate(false)){
+            return new ReturnObject_MiniMax(100000,1,object.moves);
+        }
+
+        if(player){
+            ReturnObject_MiniMax maxEval = new ReturnObject_MiniMax(-9999999, 1,new LinkedList<ChessMove>());
+
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
+            //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
+
+            for(LinkedList<ChessMove> moves:allMoves){
+                boolean breakstate=false;
+                for(ChessMove move:moves){
+
+                    Chessboard child = new Chessboard(board);
+                    child.makeMove(true,move.getFrom(),move.getTo());
+                    LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
+                    Movelist.add(move);
+
+                    ReturnObject_MiniMax eval=alphabeta_withNumPostions(alpha,beta,depthleft-1,false,child,new ReturnObject(object.eval,Movelist));
+                    maxEval.NumPositons = maxEval.NumPositons + eval.NumPositons;
+
+                    if(eval.eval==maxEval.eval){
+                        int max = 2;
+                        int min = 1;
+                        int range = max - min + 1;
+                        int rand = (int)(Math.random() * range) + min;
+                        if(rand != 1) {
+                            int tempNum = maxEval.NumPositons;
+                            maxEval = eval;
+                            maxEval.NumPositons = tempNum;
+                        }
+                    }else if(eval.eval>maxEval.eval){//maxEval=max(eval,maxEval);
+                        int tempNum = maxEval.NumPositons;
+                        maxEval = eval;
+                        maxEval.NumPositons = tempNum;
+                    }
+
+                    alpha=Math.max(alpha,eval.eval);
+                    if(beta<=alpha){
+                        breakstate=true;
+                        break;
+                    }
+                }
+                if(breakstate)break;
+            }
+            return maxEval;
+
+        }else{
+
+            ReturnObject_MiniMax minEval = new ReturnObject_MiniMax(9999999,1,new LinkedList<ChessMove>());
+
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
+            //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
+
+            for(LinkedList<ChessMove> moves:allMoves){
+                boolean breakstate=false;
+                for(ChessMove move:moves){
+
+                    Chessboard child = new Chessboard(board);
+                    child.makeMove(false,move.getFrom(),move.getTo());
+                    LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
+                    Movelist.add(move);
+
+                    ReturnObject_MiniMax eval=alphabeta_withNumPostions(alpha,beta,depthleft-1,true,child,new ReturnObject(object.eval,Movelist));
+                    minEval.NumPositons = minEval.NumPositons + eval.NumPositons;
+
+                    if(eval.eval== minEval.eval){
+                        int max = 2;
+                        int min = 1;
+                        int range = max - min + 1;
+                        int rand = (int)(Math.random() * range) + min;
+                        if(rand != 1) {
+                            int tempNum = minEval.NumPositons;
+                            minEval = eval;
+                            minEval.NumPositons = tempNum;
+                        }
+                    }else if(eval.eval< minEval.eval){//minEval=max(eval,minEval);
+                        int tempNum = minEval.NumPositons;
+                        minEval = eval;
+                        minEval.NumPositons = tempNum;
+                    }
+
+                    beta=Math.min(beta,eval.eval);
+                    if(beta<=alpha){
+                        breakstate=true;
+                        break;
+                    }
+                }
+                if(breakstate)break;
+            }
+            return minEval;
+
+
+
+        }
+        //return object;
+
+    }
 }
