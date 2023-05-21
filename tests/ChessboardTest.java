@@ -213,7 +213,7 @@ class ChessboardTest {
             System.out.println("Board 2:");
             System.out.println("Minimax:");
             starttime = System.nanoTime();
-            ReturnObject_MiniMax result_minimax_2 = game2.minimax(i,true,Chessboard2,new ReturnObject(0));
+            ReturnObject_MiniMax result_minimax_2 = game2.minimax(i,false,Chessboard2,new ReturnObject(0));
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_minimax_2.NumPositons);
