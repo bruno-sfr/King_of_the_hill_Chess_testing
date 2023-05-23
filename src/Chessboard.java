@@ -1230,6 +1230,16 @@ public class Chessboard {
         return possibleMoves;
     }
 
+    public boolean isBlackKing(){
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        return black_king.allSetSquares().size()>0;
+    }
+
+    public boolean isWhiteKing(){
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        return white_king.allSetSquares().size()>0;
+    }
+
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1
     //knight and bishop have a value of 3
@@ -1305,7 +1315,7 @@ public class Chessboard {
             eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
 
-        if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
+        /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
             if(this.isCheck(true)){
                 //white in ckeck
@@ -1322,8 +1332,125 @@ public class Chessboard {
             if (this.isCheckmate(false)) {
                 eval = eval + 100000;
             }
+        }*/
+        return eval;
+    }
+
+    public double eval_func_withCheck(){
+        double eval = 0.0;
+        //Black
+        BitBoard black_pawns = new BitBoard(Black.getBoard() & Pawn.getBoard());
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        BitBoard black_queen = new BitBoard(Black.getBoard() & Queen.getBoard());
+        BitBoard black_knights = new BitBoard(Black.getBoard() & Knight.getBoard());
+        BitBoard black_bishop = new BitBoard(Black.getBoard() & Bishop.getBoard());
+        BitBoard black_rook = new BitBoard(Black.getBoard() & Rook.getBoard());
+        //White
+        BitBoard white_pawns = new BitBoard(White.getBoard() & Pawn.getBoard());
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        BitBoard white_queen = new BitBoard(White.getBoard() & Queen.getBoard());
+        BitBoard white_knights = new BitBoard(White.getBoard() & Knight.getBoard());
+        BitBoard white_bishop = new BitBoard(White.getBoard() & Bishop.getBoard());
+        BitBoard white_rook = new BitBoard(White.getBoard() & Rook.getBoard());
+
+        //black value
+        eval = eval - black_pawns.allSetSquares().size();
+        eval = eval - black_bishop.allSetSquares().size() * 3;
+        eval = eval - black_knights.allSetSquares().size() * 3;
+        eval = eval - black_rook.allSetSquares().size() * 5;
+        eval = eval - black_queen.allSetSquares().size() * 9;
+        eval = eval - black_king.allSetSquares().size() * 100000;
+
+        //white value
+        eval = eval + white_pawns.allSetSquares().size();
+        eval = eval + white_bishop.allSetSquares().size() * 3;
+        eval = eval + white_knights.allSetSquares().size() * 3;
+        eval = eval + white_rook.allSetSquares().size() * 5;
+        eval = eval + white_queen.allSetSquares().size() * 9;
+        eval = eval + white_king.allSetSquares().size() * 100000;
+
+        //available moves
+        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
+        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
+
+        for(int i=0; i<6; i++){
+            eval = eval + whiteMoves[i].size() * 0.1;
+            eval = eval - blackMoves[i].size() * 0.1;
+        }
+
+        //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
+        if(white_king.allSetSquares().size()>0){
+            LinkedList<Integer> _whiteKing = white_king.allSetSquares();
+            int whiteKingPos = _whiteKing.getFirst();
+            if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+                //white has won via king of the hill
+                eval = eval + 100000;
+            }
+            //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
+            //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
+            //System.out.println("white dis:" + ChessHelper.euclidDistanceToMiddle(whiteKingPos));
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
+        }
+        if(black_king.allSetSquares().size()>0) {
+            LinkedList<Integer> _blackKing = black_king.allSetSquares();
+            int blackKingPos = _blackKing.getFirst();
+            if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+                //black has won via king of the hill
+                eval = eval -100000;
+            }
+            //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
+            //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
+            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
+        }
+
+        if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
+            //System.out.println("checking checkmate in eval");
+            if(this.isCheck(true)){
+                //white in ckeck
+                eval = eval - 1;
+            }
+            if(this.isCheck(false)){
+                //black in ckeck
+                eval = eval + 1;
+            }
+            if (this.isCheckmate(true)) {
+                //white in ckeckmate so black win
+                eval = eval - 100000;
+            }
+            if (this.isCheckmate(false)) {
+                eval = eval + 100000;
+            }
         }
         return eval;
+    }
+
+    public boolean isGameOver(){
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        if (this.isCheckmate(true)) {
+            //white in ckeckmate so black win
+            return true;
+        }
+        if (this.isCheckmate(false)) {
+            return true;
+        }
+        int whiteKingPos = white_king.allSetSquares().getFirst();
+        if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+            //white has won via king of the hill
+            return true;
+        }
+        int blackKingPos = black_king.allSetSquares().getFirst();
+        if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+            //white has won via king of the hill
+            return true;
+        }
+        if(!this.isBlackKing()){
+            return true;
+        }
+        if(!this.isWhiteKing()){
+            return true;
+        }
+        return false;
     }
 
     public void printBoard(){

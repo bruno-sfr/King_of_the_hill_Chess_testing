@@ -1,16 +1,48 @@
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.*;
 
-public class Game_Vs_AI {
+public class AI_Board {
 
     Chessboard board;
     private ReturnObject lastResult;
+    private ReturnObject_MiniMax _lastResult;
     private int Depth;
 
-    public Game_Vs_AI(Chessboard board) {
+    public AI_Board(Chessboard board) {
         this.board=board;
+    }
+
+    //current player and duration in ms
+    public ReturnObject_MiniMax runFunction_withNumpos(boolean whiteTurn, long DURATION) {
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + DURATION;
+        _lastResult = new ReturnObject_MiniMax(0);
+        Depth = 1;
+
+        while (System.currentTimeMillis() < endTime) {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<ReturnObject_MiniMax> future = executor.submit(new Callable<ReturnObject_MiniMax>() {
+                @Override
+                public ReturnObject_MiniMax call() throws Exception {
+                    //return randomMove(board,!board.lastPlayer);
+                    return alphabeta_withNumPostions(-9999999,9999999,Depth,whiteTurn,board, new ReturnObject(0));
+                }
+            });
+            try {
+                //wait for result but with only the time that is left as a limit: endtime - current time
+                _lastResult = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                Depth++;
+            } catch (TimeoutException f) {
+                future.cancel(true);
+                //throw new RuntimeException("Timeout", f);
+            } catch (ExecutionException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                executor.shutdownNow();
+            }
+        }
+
+        return _lastResult;
     }
 
     //current player and duration in ms
@@ -27,7 +59,7 @@ public class Game_Vs_AI {
                 @Override
                 public ReturnObject call() throws Exception {
                     //return randomMove(board,!board.lastPlayer);
-                    return alphabeta(-99999,99999,Depth,whiteTurn,board, object);
+                    return alphabeta(-9999999,9999999,Depth,whiteTurn,board, object);
                 }
             });
             try {
@@ -100,7 +132,7 @@ public class Game_Vs_AI {
     }
 
     public static void main(String[] args) {
-        Game_Vs_AI runner = new Game_Vs_AI(new Chessboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"));
+        AI_Board runner = new AI_Board(new Chessboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"));
         long startTime = System.currentTimeMillis();
         ReturnObject result = runner.runFunction(true, 10000);
         long endTime = System.currentTimeMillis();
@@ -141,7 +173,7 @@ public class Game_Vs_AI {
         if(depthleft==0){
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
-            return new ReturnObject(board.eval_func(),object.moves);
+            return new ReturnObject(board.eval_func_withCheck(),object.moves);
         }/*else if(board.isCheckmate(player)){
             if(player){
                 return new ReturnObject(-100000,object.moves);
@@ -149,11 +181,19 @@ public class Game_Vs_AI {
                 return new ReturnObject(100000,object.moves);
             }
         }*/
-        if(board.isCheckmate(true)){
+        if(!board.isWhiteKing()){
+            //no white king so black has won
+            return new ReturnObject(-100000,object.moves);
+        }
+        if(!board.isBlackKing()){
+            //no black king so white has won
+            return new ReturnObject(100000,object.moves);
+        }
+        /*if(board.isCheckmate(true)){
             return new ReturnObject(-100000,object.moves);
         }else if(board.isCheckmate(false)){
             return new ReturnObject(100000,object.moves);
-        }
+        }*/
 
         if(player){
             ReturnObject maxEval = new ReturnObject(-9999999,new LinkedList<ChessMove>());
@@ -243,7 +283,7 @@ public class Game_Vs_AI {
         if(depthleft==0){
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
-            return new ReturnObject_MiniMax(board.eval_func(),1,object.moves);
+            return new ReturnObject_MiniMax(board.eval_func_withCheck(),1,object.moves);
         }
         if(board.isCheckmate(true)){
             return new ReturnObject_MiniMax(-100000,1,object.moves);
@@ -331,7 +371,7 @@ public class Game_Vs_AI {
         if(depthleft==0){
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
-            return new ReturnObject_MiniMax(board.eval_func(),1,object.moves);
+            return new ReturnObject_MiniMax(board.eval_func_withCheck(),1,object.moves);
         }/*else if(board.isCheckmate(player)){
             if(player){
                 return new ReturnObject(-100000,object.moves);
@@ -339,6 +379,7 @@ public class Game_Vs_AI {
                 return new ReturnObject(100000,object.moves);
             }
         }*/
+
         if(board.isCheckmate(true)){
             return new ReturnObject_MiniMax(-100000,1,object.moves);
         }else if(board.isCheckmate(false)){

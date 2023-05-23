@@ -4,14 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.*;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
@@ -65,8 +58,8 @@ class ChessboardTest {
                 System.out.println((String) stellung.get("comment"));
                 Chessboard chessboard = new Chessboard(FEN);
                 chessboard.printBoard();
-                Game_Vs_AI game = new Game_Vs_AI(chessboard);
-                ReturnObject result = game.alphabeta(-9999999,9999999,(int) (Suchtiefe) ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
+                AI_Board game = new AI_Board(chessboard);
+                ReturnObject result = game.alphabeta(-9999999,9999999,(int) (Suchtiefe) + 2 ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println("Evaluation:"+result.eval);
                 /*if(result.moves.size()>=2){
                     System.out.println(result.moves.getFirst());
@@ -105,7 +98,7 @@ class ChessboardTest {
                 System.out.println((String) stellung.get("comment"));
                 Chessboard chessboard = new Chessboard(FEN);
                 chessboard.printBoard();
-                Game_Vs_AI game = new Game_Vs_AI(chessboard);
+                AI_Board game = new AI_Board(chessboard);
                 ReturnObject result = game.alphabeta(-9999999,9999999,5 ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println(result.eval);
                 int actual = result.moves.getFirst().getTo();
@@ -152,7 +145,7 @@ class ChessboardTest {
                         System.out.println(move);
                     }
                 }*/
-                Game_Vs_AI game = new Game_Vs_AI(chessboard);
+                AI_Board game = new AI_Board(chessboard);
                 ReturnObject_MiniMax result = game.minimax(2 ,true, new Chessboard("2k5/6q1/3P1P2/4N3/8/1K6/8/8"),new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println("Evaluation:"+result.eval);
                 System.out.println("Num Pos:" + result.NumPositons);
@@ -181,11 +174,11 @@ class ChessboardTest {
         long starttime;
         long endtime;
         Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
-        Game_Vs_AI game1 = new Game_Vs_AI(Chessboard1);
+        AI_Board game1 = new AI_Board(Chessboard1);
         System.out.println("Board 1:");
         Chessboard1.printBoard();
         Chessboard Chessboard2 = new Chessboard("6k1/p2qpp2/2p2PpQ/1p4N1/2n5/2N5/PPP2P2/2K5");
-        Game_Vs_AI game2 = new Game_Vs_AI(Chessboard2);
+        AI_Board game2 = new AI_Board(Chessboard2);
         System.out.println("Board w:");
         Chessboard2.printBoard();
         for(int i = 1; i<6; i++){
