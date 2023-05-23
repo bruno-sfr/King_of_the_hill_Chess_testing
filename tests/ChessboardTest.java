@@ -146,7 +146,7 @@ class ChessboardTest {
                     }
                 }*/
                 AI_Board game = new AI_Board(chessboard);
-                ReturnObject_MiniMax result = game.minimax(2 ,true, new Chessboard("2k5/6q1/3P1P2/4N3/8/1K6/8/8"),new ReturnObject(0, new LinkedList<ChessMove>()));
+                ReturnObject_withStats result = game.minimax(2 ,true, new Chessboard("2k5/6q1/3P1P2/4N3/8/1K6/8/8"),new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println("Evaluation:"+result.eval);
                 System.out.println("Num Pos:" + result.NumPositons);
                 System.out.println(result.moves.getFirst());
@@ -170,7 +170,7 @@ class ChessboardTest {
     }
 
     @Test
-    void Mini_Max_Benchmarks(){
+    void Comparison_Benchmarks(){
         long starttime;
         long endtime;
         Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
@@ -184,38 +184,48 @@ class ChessboardTest {
         for(int i = 1; i<6; i++){
             System.out.println("Depth:" + i);
             System.out.println("----------------------------------------");
-            System.out.println("Board 1:");
+            /*System.out.println("Board 1:");
             System.out.println("Minimax:");
             starttime = System.nanoTime();
-            ReturnObject_MiniMax result_minimax_1 = game1.minimax(i,true,Chessboard1,new ReturnObject(0));
+            ReturnObject_withStats result_minimax_1 = game1.minimax(i,true,Chessboard1,new ReturnObject(0));
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_minimax_1.NumPositons);
             System.out.println("Evaluation:" + result_minimax_1.eval);
             System.out.println("Best Move" + result_minimax_1.moves.getFirst());
-            System.out.println();
+            System.out.println();*/
             System.out.println("Alpha-Beta:");
             starttime = System.nanoTime();
-            ReturnObject_MiniMax result_ab_1 = game1.alphabeta_withNumPostions(-9999999,9999999,i,true,Chessboard1,new ReturnObject(0));
+            ReturnObject_withStats result_ab_1 = game1.alphabeta_withNumPostions(-9999999,9999999,i,true,Chessboard1,new ReturnObject(0));
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_ab_1.NumPositons);
             System.out.println("Evaluation:" + result_ab_1.eval);
             System.out.println("Best Move" + result_ab_1.moves.getFirst());
+            System.out.println();
+            System.out.println("Alpha-Beta with Transpostion:");
+            starttime = System.nanoTime();
+            ReturnObject_withStats result_ab_tt_1 = game1.alphabeta_withStatsAndTT(-9999999,9999999,i,true,Chessboard1,new ReturnObject(0));
+            endtime = System.nanoTime();
+            System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
+            System.out.println("Postions evaluated:" + result_ab_tt_1.NumPositons);
+            System.out.println("Evaluation:" + result_ab_tt_1.eval);
+            System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
+            System.out.println("Transpotion uses:" + result_ab_tt_1.NumHashs);
             System.out.println("----------------------------------------");
             System.out.println("Board 2:");
-            System.out.println("Minimax:");
+            /*System.out.println("Minimax:");
             starttime = System.nanoTime();
-            ReturnObject_MiniMax result_minimax_2 = game2.minimax(i,false,Chessboard2,new ReturnObject(0));
+            ReturnObject_withStats result_minimax_2 = game2.minimax(i,false,Chessboard2,new ReturnObject(0));
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_minimax_2.NumPositons);
             System.out.println("Evaluation:" + result_minimax_2.eval);
             System.out.println("Best Move" + result_minimax_2.moves.getFirst());
-            System.out.println();
+            System.out.println();*/
             System.out.println("Alpha-Beta:");
             starttime = System.nanoTime();
-            ReturnObject_MiniMax result_ab_2 = game2.alphabeta_withNumPostions(-9999999,9999999,i,false,Chessboard2,new ReturnObject(0));
+            ReturnObject_withStats result_ab_2 = game2.alphabeta_withNumPostions(-9999999,9999999,i,false,Chessboard2,new ReturnObject(0));
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_ab_2.NumPositons);

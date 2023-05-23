@@ -2,6 +2,7 @@ import java.util.LinkedList;
 
 public class Chessboard {
     //true means castle possible
+    Zobrist zob;
     Boolean BlackLeftCastle;
     Boolean BlackRightCastle;
     Boolean WhiteLeftCastle;
@@ -26,6 +27,7 @@ public class Chessboard {
 
 
     public Chessboard(){
+        zob = new Zobrist();
         Black = new BitBoard(0xffff000000000000L);
         White = new BitBoard(0x000000000000ffffL);
         Pawn = new BitBoard(0x00ff00000000ff00L);
@@ -42,6 +44,7 @@ public class Chessboard {
 
     //copy construtor
     public Chessboard(Chessboard toCopy){
+        zob = new Zobrist();
         this.Black = new BitBoard(toCopy.Black.getBoard());
         this.White = new BitBoard(toCopy.White.getBoard());
         this.Rook = new BitBoard(toCopy.Rook.getBoard());
@@ -57,6 +60,7 @@ public class Chessboard {
     }
 
     public Chessboard(String fen){
+        zob = new Zobrist();
         Black = new BitBoard();
         White = new BitBoard();
         Pawn = new BitBoard();
@@ -1451,6 +1455,93 @@ public class Chessboard {
             return true;
         }
         return false;
+    }
+
+    public long hash_func(Boolean whiteTurn){
+        /*long hash = 0;
+        if(whiteTurn){
+            //if white then bitwise or
+            hash = White.getBoard() ^ Black.getBoard() ^ Knight.getBoard() ^ King.getBoard() ^ Queen.getBoard() ^ Bishop.getBoard() ^ Pawn.getBoard();
+        }else {
+            //if black then bitwise xor
+            hash = ~(White.getBoard() ^ Black.getBoard() ^ Knight.getBoard() ^ King.getBoard() ^ Queen.getBoard() ^ Bishop.getBoard() ^ Pawn.getBoard());
+        }
+        if(BlackRightCastle){
+            hash = hash + 0xf000L;
+        }
+        if(BlackLeftCastle){
+            hash = hash + 0xf00L;
+        }
+        if(WhiteRightCastle){
+            hash = hash + 0xf0L;
+        }
+        if(WhiteLeftCastle){
+            hash = hash + 0xfL;
+        }
+        String[] bitboardStrings = new String[8];
+        bitboardStrings[0] = Long.toBinaryString(White.getBoard());
+        bitboardStrings[1] = Long.toBinaryString(Black.getBoard());
+        bitboardStrings[2] = Long.toBinaryString(King.getBoard());
+        bitboardStrings[3] = Long.toBinaryString(Queen.getBoard());
+        bitboardStrings[4] = Long.toBinaryString(Pawn.getBoard());
+        bitboardStrings[5] = Long.toBinaryString(Knight.getBoard());
+        bitboardStrings[6] = Long.toBinaryString(Rook.getBoard());
+        bitboardStrings[7] = Long.toBinaryString(Bishop.getBoard());
+        String concatenatedString = String.join("", bitboardStrings);
+        long hashKey = Long.parseUnsignedLong(concatenatedString, 2);
+        if(whiteTurn){
+            hash = hashKey;
+        }else {
+            hash = ~hashKey;
+        }
+
+        return hash;*/
+        /*try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            StringBuilder concatenatedString = new StringBuilder();
+            concatenatedString.append(Long.toBinaryString(White.getBoard()));
+            concatenatedString.append(Long.toBinaryString(Black.getBoard()));
+            concatenatedString.append(Long.toBinaryString(King.getBoard()));
+            concatenatedString.append(Long.toBinaryString(Queen.getBoard()));
+            concatenatedString.append(Long.toBinaryString(Rook.getBoard()));
+            concatenatedString.append(Long.toBinaryString(Knight.getBoard()));
+            concatenatedString.append(Long.toBinaryString(Bishop.getBoard()));
+            concatenatedString.append(Long.toBinaryString(Pawn.getBoard()));
+
+
+            byte[] hashBytes = digest.digest(concatenatedString.toString().getBytes(StandardCharsets.UTF_8));
+
+            long hashKey = 0;
+            for (int i = 0; i < 8; i++) {
+                hashKey |= ((long) (hashBytes[i] & 0xFF)) << (8 * i);
+            }
+
+            if(whiteTurn){
+                return hashKey;
+            }else {
+                return ~hashKey;
+            }
+
+        } catch (NoSuchAlgorithmException e) {
+            // Handle the exception
+            e.printStackTrace();
+            return 0; // or throw an exception
+        }*/
+        /*long hashKey = 0;
+        hashKey ^= ChessHelper.deBruijnMultiply(White.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(Black.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(Knight.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(King.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(Queen.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(Bishop.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(Pawn.getBoard());
+        hashKey ^= ChessHelper.deBruijnMultiply(Rook.getBoard());
+
+        if (!whiteTurn) {
+            hashKey ^= 0x1L; // Flip the least significant bit if it's Black's turn
+        }*/
+        return zob.generateHashKey(this,whiteTurn);
     }
 
     public void printBoard(){
