@@ -20,7 +20,7 @@ public class ChessHelper {
     }
 
     public static String indexToHuman(int index){
-        int row = (int)index/8;
+        int row = index/8;
         int column = index%8;
         char letter = (char) (column + 'a');
         row += 1;
@@ -46,8 +46,8 @@ public class ChessHelper {
         /*float x = Pos%8;
         float y = (float)Pos/8;
         return Math.sqrt(Math.pow(x-3.5, 2) + Math.pow(y-3.5, 2));*/
-        float x = Pos%8;
-        int y = (int)Pos/8;
+        float x = Pos % 8;
+        int y = Pos / 8;
         double xdistance = Math.abs(x-3.5);
         double ydistance = Math.abs(y-3.5);
         return Math.sqrt(Math.pow(xdistance, 2) + Math.pow(ydistance, 2));
