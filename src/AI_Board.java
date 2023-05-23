@@ -11,7 +11,7 @@ public class AI_Board {
 
     public AI_Board(Chessboard board) {
         this.board=board;
-        this.table=new TranspositionTable(1 << 26);
+        this.table=new TranspositionTable(1 << 28);
     }
 
     //current player and duration in ms
@@ -465,13 +465,15 @@ public class AI_Board {
         HashEntry hash = table.probeEntry(board.hash_func(player));
         if(hash != null){
             if(hash.getDepth()>=depthleft) {
-                return new ReturnObject_withStats(hash.getScore(), 1, 1, object.moves);
+                LinkedList<ChessMove> list = new LinkedList<>();
+                list.add(hash.getFlag());
+                return new ReturnObject_withStats(hash.getScore(), 1, 1, list);
             }
         }
         if(depthleft==0){
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
-            table.storeEntry(board.hash_func(player),depthleft,board.eval_func_withCheck(),0);
+            table.storeEntry(board.hash_func(player),depthleft,board.eval_func_withCheck(),object.moves.getFirst());
             return new ReturnObject_withStats(board.eval_func_withCheck(),1,0,object.moves);
         }/*else if(board.isCheckmate(player)){
             if(player){
@@ -482,10 +484,10 @@ public class AI_Board {
         }*/
 
         if(board.isCheckmate(true)){
-            table.storeEntry(board.hash_func(player),depthleft,-100000,0);
+            table.storeEntry(board.hash_func(player),depthleft,-100000,object.moves.getFirst());
             return new ReturnObject_withStats(-100000,1,0,object.moves);
         }else if(board.isCheckmate(false)){
-            table.storeEntry(board.hash_func(player),depthleft,100000,0);
+            table.storeEntry(board.hash_func(player),depthleft,100000,object.moves.getFirst());
             return new ReturnObject_withStats(100000,1,0,object.moves);
         }
 
@@ -536,7 +538,9 @@ public class AI_Board {
                 }
                 if(breakstate)break;
             }
-            table.storeEntry(board.hash_func(player),depthleft, maxEval.eval, 0);
+            if(object.moves.size()!=0) {
+                table.storeEntry(board.hash_func(player), depthleft, maxEval.eval, object.moves.getFirst());
+            }
             return maxEval;
 
         }else{
@@ -587,10 +591,49 @@ public class AI_Board {
                 }
                 if(breakstate)break;
             }
-            table.storeEntry(board.hash_func(player),depthleft, minEval.eval, 0);
+            if(object.moves.size()!=0) {
+                table.storeEntry(board.hash_func(player), depthleft, minEval.eval, object.moves.getFirst());
+            }
             return minEval;
         }
     }
 
+    /*function MTDF(root : node_type; f : integer; d: integer) : integer;
 
+        g := f;
+        upperbound := +INFINITY;
+        lowerbound := -INFINITY;
+        repeat
+
+        if g == lowerbound then beta := g + 1 else beta := g;
+            g := AlphaBetaWithMemory(root, beta – 1, beta, d);
+        if g < beta then upperbound := g else lowerbound := g;
+
+        until lowerbound >= upperbound;
+    return g;*/
+
+    public ReturnObject_withStats MTDF(int depthleft, boolean player, Chessboard board, double f){
+        double g = f;
+        ReturnObject_withStats result;
+        double upperbound = 9999999;
+        double lowerbound = -9999999;
+        do{
+            double beta;
+            if(g==lowerbound){
+                beta = g+1;
+            }else {
+                beta = g;
+            }
+
+            result = alphabeta_withStatsAndTT(beta-1, beta, depthleft,player,board,new ReturnObject(0));
+            g = result.eval;
+
+            if(g<beta){
+                upperbound = g;
+            }else {
+                lowerbound = g;
+            }
+        }while (upperbound>lowerbound);
+        return result;
+    }
 }

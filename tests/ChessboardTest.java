@@ -175,6 +175,8 @@ class ChessboardTest {
         long endtime;
         Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
         AI_Board game1 = new AI_Board(Chessboard1);
+        AI_Board game1_mtd = new AI_Board(Chessboard1);
+        double best_guess = 0;
         System.out.println("Board 1:");
         Chessboard1.printBoard();
         Chessboard Chessboard2 = new Chessboard("6k1/p2qpp2/2p2PpQ/1p4N1/2n5/2N5/PPP2P2/2K5");
@@ -212,6 +214,17 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_ab_tt_1.eval);
             System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
             System.out.println("Transpotion uses:" + result_ab_tt_1.NumHashs);
+            System.out.println();
+            System.out.println("MTD(f):");
+            starttime = System.nanoTime();
+            ReturnObject_withStats result_mtd_1 = game1_mtd.MTDF(i,true,Chessboard1,best_guess);
+            best_guess = result_mtd_1.eval;
+            endtime = System.nanoTime();
+            System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
+            System.out.println("Postions evaluated:" + result_mtd_1.NumPositons);
+            System.out.println("Evaluation:" + result_mtd_1.eval);
+            System.out.println("Best Move" + result_mtd_1.moves.getFirst());
+            System.out.println("Transpotion uses:" + result_mtd_1.NumHashs);
             System.out.println("----------------------------------------");
             System.out.println("Board 2:");
             /*System.out.println("Minimax:");

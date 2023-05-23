@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class TranspositionTable {
     private static final int DEFAULT_SIZE = 1 << 20; // Default hash table size (2^20)
@@ -13,7 +14,7 @@ public class TranspositionTable {
         Arrays.fill(table, null);
     }
 
-    public void storeEntry(long key, int depth, double score, int flag) {
+    public void storeEntry(long key, int depth, double score, ChessMove flag) {
         int index = (int) (key % table.length);
         index = Math.abs(index); //this line feels scuffed
         table[index] = new HashEntry(key, depth, score, flag);
@@ -22,6 +23,7 @@ public class TranspositionTable {
     public HashEntry probeEntry(long key) {
         int index = (int) (key % table.length);
         index = Math.abs(index); //this line feels scuffed
-        return table[index];
+        HashEntry result = table[index];
+        return result;
     }
 }

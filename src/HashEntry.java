@@ -1,10 +1,12 @@
+import java.util.LinkedList;
+
 public class HashEntry {
     private long key;
     private int depth;
     private double score;
-    private int flag;
+    private ChessMove flag;
 
-    public HashEntry(long key, int depth, double score, int flag) {
+    public HashEntry(long key, int depth, double score, ChessMove flag) {
         this.key = key;
         this.depth = depth;
         this.score = score;
@@ -17,7 +19,7 @@ public class HashEntry {
         return depth;
     }
 
-    public int getFlag() {
+    public ChessMove getFlag() {
         return flag;
     }
 
@@ -33,7 +35,7 @@ public class HashEntry {
         this.depth = depth;
     }
 
-    public void setFlag(int flag) {
+    public void setFlag(ChessMove flag) {
         this.flag = flag;
     }
 
