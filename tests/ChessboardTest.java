@@ -29,7 +29,8 @@ class ChessboardTest {
                 JSONArray zugArray = (JSONArray) stellung.get("Zug");
                 boolean isWhite = (boolean) stellung.get("White");
                 Chessboard board = new Chessboard(FEN);
-                LinkedList<ChessMove>[] moves = board.allMoves_withCheck(isWhite);
+                board.setWhiteNext(isWhite);
+                LinkedList<ChessMove>[] moves = board.allMoves_withCheck();
                 for(int i=0; i<6; i++){
                     Assertions.assertEquals((long) moves[i].size(), (long) zugArray.get(i));
                 }

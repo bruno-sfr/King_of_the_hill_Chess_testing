@@ -140,7 +140,8 @@ public class AI_Board {
         System.out.println("Result: " + result);
         boolean whiteturn = true;
         for(ChessMove move: result.moves){
-            runner.board.makeMove(whiteturn, move.getFrom(), move.getTo());
+            runner.board.setWhiteNext(whiteturn);
+            runner.board.makeMove(move.getFrom(), move.getTo());
             whiteturn = !whiteturn;
         }
         runner.board.printBoard();
@@ -198,7 +199,8 @@ public class AI_Board {
         if(player){
             ReturnObject maxEval = new ReturnObject(-9999999,new LinkedList<ChessMove>());
 
-            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
+            board.setWhiteNext();
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces();
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
 
             for(LinkedList<ChessMove> moves:allMoves){
@@ -206,7 +208,8 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.setWhiteNext();
+                    child.makeMove(move.getFrom(),move.getTo());
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -237,7 +240,8 @@ public class AI_Board {
 
             ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
 
-            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
+            board.setBlackNext();
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces();
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
 
             for(LinkedList<ChessMove> moves:allMoves){
@@ -245,7 +249,8 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.setBlackNext();
+                    child.makeMove(move.getFrom(),move.getTo());
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -285,22 +290,28 @@ public class AI_Board {
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
             return new ReturnObject_MiniMax(board.eval_func_withCheck(),1,object.moves);
         }
-        if(board.isCheckmate(true)){
+        board.setWhiteNext();
+        if(board.isCheckmate()){
             return new ReturnObject_MiniMax(-100000,1,object.moves);
-        }else if(board.isCheckmate(false)){
-            return new ReturnObject_MiniMax(100000,1,object.moves);
+        }else {
+            board.setBlackNext();
+            if(board.isCheckmate()){
+                return new ReturnObject_MiniMax(100000,1,object.moves);
+            }
         }
 
         if(player){
             ReturnObject_MiniMax maxEval = new ReturnObject_MiniMax(-9999999,1,new LinkedList<ChessMove>());
 
-            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
+            board.setWhiteNext();
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces();
 
             for(LinkedList<ChessMove> moves:allMoves){
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.setWhiteNext();
+                    child.makeMove(move.getFrom(),move.getTo());
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -329,11 +340,13 @@ public class AI_Board {
 
         }else{
             ReturnObject_MiniMax minEval = new ReturnObject_MiniMax(9999999,1,new LinkedList<ChessMove>());
-            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
+            board.setBlackNext();
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces();
             for(LinkedList<ChessMove> moves:allMoves){
                 for(ChessMove move:moves){
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.setBlackNext();
+                    child.makeMove(move.getFrom(),move.getTo());
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
                     ReturnObject_MiniMax eval=minimax(depthleft-1,true,child,new ReturnObject(object.eval,Movelist));
@@ -380,16 +393,21 @@ public class AI_Board {
             }
         }*/
 
-        if(board.isCheckmate(true)){
+        board.setWhiteNext();
+        if(board.isCheckmate()){
             return new ReturnObject_MiniMax(-100000,1,object.moves);
-        }else if(board.isCheckmate(false)){
-            return new ReturnObject_MiniMax(100000,1,object.moves);
+        } else {
+            board.setBlackNext();
+            if (board.isCheckmate()) {
+                return new ReturnObject_MiniMax(100000, 1, object.moves);
+            }
         }
 
         if(player){
             ReturnObject_MiniMax maxEval = new ReturnObject_MiniMax(-9999999, 1,new LinkedList<ChessMove>());
 
-            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
+            board.setWhiteNext();
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces();
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
 
             for(LinkedList<ChessMove> moves:allMoves){
@@ -397,7 +415,8 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.setWhiteNext();
+                    child.makeMove(move.getFrom(),move.getTo());
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -434,7 +453,8 @@ public class AI_Board {
 
             ReturnObject_MiniMax minEval = new ReturnObject_MiniMax(9999999,1,new LinkedList<ChessMove>());
 
-            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
+            board.setBlackNext();
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces();
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
 
             for(LinkedList<ChessMove> moves:allMoves){
@@ -442,7 +462,8 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.setBlackNext();
+                    child.makeMove(move.getFrom(),move.getTo());
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 

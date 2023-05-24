@@ -6,11 +6,13 @@ public class Game {
         while (!board.isGameOver()){
             if(whiteturn){
                 ReturnObject result = Player.runFunction(true,10000);
-                board.makeMove(true, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo());
+                board.setWhiteNext();
+                board.makeMove(result.moves.getFirst().getFrom(), result.moves.getFirst().getTo());
                 System.out.println("Depth:"+result.moves.size());
             }else {
                 ReturnObject_MiniMax result = Player.runFunction_withNumpos(false,10000);
-                board.makeMove(false, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo());
+                board.setBlackNext();
+                board.makeMove(result.moves.getFirst().getFrom(), result.moves.getFirst().getTo());
                 System.out.println("Depth:"+result.moves.size());
             }
             System.out.println("White Turn:"+whiteturn);

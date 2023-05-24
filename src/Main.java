@@ -19,23 +19,28 @@ public class Main {
             ReturnObject result = game.alphabeta(-999999, 999999, 6, true, board, object);
             System.out.println(result);*/
             long Starttime = System.nanoTime();
-            LinkedList<ChessMove>[] test = board.allMovesWithPieces(WhiteTurn);
+
+            board.setWhiteNext(WhiteTurn);
+            LinkedList<ChessMove>[] test = board.allMovesWithPieces();
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
             Starttime = System.nanoTime();
             LinkedList<Integer[]> test2 = board.allMovesWithoutPieces(WhiteTurn);
             endtime = System.nanoTime();
             System.out.println("Duration_Nico:" + (endtime-Starttime));
-            System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
-            System.out.println("Is check? " + board.isCheck(WhiteTurn));
-            System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
+            System.out.println("Whiteturn? " + WhiteTurn);
+            board.setWhiteNext(WhiteTurn);
+            System.out.println("Is check? " + board.isCheck());
+            board.setWhiteNext(WhiteTurn);
+            System.out.println("Is checkmate? " + board.isCheckmate());
             System.out.println("Eval:" + board.eval_func());
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
             LinkedList<Integer> move = ChessHelper.calcPos(input);
             try {
-                if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
+                board.setWhiteNext();
+                if (board.makeMove(move.get(0), move.get(1))) {
                     board.printBoard();
                     WhiteTurn = !WhiteTurn;
                 } else {
