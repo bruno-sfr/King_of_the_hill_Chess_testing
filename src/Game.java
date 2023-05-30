@@ -5,15 +5,20 @@ public class Game {
         boolean whiteturn = true;
         while (!board.isGameOver()){
             if(whiteturn){
-                ReturnObject result = Player.iterativeDeepening(true,10000);
+                System.out.println("MTD(f):");
+                ReturnObject_withStats result = Player.iterativeDeepening_MTD(true,20000);
+                System.out.println(result.moves.getFirst());
                 board.makeMove(true, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo());
                 System.out.println("Depth:"+result.moves.size());
             }else {
-                ReturnObject_withStats result = Player.iterativeDeepening_withNumpos(false,10000);
+                System.out.println("Alpha-Beta TT:");
+                ReturnObject_withStats result = Player.iterativeDeepening_withTT(false,20000);
+                System.out.println(result.moves.getFirst());
                 board.makeMove(false, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo());
                 System.out.println("Depth:"+result.moves.size());
             }
             System.out.println("White Turn:"+whiteturn);
+            Player.setBoard(board);
             board.printBoard();
             whiteturn = !whiteturn;
         }

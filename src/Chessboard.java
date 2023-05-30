@@ -1387,8 +1387,10 @@ public class Chessboard {
             LinkedList<Integer> _whiteKing = white_king.allSetSquares();
             int whiteKingPos = _whiteKing.getFirst();
             if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
-                //white has won via king of the hill
-                eval = eval + 100000;
+                //white has won via king of the hill, but only when not in check
+                if(!this.isCheck(true)) {
+                    eval = eval + 100000;
+                }
             }
             //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
             //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
@@ -1400,7 +1402,9 @@ public class Chessboard {
             int blackKingPos = _blackKing.getFirst();
             if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
                 //black has won via king of the hill
-                eval = eval -100000;
+                if(!this.isCheck(false)) {
+                    eval = eval - 100000;
+                }
             }
             //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
             //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
@@ -1441,12 +1445,16 @@ public class Chessboard {
         int whiteKingPos = white_king.allSetSquares().getFirst();
         if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
             //white has won via king of the hill
-            return true;
+            if(!this.isCheck(true)) {
+                return true;
+            }
         }
         int blackKingPos = black_king.allSetSquares().getFirst();
         if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
             //white has won via king of the hill
-            return true;
+            if(!this.isCheck(false)) {
+                return true;
+            }
         }
         if(!this.isBlackKing()){
             return true;
