@@ -747,12 +747,14 @@ public class Chessboard {
             }
             else if(King.isSquareSet(from)){
                 if(WhiteTurn){
-                    if(isCheck(true)){
+                    //if(isCheck(true)){
+                    if(isCheck()){
                         WhiteLeftCastle = false;
                         WhiteRightCastle = false;
                     }
                 }else {
-                    if(isCheck(false)){
+                    //if(isCheck(false)){
+                    if(isCheck()){
                         BlackRightCastle = false;
                         BlackLeftCastle = false;
                     }
@@ -1417,7 +1419,7 @@ public class Chessboard {
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
-            if(this.isCheck(true)){
+            /*if(this.isCheck(true)){
                 //white in ckeck
                 eval = eval - 1;
             }
@@ -1431,6 +1433,21 @@ public class Chessboard {
             }
             if (this.isCheckmate(false)) {
                 eval = eval + 100000;
+            }*/
+            if(this.isCheck()){
+                //white in ckeck
+                eval = eval - 1;
+            }
+            if(this.isCheck()){
+                //black in ckeck
+                eval = eval + 1;
+            }
+            if (this.isCheckmate()) {
+                //white in ckeckmate so black win
+                eval = eval - 100000;
+            }
+            if (this.isCheckmate()) {
+                eval = eval + 100000;
             }
         }
         return eval;
@@ -1439,11 +1456,18 @@ public class Chessboard {
     public boolean isGameOver(){
         BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
         BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
-        if (this.isCheckmate(true)) {
+        /*if (this.isCheckmate(true)) {
             //white in ckeckmate so black win
             return true;
         }
         if (this.isCheckmate(false)) {
+            return true;
+        }*/
+        if (this.isCheckmate()) {
+            //white in ckeckmate so black win
+            return true;
+        }
+        if (this.isCheckmate()) {
             return true;
         }
         int whiteKingPos = white_king.allSetSquares().getFirst();
