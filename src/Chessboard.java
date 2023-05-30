@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class Chessboard {
     //true means castle possible
-    Zobrist zob;
+    //Zobrist zob;
     Boolean BlackLeftCastle;
     Boolean BlackRightCastle;
     Boolean WhiteLeftCastle;
@@ -27,7 +27,7 @@ public class Chessboard {
 
 
     public Chessboard(){
-        zob = new Zobrist();
+        //zob = new Zobrist();
         Black = new BitBoard(0xffff000000000000L);
         White = new BitBoard(0x000000000000ffffL);
         Pawn = new BitBoard(0x00ff00000000ff00L);
@@ -44,7 +44,7 @@ public class Chessboard {
 
     //copy construtor
     public Chessboard(Chessboard toCopy){
-        zob = new Zobrist();
+        //zob = new Zobrist();
         this.Black = new BitBoard(toCopy.Black.getBoard());
         this.White = new BitBoard(toCopy.White.getBoard());
         this.Rook = new BitBoard(toCopy.Rook.getBoard());
@@ -60,7 +60,7 @@ public class Chessboard {
     }
 
     public Chessboard(String fen){
-        zob = new Zobrist();
+        //zob = new Zobrist();
         Black = new BitBoard();
         White = new BitBoard();
         Pawn = new BitBoard();
@@ -1457,8 +1457,8 @@ public class Chessboard {
         return false;
     }
 
-    public long hash_func(Boolean whiteTurn){
-        /*long hash = 0;
+    /*public long hash_func(Boolean whiteTurn){
+        long hash = 0;
         if(whiteTurn){
             //if white then bitwise or
             hash = White.getBoard() ^ Black.getBoard() ^ Knight.getBoard() ^ King.getBoard() ^ Queen.getBoard() ^ Bishop.getBoard() ^ Pawn.getBoard();
@@ -1540,9 +1540,9 @@ public class Chessboard {
 
         if (!whiteTurn) {
             hashKey ^= 0x1L; // Flip the least significant bit if it's Black's turn
-        }*/
+        }
         return zob.generateHashKey(this,whiteTurn);
-    }
+    }*/
 
     public void printBoard(){
 

@@ -183,7 +183,7 @@ class ChessboardTest {
         AI_Board game2 = new AI_Board(Chessboard2);
         System.out.println("Board w:");
         Chessboard2.printBoard();
-        for(int i = 1; i<6; i++){
+        for(int i = 1; i<7; i++){
             System.out.println("Depth:" + i);
             System.out.println("----------------------------------------");
             /*System.out.println("Board 1:");
@@ -218,7 +218,7 @@ class ChessboardTest {
             System.out.println("MTD(f):");
             starttime = System.nanoTime();
             ReturnObject_withStats result_mtd_1 = game1_mtd.MTDF(i,true,Chessboard1,best_guess);
-            best_guess = result_mtd_1.eval;
+            //best_guess = result_mtd_1.eval;
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_mtd_1.NumPositons);
@@ -226,8 +226,8 @@ class ChessboardTest {
             System.out.println("Best Move" + result_mtd_1.moves.getFirst());
             System.out.println("Transpotion uses:" + result_mtd_1.NumHashs);
             System.out.println("----------------------------------------");
-            System.out.println("Board 2:");
-            /*System.out.println("Minimax:");
+            /*System.out.println("Board 2:");
+            System.out.println("Minimax:");
             starttime = System.nanoTime();
             ReturnObject_withStats result_minimax_2 = game2.minimax(i,false,Chessboard2,new ReturnObject(0));
             endtime = System.nanoTime();
@@ -235,7 +235,7 @@ class ChessboardTest {
             System.out.println("Postions evaluated:" + result_minimax_2.NumPositons);
             System.out.println("Evaluation:" + result_minimax_2.eval);
             System.out.println("Best Move" + result_minimax_2.moves.getFirst());
-            System.out.println();*/
+            System.out.println();
             System.out.println("Alpha-Beta:");
             starttime = System.nanoTime();
             ReturnObject_withStats result_ab_2 = game2.alphabeta_withNumPostions(-9999999,9999999,i,false,Chessboard2,new ReturnObject(0));
@@ -245,7 +245,7 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_ab_2.eval);
             System.out.println("Best Move" + result_ab_2.moves.getFirst());
             System.out.println("----------------------------------------");
-            System.out.println();
+            System.out.println();*/
         }
     }
 }

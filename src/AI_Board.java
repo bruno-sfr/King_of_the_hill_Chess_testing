@@ -9,7 +9,10 @@ public class AI_Board {
     private int Depth;
     private TranspositionTable table;
 
+    Zobrist zob;
+
     public AI_Board(Chessboard board) {
+        zob = new Zobrist();
         this.board=board;
         this.table=new TranspositionTable(1 << 28);
     }
@@ -462,7 +465,8 @@ public class AI_Board {
     }
 
     public ReturnObject_withStats alphabeta_withStatsAndTT(double alpha, double beta, int depthleft, boolean player, Chessboard board, ReturnObject object){
-        HashEntry hash = table.probeEntry(board.hash_func(player));
+        long boardhash = zob.generateHashKey(board,player);
+        HashEntry hash = table.probeEntry(boardhash);
         if(hash != null){
             if(hash.getDepth()>=depthleft) {
                 LinkedList<ChessMove> list = new LinkedList<>();
@@ -473,7 +477,7 @@ public class AI_Board {
         if(depthleft==0){
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
-            table.storeEntry(board.hash_func(player),depthleft,board.eval_func_withCheck(),object.moves.getFirst());
+            table.storeEntry(boardhash,depthleft,board.eval_func_withCheck(),object.moves.getFirst());
             return new ReturnObject_withStats(board.eval_func_withCheck(),1,0,object.moves);
         }/*else if(board.isCheckmate(player)){
             if(player){
@@ -484,10 +488,10 @@ public class AI_Board {
         }*/
 
         if(board.isCheckmate(true)){
-            table.storeEntry(board.hash_func(player),depthleft,-100000,object.moves.getFirst());
+            table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
             return new ReturnObject_withStats(-100000,1,0,object.moves);
         }else if(board.isCheckmate(false)){
-            table.storeEntry(board.hash_func(player),depthleft,100000,object.moves.getFirst());
+            table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
             return new ReturnObject_withStats(100000,1,0,object.moves);
         }
 
@@ -539,7 +543,7 @@ public class AI_Board {
                 if(breakstate)break;
             }
             if(object.moves.size()!=0) {
-                table.storeEntry(board.hash_func(player), depthleft, maxEval.eval, object.moves.getFirst());
+                table.storeEntry(boardhash, depthleft, maxEval.eval, object.moves.getFirst());
             }
             return maxEval;
 
@@ -592,7 +596,7 @@ public class AI_Board {
                 if(breakstate)break;
             }
             if(object.moves.size()!=0) {
-                table.storeEntry(board.hash_func(player), depthleft, minEval.eval, object.moves.getFirst());
+                table.storeEntry(boardhash, depthleft, minEval.eval, object.moves.getFirst());
             }
             return minEval;
         }
@@ -612,28 +616,187 @@ public class AI_Board {
         until lowerbound >= upperbound;
     return g;*/
 
+    public ReturnObject_withStats alphabeta_withStatsAndTTforMTD(double alpha, double beta, double lowerbound, double upperbound, int depthleft, boolean player, Chessboard board, ReturnObject object){
+        long boardhash = zob.generateHashKey(board,player);
+        HashEntry hash = table.probeEntry(boardhash);
+        if(hash != null){
+            if(hash.getDepth()>=depthleft) {
+                LinkedList<ChessMove> list = new LinkedList<>();
+                list.add(hash.getFlag());
+                return new ReturnObject_withStats(hash.getScore(), 1, 1, list);
+            }
+        }
+
+        /*if n.lowerbound >= beta then return n.lowerbound;
+        if n.upperbound <= alpha then return n.upperbound;
+        alpha := max(alpha, n.lowerbound);
+        beta := min(beta, n.upperbound);*/
+
+        /*if(lowerbound>=beta){return new ReturnObject_withStats(lowerbound,1,0,object.moves);}
+
+        if(upperbound<=alpha){return new ReturnObject_withStats(upperbound,1,0,object.moves);}
+
+        alpha = Math.max(alpha,lowerbound);
+        beta = Math.min(beta,upperbound);*/
+
+        if(depthleft==0){
+            //object.eval=board.eval_func();
+            //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
+            table.storeEntry(boardhash,depthleft,board.eval_func_withCheck(),object.moves.getFirst());
+            return new ReturnObject_withStats(board.eval_func_withCheck(),1,0,object.moves);
+        }/*else if(board.isCheckmate(player)){
+            if(player){
+                return new ReturnObject(-100000,object.moves);
+            }else {
+                return new ReturnObject(100000,object.moves);
+            }
+        }*/
+
+        if(board.isCheckmate(true)){
+            table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
+            return new ReturnObject_withStats(-100000,1,0,object.moves);
+        }else if(board.isCheckmate(false)){
+            table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
+            return new ReturnObject_withStats(100000,1,0,object.moves);
+        }
+
+        if(player){
+            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
+
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
+            //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
+
+            for(LinkedList<ChessMove> moves:allMoves){
+                boolean breakstate=false;
+                for(ChessMove move:moves){
+
+                    Chessboard child = new Chessboard(board);
+                    child.makeMove(true,move.getFrom(),move.getTo());
+                    LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
+                    Movelist.add(move);
+
+                    ReturnObject_withStats eval=alphabeta_withStatsAndTTforMTD(alpha,beta, lowerbound, upperbound, depthleft-1,false,child,new ReturnObject(object.eval,Movelist));
+                    maxEval.NumPositons = maxEval.NumPositons + eval.NumPositons;
+                    maxEval.NumHashs = maxEval.NumHashs + eval.NumHashs;
+
+                    if(eval.eval==maxEval.eval){
+                        int max = 2;
+                        int min = 1;
+                        int range = max - min + 1;
+                        int rand = (int)(Math.random() * range) + min;
+                        if(rand != 1) {
+                            int tempNum = maxEval.NumPositons;
+                            int tempNumh = maxEval.NumHashs;
+                            maxEval = eval;
+                            maxEval.NumPositons = tempNum;
+                            maxEval.NumHashs = tempNumh;
+                        }
+                    }else if(eval.eval>maxEval.eval){//maxEval=max(eval,maxEval);
+                        int tempNum = maxEval.NumPositons;
+                        int tempNumh = maxEval.NumHashs;
+                        maxEval = eval;
+                        maxEval.NumPositons = tempNum;
+                        maxEval.NumHashs = tempNumh;
+                    }
+
+                    alpha=Math.max(alpha,eval.eval);
+                    if(beta<=alpha){
+                        breakstate=true;
+                        break;
+                    }
+                }
+                if(breakstate)break;
+            }
+            if(object.moves.size()!=0) {
+                table.storeEntry(boardhash, depthleft, maxEval.eval, object.moves.getFirst());
+            }
+            return maxEval;
+
+        }else{
+
+            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1,new LinkedList<ChessMove>());
+
+            LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
+            //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
+
+            for(LinkedList<ChessMove> moves:allMoves){
+                boolean breakstate=false;
+                for(ChessMove move:moves){
+
+                    Chessboard child = new Chessboard(board);
+                    child.makeMove(false,move.getFrom(),move.getTo());
+                    LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
+                    Movelist.add(move);
+
+                    ReturnObject_withStats eval=alphabeta_withStatsAndTTforMTD(alpha,beta, lowerbound, upperbound,depthleft-1,true,child,new ReturnObject(object.eval,Movelist));
+                    minEval.NumPositons = minEval.NumPositons + eval.NumPositons;
+                    minEval.NumHashs = minEval.NumHashs + eval.NumHashs;
+
+                    if(eval.eval== minEval.eval){
+                        int max = 2;
+                        int min = 1;
+                        int range = max - min + 1;
+                        int rand = (int)(Math.random() * range) + min;
+                        if(rand != 1) {
+                            int tempNum = minEval.NumPositons;
+                            int tempNumh = minEval.NumHashs;
+                            minEval = eval;
+                            minEval.NumPositons = tempNum;
+                            minEval.NumHashs = tempNumh;
+                        }
+                    }else if(eval.eval< minEval.eval){//minEval=max(eval,minEval);
+                        int tempNum = minEval.NumPositons;
+                        int tempNumh = minEval.NumHashs;
+                        minEval = eval;
+                        minEval.NumPositons = tempNum;
+                        minEval.NumHashs = tempNumh;
+                    }
+
+                    beta=Math.min(beta,eval.eval);
+                    if(beta<=alpha){
+                        breakstate=true;
+                        break;
+                    }
+                }
+                if(breakstate)break;
+            }
+            if(object.moves.size()!=0) {
+                table.storeEntry(boardhash, depthleft, minEval.eval, object.moves.getFirst());
+            }
+            return minEval;
+        }
+    }
+
     public ReturnObject_withStats MTDF(int depthleft, boolean player, Chessboard board, double f){
         double g = f;
         ReturnObject_withStats result;
-        double upperbound = 9999999;
-        double lowerbound = -9999999;
+        double upperbound = Double.POSITIVE_INFINITY;
+        double lowerbound = Double.NEGATIVE_INFINITY;
+        double beta;
+        double increment = 1;
+        double tolerance = 1e-9;
         do{
-            double beta;
-            if(g==lowerbound){
-                beta = g+1;
+            //g == lowerbound
+            if(Math.abs(g - lowerbound) <= tolerance){//Math.ulp(g)){
+                beta = g+increment;
             }else {
                 beta = g;
             }
 
-            result = alphabeta_withStatsAndTT(beta-1, beta, depthleft,player,board,new ReturnObject(0));
+            result = alphabeta_withStatsAndTTforMTD(beta-increment, beta, lowerbound, upperbound, depthleft,player,board,new ReturnObject(0));
+            //increment = increment/10;
             g = result.eval;
 
-            if(g<beta){
+            //g<beta
+            if((beta - g) > tolerance){
                 upperbound = g;
             }else {
                 lowerbound = g;
             }
-        }while (upperbound>lowerbound);
+        //upperbound>lowerbound
+            System.out.println("lowerbound:"+lowerbound);
+            System.out.println("upperbound:"+upperbound);
+        }while ((upperbound - lowerbound) > tolerance);//Math.ulp(upperbound));//Double.longBitsToDouble(971l << 52));
         return result;
     }
 }
