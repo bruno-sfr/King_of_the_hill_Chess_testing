@@ -488,6 +488,7 @@ public class AI_Board {
         long boardhash = zob.generateHashKey(board,player);
         HashEntry hash = table.probeEntry(boardhash);
         if(hash != null){
+            //somehow when >= it is wrong in minimal cases
             if(hash.getDepth()>=depthleft) {
                 LinkedList<ChessMove> list = new LinkedList<>();
                 list.add(hash.getFlag());
@@ -507,13 +508,24 @@ public class AI_Board {
             }
         }*/
 
-        if(board.isCheckmate(true)){
+        if(board.isCheckmate(player)){
+            if(player){
+                //white in checkmate
+                table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
+                return new ReturnObject_withStats(-100000,1,0,object.moves);
+            }else {
+                //black in checkmate
+                table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
+                return new ReturnObject_withStats(100000,1,0,object.moves);
+            }
+        }
+        /*if(board.isCheckmate(true)){
             table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
             return new ReturnObject_withStats(-100000,1,0,object.moves);
         }else if(board.isCheckmate(false)){
             table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
             return new ReturnObject_withStats(100000,1,0,object.moves);
-        }
+        }*/
 
         if(player){
             ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
@@ -659,13 +671,24 @@ public class AI_Board {
             }
         }*/
 
-        if(board.isCheckmate(true)){
+        if(board.isCheckmate(player)){
+            if(player){
+                //white in checkmate
+                table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
+                return new ReturnObject_withStats(-100000,1,0,object.moves);
+            }else {
+                //black in checkmate
+                table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
+                return new ReturnObject_withStats(100000,1,0,object.moves);
+            }
+        }
+        /*if(board.isCheckmate(true)){
             table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
             return new ReturnObject_withStats(-100000,1,0,object.moves);
         }else if(board.isCheckmate(false)){
             table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
             return new ReturnObject_withStats(100000,1,0,object.moves);
-        }
+        }*/
 
         if(player){
             ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
@@ -781,7 +804,7 @@ public class AI_Board {
         double upperbound = Double.POSITIVE_INFINITY;
         double lowerbound = Double.NEGATIVE_INFINITY;
         double beta;
-        double increment = 10;
+        double increment = 20;
         double tolerance = 1e-15;
         do{
             //g == lowerbound
@@ -794,13 +817,18 @@ public class AI_Board {
             result = alphabeta_withStatsAndTTforMTD(beta-increment, beta, lowerbound, upperbound, depthleft,player,board,new ReturnObject(0));
             //result = alphabeta_withStatsAndTT(beta-increment, beta, depthleft,player,board,new ReturnObject(0));
 
+            /*System.out.println("Temp MTD(f) result moves:");
+            for(ChessMove move : result.moves){
+                System.out.println(move);
+            }*/
+
             //increment = increment/10;
             g = result.eval;
             MTD_result.NumPositons = MTD_result.NumPositons + result.NumPositons;
             MTD_result.NumHashs = MTD_result.NumHashs + result.NumHashs;
             /*System.out.println("transpos:"+result.NumHashs);
-            System.out.println("pos:"+result.NumPositons);
-            System.out.println("eval"+result.eval);*/
+            System.out.println("pos:"+result.NumPositons);*/
+            //System.out.println("eval"+result.eval);
 
             //g<beta
             //if((beta - g) > tolerance){

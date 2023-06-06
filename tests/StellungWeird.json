@@ -1,0 +1,18 @@
+
+{
+  "Stellungen": [
+    {
+      "comment": "Gruppe C-seltsame Notation",
+      "FEN": "r3kb1r/1p1nqp1p/p2p1np1/P1p1p3/2P1P3/2N1K1PP/1P1P1P2/R1BQ1B1R",
+      "Zug": [
+        "Pd4",
+        "pd4",
+        "Qd4",
+        "pd4",
+        "Kc4"
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    }
+  ]
+}

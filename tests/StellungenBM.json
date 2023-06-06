@@ -2,19 +2,6 @@
 {
   "Stellungen": [
     {
-      "comment": "Gruppe C-seltsame Notation",
-      "FEN": "r3kb1r/1p1nqp1p/p2p1np1/P1p1p3/2P1P3/2N1K1PP/1P1P1P2/R1BQ1B1R",
-      "Zug": [
-        "Pd4",
-        "pd4",
-        "Qd4",
-        "pd4",
-        "Kc4"
-      ],
-      "White": true,
-      "Suchtiefe": 5
-    },
-    {
       "comment": "Gruppe E - Schachmatt in Suchtiefe 4, aber nur eigene foglenden Züge angegeben d7e8, h8e8",
       "FEN": "7k/5ppp/8/R7/5n2/3B4/2K5/8",
       "Zug": [

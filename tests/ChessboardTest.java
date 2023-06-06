@@ -81,6 +81,88 @@ class ChessboardTest {
     }
 
     @Test
+    void Alpha_Beta_TT_Checkmate_Test() throws IOException{
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("./tests/StellungenSuchtiefe.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray stellungenArray = (JSONArray) jsonObject.get("Stellungen");
+
+            Iterator<JSONObject> iterator = stellungenArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject stellung = iterator.next();
+                String FEN = (String) stellung.get("FEN");
+                JSONArray zugArray = (JSONArray) stellung.get("Zug");
+                boolean isWhite = (boolean) stellung.get("White");
+                long Suchtiefe = (long) stellung.get("Suchtiefe");
+                System.out.println(FEN);
+                System.out.println((String) stellung.get("comment"));
+                Chessboard chessboard = new Chessboard(FEN);
+                chessboard.printBoard();
+                AI_Board game = new AI_Board(chessboard);
+                ReturnObject_withStats result = game.alphabeta_withStatsAndTT(-9999999,9999999,(int) (Suchtiefe),isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
+                System.out.println("Evaluation:"+result.eval);
+                /*if(result.moves.size()>=2){
+                    System.out.println(result.moves.getFirst());
+                    System.out.println(result.moves.get(1));
+                }*/
+                if(isWhite){
+                    //50000 seems big enough to be bigger than normal eval but smaller than 100000 if black king is slayn
+                    Assertions.assertTrue(result.eval>50000);
+                }else {
+                    Assertions.assertTrue(result.eval<-50000);
+                }
+                /*int actual = result.moves.getFirst().getTo();
+                int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
+                Assertions.assertEquals(expected, actual);*/
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void MTD_Checkmate_Test() throws IOException{
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("./tests/StellungenSuchtiefe_TT.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray stellungenArray = (JSONArray) jsonObject.get("Stellungen");
+
+            Iterator<JSONObject> iterator = stellungenArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject stellung = iterator.next();
+                String FEN = (String) stellung.get("FEN");
+                JSONArray zugArray = (JSONArray) stellung.get("Zug");
+                boolean isWhite = (boolean) stellung.get("White");
+                long Suchtiefe = (long) stellung.get("Suchtiefe");
+                System.out.println(FEN);
+                System.out.println((String) stellung.get("comment"));
+                Chessboard chessboard = new Chessboard(FEN);
+                chessboard.printBoard();
+                AI_Board game = new AI_Board(chessboard);
+                ReturnObject_withStats result = game.MTDF((int) (Suchtiefe),isWhite,chessboard,0.0);
+                System.out.println("Evaluation:"+result.eval);
+                /*if(result.moves.size()>=2){
+                    System.out.println(result.moves.getFirst());
+                    System.out.println(result.moves.get(1));
+                }*/
+                if(isWhite){
+                    //50000 seems big enough to be bigger than normal eval but smaller than 100000 if black king is slayn
+                    Assertions.assertTrue(result.eval>50000);
+                }else {
+                    Assertions.assertTrue(result.eval<-50000);
+                }
+                /*int actual = result.moves.getFirst().getTo();
+                int expected = ChessHelper.calcPos((String) zugArray.get(0)).getFirst();
+                Assertions.assertEquals(expected, actual);*/
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     void Alpha_Beta_Best_move_Test() throws IOException{
         JSONParser parser = new JSONParser();
         try {
@@ -201,11 +283,11 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_ab_1.NumPositons);
             System.out.println("Evaluation:" + result_ab_1.eval);
-            //System.out.println("Best Move" + result_ab_1.moves.getFirst());
-            System.out.println("Moves:");
+            System.out.println("Best Move" + result_ab_1.moves.getFirst());
+            /*System.out.println("Moves:");
             for(ChessMove move: result_ab_1.moves){
                 System.out.println(move);
-            }
+            }*/
             System.out.println();
             System.out.println("Alpha-Beta with Transpostion:");
             starttime = System.nanoTime();
@@ -214,11 +296,11 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_ab_tt_1.NumPositons);
             System.out.println("Evaluation:" + result_ab_tt_1.eval);
-            //System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
-            System.out.println("Moves:");
+            System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
+            /*System.out.println("Moves:");
             for(ChessMove move: result_ab_tt_1.moves){
                 System.out.println(move);
-            }
+            }*/
             System.out.println("Transpotion uses:" + result_ab_tt_1.NumHashs);
             System.out.println();
             System.out.println("MTD(f):");
@@ -229,11 +311,11 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_mtd_1.NumPositons);
             System.out.println("Evaluation:" + result_mtd_1.eval);
-            //System.out.println("Best Move" + result_mtd_1.moves.getFirst());
-            System.out.println("Moves:");
+            System.out.println("Best Move" + result_mtd_1.moves.getFirst());
+            /*System.out.println("Moves:");
             for(ChessMove move: result_mtd_1.moves){
                 System.out.println(move);
-            }
+            }*/
             System.out.println("Transpotion uses:" + result_mtd_1.NumHashs);
             System.out.println("----------------------------------------");
         }

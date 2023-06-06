@@ -1,0 +1,182 @@
+
+{
+  "Stellungen": [
+    {
+      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
+      "FEN": "r1bqkbnr/p2ppppp/2p5/1p4N1/2B1P3/8/PPQP1PPP/RNB1K2R",
+      "Zug": [
+        "Bf7"
+      ],
+      "White": true,
+      "Suchtiefe": 1
+    },
+    {
+      "comment": "Gruppe AI - keine Angabe für Schach in x Zügen",
+      "FEN": "8/6k1/8/8/8/8/1K6/8",
+      "Zug": [
+        "Kf6"
+      ],
+      "White": false,
+      "Suchtiefe": 3
+    },
+    {
+      "comment": "Gruppe H",
+      "FEN": "3qr1k1/p6p/3p2p1/2p1br2/1p6/3PB2P/PPPQ2K1/R2N2R1",
+      "Zug": [
+        "qa8"
+      ],
+      "White": false,
+      "Suchtiefe": 1
+    },
+    {
+      "comment": "Gruppe AF",
+      "FEN": "3r2rk/ppp4p/b5pN/6B1/6b1/2N5/PPP2PPP/2KRR3",
+      "Zug": [
+        "Bf6",
+        "rg7",
+        "Rd8"
+      ],
+      "White": true,
+      "Suchtiefe": 3
+    },
+    {
+      "comment": "Gruppe B",
+      "FEN": "rnr3k1/1pq2p1p/p2p1bpB/3P4/P3Q3/2PB4/5PPP/2R1R1K1",
+      "Zug": [
+        "Qe8",
+        "re8",
+        "Re8"
+      ],
+      "White": true,
+      "Suchtiefe": 3
+    },
+    {
+      "comment": "Gruppe C-seltsame Notation",
+      "FEN": "rnr3k1/1pq2p1p/p2p1bpB/3P4/P3Q3/2PB4/5PPP/2R1R1K1",
+      "Zug": [
+        "Ne5",
+        "bd4",
+        "bf7",
+        "ke7",
+        "Nd5"
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe E - Schachmatt in Suchtiefe 4, aber nur eigene foglenden Züge angegeben d7e8, h8e8",
+      "FEN": "1R5Q/2pq1p2/3pkBr1/3Np3/2P1P1b1/3P1N2/5PPK/r7",
+      "Zug": [
+        "Re8"
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe F - Beste Zugfolge: c4d5, d8d5, f3d5, c8e6, Suchtiefe: 4",
+      "FEN": "r1bq1bkr/ppp3pp/2n5/3np3/2B5/5Q2/PPPP1PPP/RNB1K2R",
+      "Zug": [
+        "Bd5"
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe F - Beste Zugfolge: e2e8, b5e8, e1e8, Suchtiefe: 3",
+      "FEN": "6k1/r4ppp/r7/1b6/8/8/4QPPP/4R1K1",
+      "Zug": [
+        "Qe8"
+      ],
+      "White": true,
+      "Suchtiefe": 3
+    },
+    {
+      "comment": "Gruppe G",
+      "FEN": "4k2r/1q1p1pp1/p3p3/1pb1P3/2r3P1/P1N1P2p/1PP1Q2P/2R1R1K1",
+      "Zug": [
+        "be3",
+        "Qe3",
+        "qg2"
+
+      ],
+      "White": false,
+      "Suchtiefe": 3
+    },
+    {
+      "comment": "Gruppe V - Matt in 2, aber Züge nicht angegeben",
+      "FEN": "2K1Qn1r/5P1k/3R2R1/6p1/4B1p1/8/8/8",
+      "Zug": [
+        "Qd7"
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe V - Matt in 3, aber Züge nicht angegeben",
+      "FEN": "2Q5/6K1/1p2N3/1r1p1k2/1r2R1N1/5n2/2p5/8",
+      "Zug": [
+        "Kh6"
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe A - Matt in 7",
+      "FEN": "krr3rr/pp6/8/8/8/3K4/8/8",
+      "Zug": [
+        "rh4"
+      ],
+      "White": false,
+      "Suchtiefe": 7
+    },
+    {
+      "comment": "Gruppe AN",
+      "FEN": "3q3r/1pp2pb1/3pkn2/1B6/3P4/4PN1P/5K1P/7R",
+      "Zug": [
+        "ke6"
+      ],
+      "White": false,
+      "Suchtiefe": 1
+    },
+    {
+      "comment": "Gruppe S - angeblich weiß am Zug, aber in der Zugauflistung isses schwarz",
+      "FEN": "r1b2k1N/pp1p2pp/2p5/2q1p3/3nn3/1B6/PPPP2PP/RNBQ1RK1",
+      "Zug": [
+        "nf3",
+        "Kh1",
+        "qg1",
+        "Rg1",
+        "nf2"
+      ],
+      "White": false,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe S - pawn to queen",
+      "FEN": "kb5Q/p7/Pp6/1P6/4p3/4R3/4P1p1/6K1",
+      "Zug": [
+        "Rh3",
+        "pe3",
+        "Rh1",
+        "ph1",
+        "Qh1"
+
+      ],
+      "White": true,
+      "Suchtiefe": 5
+    },
+    {
+      "comment": "Gruppe D",
+      "FEN": "6k1/1Q3ppp/1p6/2p5/P1Pp4/1Pn1r3/3N1PPP/6K1",
+      "Zug": [
+        "re1",
+        "Nf1",
+        "ne2",
+        "Kh1",
+        "rf1"
+      ],
+      "White": false,
+      "Suchtiefe": 5
+    }
+  ]
+}
