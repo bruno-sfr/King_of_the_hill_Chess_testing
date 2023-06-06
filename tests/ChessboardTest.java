@@ -59,7 +59,7 @@ class ChessboardTest {
                 Chessboard chessboard = new Chessboard(FEN);
                 chessboard.printBoard();
                 AI_Board game = new AI_Board(chessboard);
-                ReturnObject result = game.alphabeta(-9999999,9999999,(int) (Suchtiefe) + 2 ,isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
+                ReturnObject result = game.alphabeta(-9999999,9999999,(int) (Suchtiefe),isWhite,chessboard,new ReturnObject(0, new LinkedList<ChessMove>()));
                 System.out.println("Evaluation:"+result.eval);
                 /*if(result.moves.size()>=2){
                     System.out.println(result.moves.getFirst());
@@ -173,8 +173,9 @@ class ChessboardTest {
     void Comparison_Benchmarks_1(){
         long starttime;
         long endtime;
-        //Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
-        Chessboard Chessboard1 = new Chessboard("r3r1k1/p4ppp/2Q1b3/4N3/5q2/4RP2/PPB3PP/R5K1 ");
+        //Chessboard Chessboard1 = new Chessboard();
+        Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
+        //Chessboard Chessboard1 = new Chessboard("r3r1k1/p4ppp/2Q1b3/4N3/5q2/4RP2/PPB3PP/R5K1 ");
         AI_Board game1 = new AI_Board(Chessboard1);
         AI_Board game1_mtd = new AI_Board(Chessboard1);
         double best_guess = 0;
@@ -200,7 +201,11 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_ab_1.NumPositons);
             System.out.println("Evaluation:" + result_ab_1.eval);
-            System.out.println("Best Move" + result_ab_1.moves.getFirst());
+            //System.out.println("Best Move" + result_ab_1.moves.getFirst());
+            System.out.println("Moves:");
+            for(ChessMove move: result_ab_1.moves){
+                System.out.println(move);
+            }
             System.out.println();
             System.out.println("Alpha-Beta with Transpostion:");
             starttime = System.nanoTime();
@@ -209,7 +214,11 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_ab_tt_1.NumPositons);
             System.out.println("Evaluation:" + result_ab_tt_1.eval);
-            System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
+            //System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
+            System.out.println("Moves:");
+            for(ChessMove move: result_ab_tt_1.moves){
+                System.out.println(move);
+            }
             System.out.println("Transpotion uses:" + result_ab_tt_1.NumHashs);
             System.out.println();
             System.out.println("MTD(f):");
@@ -220,7 +229,11 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Postions evaluated:" + result_mtd_1.NumPositons);
             System.out.println("Evaluation:" + result_mtd_1.eval);
-            System.out.println("Best Move" + result_mtd_1.moves.getFirst());
+            //System.out.println("Best Move" + result_mtd_1.moves.getFirst());
+            System.out.println("Moves:");
+            for(ChessMove move: result_mtd_1.moves){
+                System.out.println(move);
+            }
             System.out.println("Transpotion uses:" + result_mtd_1.NumHashs);
             System.out.println("----------------------------------------");
         }
