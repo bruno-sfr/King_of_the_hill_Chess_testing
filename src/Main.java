@@ -19,27 +19,31 @@ public class Main {
             ReturnObject result = game.alphabeta(-999999, 999999, 6, true, board, object);
             System.out.println(result);*/
             long Starttime = System.nanoTime();
-            LinkedList<ChessMove>[] test = board.allMovesWithPieces(WhiteTurn);
+            boolean tmp = board.WhiteTurn;
+            board.setWhiteNext(WhiteTurn);
+            LinkedList<ChessMove>[] test = board.allMovesWithPieces();
+            board.setWhiteNext(tmp);
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
             Starttime = System.nanoTime();
-            LinkedList<Integer[]> test2 = board.allMovesWithoutPieces(WhiteTurn);
+            board.setWhiteNext(WhiteTurn);
+            LinkedList<Integer[]> test2 = board.allMovesWithoutPieces();
             endtime = System.nanoTime();
             System.out.println("Duration_Nico:" + (endtime-Starttime));
-            System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
-            System.out.println("Is check? " + board.isCheck(WhiteTurn));
-            System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
+            System.out.println("Whiteturn? " + board.isCheck());
+            System.out.println("Is check? " + board.isCheck());
+            System.out.println("Is checkmate? " + board.isCheckmate());
             System.out.println("Eval:" + board.eval_func());
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
             LinkedList<Integer> move = ChessHelper.calcPos(input);
             try {
-                if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
+                if (board.makeMove(move.get(0), move.get(1))) {
                     board.printBoard();
-                    WhiteTurn = !WhiteTurn;
+                    board.setWhiteNext(!board.WhiteTurn);
                 } else {
-                    if (WhiteTurn) {
+                    if (board.WhiteTurn) {
                         System.out.println("Invalid move provided. It's white's turn.");
                     } else {
                         System.out.println("Invalid move provided. It's black's turn.");

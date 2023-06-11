@@ -1,6 +1,28 @@
 import java.util.LinkedList;
 
 public class Chessboard {
+    Boolean WhiteTurn;
+
+    public void setWhiteNext() {
+        WhiteTurn = true;
+    }
+    public void setWhiteNext(Boolean White) {
+        WhiteTurn = White;
+    }
+    public void setBlackNext() {
+        WhiteTurn = false;
+    }
+
+    public BitBoard getAttacker() {
+        if (WhiteTurn)
+            return White;
+        return Black;
+    }
+    public BitBoard getDefender() {
+        if (WhiteTurn)
+            return Black;
+        return White;
+    }
     //true means castle possible
     //Zobrist zob;
     Boolean BlackLeftCastle;
@@ -216,7 +238,7 @@ public class Chessboard {
         }
     }
 
-    public LinkedList<ChessMove>[] allMovesWithPieces(boolean WhiteTurn){
+    public LinkedList<ChessMove>[] allMovesWithPieces(){
         //Moves in Order Pawn / bishop / knight / rook / queen / king
         LinkedList<ChessMove>[] Moves = new LinkedList[6];
         for(int i = 0; i<Moves.length; i++){
@@ -243,7 +265,7 @@ public class Chessboard {
         //Pawn
         FigPos = AttackPawn.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = PawnMove(WhiteTurn,pos);
+            BitBoard targets = PawnMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Moves[0].add(new ChessMove(pos,target));
@@ -253,7 +275,7 @@ public class Chessboard {
         //Bishop
         FigPos = AttackBishop.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = BishopMove(pos, Attacker, Defender);
+            BitBoard targets = BishopMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Moves[1].add(new ChessMove(pos,target));
@@ -263,7 +285,7 @@ public class Chessboard {
         //Knight
         FigPos = AttackKnight.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = KnightMove(pos, Attacker, Defender);
+            BitBoard targets = KnightMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Moves[2].add(new ChessMove(pos,target));
@@ -273,7 +295,7 @@ public class Chessboard {
         //Rook
         FigPos = AttackRook.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = RookMove(pos, Attacker, Defender);
+            BitBoard targets = RookMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Moves[3].add(new ChessMove(pos,target));
@@ -283,7 +305,7 @@ public class Chessboard {
         //Queen
         FigPos = AttackQueen.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = QueenMove(pos, Attacker, Defender);
+            BitBoard targets = QueenMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Moves[4].add(new ChessMove(pos,target));
@@ -293,7 +315,7 @@ public class Chessboard {
         //King
         FigPos = AttackKing.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = KingMove(pos, Attacker, Defender);
+            BitBoard targets = KingMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Moves[5].add(new ChessMove(pos,target));
@@ -303,7 +325,7 @@ public class Chessboard {
         return Moves;
     }
 
-    public LinkedList<ChessMove>[] allMoves_withCheck(boolean WhiteTurn){
+    public LinkedList<ChessMove>[] allMoves_withCheck(){
         //Moves in Order Pawn / bishop / knight / rook / queen / king
         LinkedList<ChessMove>[] Moves = new LinkedList[6];
         for(int i = 0; i<Moves.length; i++){
@@ -330,13 +352,14 @@ public class Chessboard {
         //Pawn
         FigPos = AttackPawn.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = PawnMove(WhiteTurn,pos);
+            BitBoard targets = PawnMove(pos);
             //targets.printBoard();
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
-                if(test.makeMove(WhiteTurn,pos,target)) {
-                    if (!test.isCheck(WhiteTurn)) {
+                test.setWhiteNext(WhiteTurn);
+                if(test.makeMove(pos,target)) {
+                    if (!test.isCheck()) {
                         Moves[0].add(new ChessMove(pos, target));
                     }
                 }
@@ -346,12 +369,13 @@ public class Chessboard {
         //Bishop
         FigPos = AttackBishop.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = BishopMove(pos, Attacker, Defender);
+            BitBoard targets = BishopMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
-                if(test.makeMove(WhiteTurn,pos,target)) {
-                    if (!test.isCheck(WhiteTurn)) {
+                test.setWhiteNext(WhiteTurn);
+                if(test.makeMove(pos,target)) {
+                    if (!test.isCheck()) {
                         Moves[1].add(new ChessMove(pos, target));
                     }
                 }
@@ -361,12 +385,13 @@ public class Chessboard {
         //Knight
         FigPos = AttackKnight.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = KnightMove(pos, Attacker, Defender);
+            BitBoard targets = KnightMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
-                if(test.makeMove(WhiteTurn,pos,target)) {
-                    if (!test.isCheck(WhiteTurn)) {
+                test.setWhiteNext(WhiteTurn);
+                if(test.makeMove(pos,target)) {
+                    if (!test.isCheck()) {
                         Moves[2].add(new ChessMove(pos, target));
                     }
                 }
@@ -376,12 +401,13 @@ public class Chessboard {
         //Rook
         FigPos = AttackRook.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = RookMove(pos, Attacker, Defender);
+            BitBoard targets = RookMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
-                if(test.makeMove(WhiteTurn,pos,target)) {
-                    if (!test.isCheck(WhiteTurn)) {
+                test.setWhiteNext(WhiteTurn);
+                if(test.makeMove(pos,target)) {
+                    if (!test.isCheck()) {
                         Moves[3].add(new ChessMove(pos, target));
                     }
                 }
@@ -391,13 +417,14 @@ public class Chessboard {
         //Queen
         FigPos = AttackQueen.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = QueenMove(pos, Attacker, Defender);
+            BitBoard targets = QueenMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
                 //System.out.println("testing queenmove:" + new ChessMove(pos, target));
-                if(test.makeMove(WhiteTurn,pos,target)) {
-                    if (!test.isCheck(WhiteTurn)) {
+                test.setWhiteNext(WhiteTurn);
+                if(test.makeMove(pos,target)) {
+                    if (!test.isCheck()) {
                         Moves[4].add(new ChessMove(pos, target));
                         //System.out.println("added");
                     }
@@ -408,12 +435,13 @@ public class Chessboard {
         //King
         FigPos = AttackKing.allSetSquares();
         for(int pos:FigPos){
-            BitBoard targets = KingMove(pos, Attacker, Defender);
+            BitBoard targets = KingMove(pos);
             LinkedList<Integer> targets_list = targets.allSetSquares();
             for(int target:targets_list){
                 Chessboard test = new Chessboard(this);
-                if(test.makeMove(WhiteTurn,pos,target)) {
-                    if (!test.isCheck(WhiteTurn)) {
+                test.setWhiteNext(WhiteTurn);
+                if(test.makeMove(pos,target)) {
+                    if (!test.isCheck()) {
                         Moves[5].add(new ChessMove(pos, target));
                     }
                 }
@@ -424,11 +452,11 @@ public class Chessboard {
     }
 
     //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
-    public boolean isCheck(boolean whiteTurn){
+    public boolean isCheck(){
         BitBoard Attacker;
         BitBoard Defender;
         int KingPos;
-        if(whiteTurn){
+        if(WhiteTurn){
             Attacker = Black;
             Defender = White;
         }
@@ -452,7 +480,7 @@ public class Chessboard {
         BitBoard AttackerBishop = new BitBoard(Attacker.getBoard() & Bishop.getBoard());
         LinkedList<Integer> BishopPositions = AttackerBishop.allSetSquares();
         for (int Pos: BishopPositions) {
-            BitBoard temp = BishopMove(Pos, Attacker, Defender);
+            BitBoard temp = BishopMove(Pos);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -460,7 +488,7 @@ public class Chessboard {
         BitBoard AttackerQueen = new BitBoard(Attacker.getBoard() & Queen.getBoard());
         LinkedList<Integer> QueenPositions = AttackerQueen.allSetSquares();
         for (int Pos: QueenPositions) {
-            BitBoard temp = QueenMove(Pos, Attacker, Defender);
+            BitBoard temp = QueenMove(Pos);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -468,7 +496,7 @@ public class Chessboard {
         BitBoard AttackerRook = new BitBoard(Attacker.getBoard() & Rook.getBoard());
         LinkedList<Integer> RookPositions = AttackerRook.allSetSquares();
         for (int Pos: RookPositions) {
-            BitBoard temp = RookMove(Pos,Attacker, Defender);
+            BitBoard temp = RookMove(Pos);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -476,7 +504,7 @@ public class Chessboard {
         BitBoard AttackerKnight = new BitBoard(Attacker.getBoard() & Knight.getBoard());
         LinkedList<Integer> KnightPositions = AttackerKnight.allSetSquares();
         for (int Pos: KnightPositions) {
-            BitBoard temp = KnightMove(Pos, Attacker, Defender);
+            BitBoard temp = KnightMove(Pos);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -484,7 +512,9 @@ public class Chessboard {
         BitBoard AttackerPawn = new BitBoard(Attacker.getBoard() & Pawn.getBoard());
         LinkedList<Integer> PawnPositions = AttackerPawn.allSetSquares();
         for (int Pos: PawnPositions) {
-            BitBoard temp = PawnAttack(!whiteTurn, Pos);
+            setWhiteNext(!WhiteTurn);
+            BitBoard temp = PawnAttack(Pos);
+            setWhiteNext(!WhiteTurn);           //correct??
             /*if(temp.getBoard()>0){
                 temp.printBoard();
             }*/
@@ -495,7 +525,7 @@ public class Chessboard {
         BitBoard AttackerKing = new BitBoard(Attacker.getBoard() & King.getBoard());
         LinkedList<Integer> KingPositions = AttackerKing.allSetSquares();
         for (int Pos: KingPositions) {
-            BitBoard temp = KingMove(Pos, Attacker, Defender);
+            BitBoard temp = KingMove(Pos);
             allEnemyMoves.setBoard(allEnemyMoves.getBoard() | temp.getBoard());
         }
 
@@ -504,10 +534,10 @@ public class Chessboard {
     }
 
     //check if the player whose turn it is, is in check mate
-    public boolean isCheckmate(boolean whiteTurn){
+    public boolean isCheckmate(){
         BitBoard Attacker;
         BitBoard Defender;
-        if(whiteTurn){
+        if(WhiteTurn){
             Attacker = White;
             Defender = Black;
         }
@@ -532,12 +562,13 @@ public class Chessboard {
         //king
         LinkedList<Integer> kingPos = Attacker_king.allSetSquares();
         for(int king:kingPos){
-            BitBoard Moves = KingMove(king,Attacker,Defender);
+            BitBoard Moves = KingMove(king);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
-                State.makeMove(whiteTurn,king,move);
-                if(!State.isCheck(whiteTurn)){
+                State.setWhiteNext(WhiteTurn);
+                State.makeMove(king,move);
+                if(!State.isCheck()){
                     return false;
                 }
             }
@@ -546,12 +577,13 @@ public class Chessboard {
         //Pawn
         LinkedList<Integer> PawnPos = Attacker_pawns.allSetSquares();
         for(int pawn:PawnPos){
-            BitBoard Moves = PawnAttack(whiteTurn,pawn);
+            BitBoard Moves = PawnAttack(pawn);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
-                State.makeMove(whiteTurn,pawn,move);
-                if(!State.isCheck(whiteTurn)){
+                State.setWhiteNext(WhiteTurn);
+                State.makeMove(pawn,move);
+                if(!State.isCheck()){
                     return false;
                 }
             }
@@ -560,12 +592,13 @@ public class Chessboard {
         //queen
         LinkedList<Integer> queenPos = Attacker_queen.allSetSquares();
         for(int queen:queenPos){
-            BitBoard Moves = QueenMove(queen,Attacker,Defender);
+            BitBoard Moves = QueenMove(queen);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
-                State.makeMove(whiteTurn,queen,move);
-                if(!State.isCheck(whiteTurn)){
+                State.setWhiteNext(WhiteTurn);
+                State.makeMove(queen,move);
+                if(!State.isCheck()){
                     return false;
                 }
             }
@@ -574,12 +607,13 @@ public class Chessboard {
         //knight
         LinkedList<Integer> knightPos = Attacker_knights.allSetSquares();
         for(int knight:knightPos){
-            BitBoard Moves = KnightMove(knight,Attacker,Defender);
+            BitBoard Moves = KnightMove(knight);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
-                State.makeMove(whiteTurn,knight,move);
-                if(!State.isCheck(whiteTurn)){
+                State.setWhiteNext(WhiteTurn);
+                State.makeMove(knight,move);
+                if(!State.isCheck()){
                     return false;
                 }
             }
@@ -588,12 +622,13 @@ public class Chessboard {
         //bishop
         LinkedList<Integer> bishopPos = Attacker_bishop.allSetSquares();
         for(int bishop:bishopPos){
-            BitBoard Moves = BishopMove(bishop,Attacker,Defender);
+            BitBoard Moves = BishopMove(bishop);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
-                State.makeMove(whiteTurn,bishop,move);
-                if(!State.isCheck(whiteTurn)){
+                State.setWhiteNext(WhiteTurn);
+                State.makeMove(bishop,move);
+                if(!State.isCheck()){
                     return false;
                 }
             }
@@ -602,12 +637,13 @@ public class Chessboard {
         //rook
         LinkedList<Integer> rookPos = Attacker_rook.allSetSquares();
         for(int rook:rookPos){
-            BitBoard Moves = RookMove(rook,Attacker,Defender);
+            BitBoard Moves = RookMove(rook);
             LinkedList<Integer> _moves = Moves.allSetSquares();
             for(int move:_moves){
                 Chessboard State = new Chessboard(this);
-                State.makeMove(whiteTurn,rook,move);
-                if(!State.isCheck(whiteTurn)){
+                State.setWhiteNext(WhiteTurn);
+                State.makeMove(rook,move);
+                if(!State.isCheck()){
                     return false;
                 }
             }
@@ -616,10 +652,10 @@ public class Chessboard {
         return true;
     }
 
-    public LinkedList<Integer[]> allMovesWithoutPieces(boolean whiteTurn){
+    public LinkedList<Integer[]> allMovesWithoutPieces(){
         BitBoard Attacker;
         BitBoard Defender;
-        if(whiteTurn){
+        if(WhiteTurn){
             Attacker = White;
             Defender = Black;
         }
@@ -634,7 +670,7 @@ public class Chessboard {
             if (from == 64)
                 break;
             pawnPositions = pawnPositions & ~Long.lowestOneBit(pawnPositions);     //delete piece from board
-            LinkedList<Integer> pawnTos = PawnMove(whiteTurn, from).allSetSquares();
+            LinkedList<Integer> pawnTos = PawnMove(from).allSetSquares();
 
             for (int to : pawnTos) {                                //save discovered moves in possibleMoves
                 Integer[] move = new Integer[]{from, to};
@@ -648,7 +684,7 @@ public class Chessboard {
             if (from == 64)
                 break;
             bishopPositions = bishopPositions & ~Long.lowestOneBit(bishopPositions);     //delete piece from board
-            LinkedList<Integer> bishopTos = BishopMove(from, Attacker, Defender).allSetSquares();
+            LinkedList<Integer> bishopTos = BishopMove(from).allSetSquares();
 
             for (int to : bishopTos) {                                //save discovered moves in possibleMoves
                 Integer[] move = new Integer[]{from, to};
@@ -662,7 +698,7 @@ public class Chessboard {
             if (from == 64)
                 break;
             rookPositions = rookPositions & ~Long.lowestOneBit(rookPositions);     //delete piece from board
-            LinkedList<Integer> rookTos = RookMove(from, Attacker, Defender).allSetSquares();
+            LinkedList<Integer> rookTos = RookMove(from).allSetSquares();
 
             for (int to : rookTos) {                                //save discovered moves in possibleMoves
                 Integer[] move = new Integer[]{from, to};
@@ -676,7 +712,7 @@ public class Chessboard {
             if (from == 64)
                 break;
             knightPositions = knightPositions & ~Long.lowestOneBit(knightPositions);     //delete piece from board
-            LinkedList<Integer> knightTos = KnightMove(from, Attacker, Defender).allSetSquares();
+            LinkedList<Integer> knightTos = KnightMove(from).allSetSquares();
 
             for (int to : knightTos) {                                //save discovered moves in possibleMoves
                 Integer[] move = new Integer[]{from, to};
@@ -690,7 +726,7 @@ public class Chessboard {
             if (from == 64)
                 break;
             QueenPositions = QueenPositions & ~Long.lowestOneBit(QueenPositions);     //delete piece from board
-            LinkedList<Integer> QueenTos = QueenMove(from, Attacker, Defender).allSetSquares();
+            LinkedList<Integer> QueenTos = QueenMove(from).allSetSquares();
 
             for (int to : QueenTos) {                                //save discovered moves in possibleMoves
                 Integer[] move = new Integer[]{from, to};
@@ -704,7 +740,7 @@ public class Chessboard {
             if (from == 64)
                 break;
             KingPositions = KingPositions & ~Long.lowestOneBit(KingPositions);     //delete piece from board
-            LinkedList<Integer> KingTos = KingMove(from, Attacker, Defender).allSetSquares();
+            LinkedList<Integer> KingTos = KingMove(from).allSetSquares();
 
             for (int to : KingTos) {                                //save discovered moves in possibleMoves
                 Integer[] move = new Integer[]{from, to};
@@ -715,11 +751,11 @@ public class Chessboard {
         return possibleMoves;
     }
 
-    public boolean makeMove(boolean whiteTurn, int from, int to){
+    public boolean makeMove(int from, int to){
         boolean figAtFrom;
         BitBoard Attacker;
         BitBoard Defender;
-        if(whiteTurn){
+        if(WhiteTurn){
             figAtFrom = White.isSquareSet(from);
             Attacker = White;
             Defender = Black;
@@ -737,24 +773,24 @@ public class Chessboard {
         BitBoard possibleMoves;
         if(figAtFrom){
             if(Pawn.isSquareSet(from)){
-                possibleMoves = PawnMove(whiteTurn, from);
+                possibleMoves = PawnMove(from);
                 success = possibleMoves.isSquareSet(to);
                 figureboard = Pawn;
             }
             else if(King.isSquareSet(from)){
-                if(whiteTurn){
-                    if(isCheck(true)){
+                if(WhiteTurn){
+                    if(isCheck()){
                         WhiteLeftCastle = false;
                         WhiteRightCastle = false;
                     }
                 }else {
-                    if(isCheck(false)){
+                    if(isCheck()){
                         BlackRightCastle = false;
                         BlackLeftCastle = false;
                     }
                 }
 
-                possibleMoves = KingMove(from, Attacker, Defender);
+                possibleMoves = KingMove(from);
                 success = possibleMoves.isSquareSet(to);
                 if(success) {
                     //white king moves so set castle flags and check if its a castle
@@ -796,17 +832,17 @@ public class Chessboard {
                 figureboard = King;
             }
             else if(Queen.isSquareSet(from)){
-                possibleMoves = QueenMove(from, Attacker, Defender);
+                possibleMoves = QueenMove(from);
                 success = possibleMoves.isSquareSet(to);
                 figureboard = Queen;
             }
             else if(Knight.isSquareSet(from)){
-                possibleMoves = KnightMove(from, Attacker, Defender);
+                possibleMoves = KnightMove(from);
                 success = possibleMoves.isSquareSet(to);
                 figureboard = Knight;
             }
             else if(Rook.isSquareSet(from)){
-                possibleMoves = RookMove(from, Attacker, Defender);
+                possibleMoves = RookMove(from);
                 success = possibleMoves.isSquareSet(to);
                 //check for first rook move, disable caslte accordingly
                 if(success){
@@ -827,7 +863,7 @@ public class Chessboard {
                 figureboard = Rook;
             }
             else if(Bishop.isSquareSet(from)){
-                possibleMoves = BishopMove(from, Attacker, Defender);
+                possibleMoves = BishopMove(from);
                 success = possibleMoves.isSquareSet(to);
                 figureboard = Bishop;
             }
@@ -902,13 +938,13 @@ public class Chessboard {
         return null;
     }
 
-    public BitBoard PawnMove(boolean whiteTurn, int from){
+    public BitBoard PawnMove(int from){
 
         BitBoard pawnPos = new BitBoard();
         pawnPos.setSquare(from);
 
         BitBoard possibleMoves = new BitBoard();
-        if (whiteTurn) {
+        if (WhiteTurn) {
             if ((pawnPos.getBoard() << 8 & (White.getBoard() | Black.getBoard())) == 0) {
                 possibleMoves.setBoard(possibleMoves.getBoard() | pawnPos.getBoard() << 8);
 
@@ -950,11 +986,11 @@ public class Chessboard {
         return possibleMoves;
     }
 
-    public BitBoard PawnAttack(boolean whiteTurn, int from) {
+    public BitBoard PawnAttack(int from) {
         BitBoard pawnPos = new BitBoard();
         pawnPos.setSquare(from);
         BitBoard possibleMoves = new BitBoard();
-        if (whiteTurn) {
+        if (WhiteTurn) {
             //if ((pawnPos.getBoard() & colA.getBoard()) == 0) {
             if (!ChessHelper.isWestBorder(from)) {
                 int nw = from + 7;
@@ -985,9 +1021,10 @@ public class Chessboard {
     }
 
 
-    public BitBoard KingMove(int from, BitBoard Attacker, BitBoard Defender){
+    public BitBoard KingMove(int from){
+        BitBoard Attacker = getAttacker();
         BitBoard possibleCastle = new BitBoard();
-        //white king at starting position, so check for castleing
+        //white king at starting position, so check for castling
         if(from == 4 && Attacker == White){
             if(WhiteLeftCastle && (0x1L & Rook.getBoard() & White.getBoard()) != 0) {
                 long figbetween = 0x000000000000000eL;
@@ -1038,13 +1075,14 @@ public class Chessboard {
         return possibleMoves;
     }
 
-    public BitBoard QueenMove(int from, BitBoard Attacker, BitBoard Defender){
-        BitBoard BishopMoves = BishopMove(from,Attacker,Defender);
-        BitBoard RookMoves = RookMove(from,Attacker,Defender);
+    public BitBoard QueenMove(int from){
+        BitBoard BishopMoves = BishopMove(from);
+        BitBoard RookMoves = RookMove(from);
         return new BitBoard(BishopMoves.getBoard() | RookMoves.getBoard());
     }
 
-    public BitBoard KnightMove(int from, BitBoard Attacker, BitBoard Defender){
+    public BitBoard KnightMove(int from){
+        long Attacker = getAttacker().getBoard();
         BitBoard nMoves = new BitBoard();
         if ((from % 8 > 1) & (from < 56))
             nMoves.setSquare(from+6);
@@ -1070,11 +1108,13 @@ public class Chessboard {
         if ((from % 8 > 0) & (from > 15))
             nMoves.setSquare(from - 17);
         long possibleMoves;
-        possibleMoves = nMoves.getBoard() & ~Attacker.getBoard();
+        possibleMoves = nMoves.getBoard() & ~Attacker;
         return new BitBoard(possibleMoves);
     }
 
-    public BitBoard BishopMove(int from, BitBoard Attacker, BitBoard Defender){
+    public BitBoard BishopMove(int from){
+        BitBoard Attacker = getAttacker();
+        BitBoard Defender = getDefender();
         BitBoard possibleMoves = new BitBoard();
         //check if Bishop is on the north or west border so movement in north/west dirction is not possible
         if(!(ChessHelper.isNorthBorder(from) | ChessHelper.isWestBorder(from))){
@@ -1158,7 +1198,9 @@ public class Chessboard {
         return possibleMoves;
     }
 
-    public BitBoard RookMove(int from, BitBoard Attacker, BitBoard Defender) {
+    public BitBoard RookMove(int from) {
+        BitBoard Attacker = getAttacker();
+        BitBoard Defender = getDefender();
         BitBoard possibleMoves = new BitBoard();
         //west direction so a change of -1
         if (!ChessHelper.isWestBorder(from)) {
@@ -1286,8 +1328,12 @@ public class Chessboard {
         eval = eval + white_king.allSetSquares().size() * 100000;
 
         //available moves
-        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
-        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
+        boolean tmp = WhiteTurn;
+        setWhiteNext();
+        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces();
+        setBlackNext();
+        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces();
+        setWhiteNext(tmp);
 
         for(int i=0; i<6; i++){
             eval = eval + whiteMoves[i].size() * 0.1;
@@ -1374,8 +1420,11 @@ public class Chessboard {
         eval = eval + white_king.allSetSquares().size() * 100000;
 
         //available moves
-        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
-        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
+        boolean tmp = WhiteTurn;
+        setWhiteNext();
+        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces();
+        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces();
+        setWhiteNext(tmp);
 
         for(int i=0; i<6; i++){
             eval = eval + whiteMoves[i].size() * 0.1;
@@ -1387,10 +1436,13 @@ public class Chessboard {
             LinkedList<Integer> _whiteKing = white_king.allSetSquares();
             int whiteKingPos = _whiteKing.getFirst();
             if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+                boolean temp = WhiteTurn;
+                setWhiteNext();
                 //white has won via king of the hill, but only when not in check
-                if(!this.isCheck(true)) {
+                if(!this.isCheck()) {
                     eval = eval + 100000;
                 }
+                setWhiteNext(temp);
             }
             //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
             //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
@@ -1401,10 +1453,13 @@ public class Chessboard {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
             int blackKingPos = _blackKing.getFirst();
             if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+                boolean temp = WhiteTurn;
+                setBlackNext();
                 //black has won via king of the hill
-                if(!this.isCheck(false)) {
+                if(!this.isCheck()) {
                     eval = eval - 100000;
                 }
+                setWhiteNext(temp);
             }
             //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
             //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
@@ -1413,21 +1468,25 @@ public class Chessboard {
 
         if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
-            if(this.isCheck(true)){
+            boolean temp = WhiteTurn;
+            setWhiteNext();
+            if(this.isCheck()){
                 //white in ckeck
                 eval = eval - 1;
             }
-            if(this.isCheck(false)){
-                //black in ckeck
-                eval = eval + 1;
-            }
-            if (this.isCheckmate(true)) {
+            if (this.isCheckmate()) {
                 //white in ckeckmate so black win
                 eval = eval - 100000;
             }
-            if (this.isCheckmate(false)) {
+            setBlackNext();
+            if(this.isCheck()){
+                //black in ckeck
+                eval = eval + 1;
+            }
+            if (this.isCheckmate()) {
                 eval = eval + 100000;
             }
+            setWhiteNext(temp);
         }
         return eval;
     }
@@ -1435,27 +1494,33 @@ public class Chessboard {
     public boolean isGameOver(){
         BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
         BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
-        if (this.isCheckmate(true)) {
+        boolean tmp = WhiteTurn;
+        setWhiteNext();
+        if (this.isCheckmate()) {
             //white in ckeckmate so black win
             return true;
         }
-        if (this.isCheckmate(false)) {
+        setBlackNext();
+        if (this.isCheckmate()) {
             return true;
         }
         int whiteKingPos = white_king.allSetSquares().getFirst();
         if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+            setWhiteNext();
             //white has won via king of the hill
-            if(!this.isCheck(true)) {
+            if(!this.isCheck()) {
                 return true;
             }
         }
         int blackKingPos = black_king.allSetSquares().getFirst();
         if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
             //white has won via king of the hill
-            if(!this.isCheck(false)) {
+            setBlackNext();
+            if(!this.isCheck()) {
                 return true;
             }
         }
+        setWhiteNext(tmp);
         if(!this.isBlackKing()){
             return true;
         }
