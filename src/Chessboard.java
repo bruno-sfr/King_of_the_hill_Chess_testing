@@ -451,7 +451,7 @@ public class Chessboard {
         return Moves;
     }
 
-    //checks if player whose current turn it is, is in a check. The Person who is in check is considerd to be the defender
+    //checks if player whose current turn it is, is in a check. The Person who is in check is considered to be the defender
     public boolean isCheck(){
         BitBoard Attacker;
         BitBoard Defender;
