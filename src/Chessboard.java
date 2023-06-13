@@ -1286,13 +1286,17 @@ public class Chessboard {
         eval = eval + white_king.allSetSquares().size() * 100000;
 
         //available moves
-        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
+        /*LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
         LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
 
         for(int i=0; i<6; i++){
             eval = eval + whiteMoves[i].size() * 0.1;
             eval = eval - blackMoves[i].size() * 0.1;
-        }
+        }*/
+        LinkedList<Integer[]> whiteMoves = this.allMovesWithoutPieces(true);
+        LinkedList<Integer[]> blackMoves = this.allMovesWithoutPieces(false);
+        eval += whiteMoves.size() * 0.1;
+        eval -= blackMoves.size() * 0.1;
 
         //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
         if(white_king.allSetSquares().size()>0){
