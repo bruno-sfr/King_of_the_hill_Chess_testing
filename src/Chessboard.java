@@ -1322,6 +1322,69 @@ public class Chessboard {
             //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
             eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
+        //pawn structure holes evaluation
+        long whitePawnBoard = White.getBoard() & Pawn.getBoard();
+        long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
+        long colABoard = colA.getBoard();
+        long colBBoard = colB.getBoard();
+        long colCBoard = colC.getBoard();
+        long colDBoard = colD.getBoard();
+        long colEBoard = colE.getBoard();
+        long colFBoard = colF.getBoard();
+        long colGBoard = colG.getBoard();
+        long colHBoard = colH.getBoard();
+        double deltaEval = 0.0;
+
+        if ((whitePawnBoard & colABoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colBBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colCBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colDBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colEBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colFBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colGBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((whitePawnBoard & colHBoard) == 0L){
+            deltaEval -= 0.1;
+        }
+        if ((blackPawnBoard & colABoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colBBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colCBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colDBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colEBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colFBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colGBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        if ((blackPawnBoard & colHBoard) == 0L){
+            deltaEval += 0.1;
+        }
+        eval += deltaEval;
+
 
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
