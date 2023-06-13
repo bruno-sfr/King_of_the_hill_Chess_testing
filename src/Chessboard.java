@@ -1298,7 +1298,7 @@ public class Chessboard {
         eval += whiteMoves.size() * 0.1;
         eval -= blackMoves.size() * 0.1;
 
-        //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
+        //eval king distance to middle but just subtracting bitboard values (TODO: IMPROVE THIS LATER!!!)
         if(white_king.allSetSquares().size()>0){
             LinkedList<Integer> _whiteKing = white_king.allSetSquares();
             int whiteKingPos = _whiteKing.getFirst();
@@ -1323,9 +1323,7 @@ public class Chessboard {
             eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
         //pawn structure holes evaluation
-        long whitePawnBoard = White.getBoard() & Pawn.getBoard();
-        long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
-        long colABoard = colA.getBoard();
+       /* long colABoard = colA.getBoard();
         long colBBoard = colB.getBoard();
         long colCBoard = colC.getBoard();
         long colDBoard = colD.getBoard();
@@ -1383,7 +1381,40 @@ public class Chessboard {
         if ((blackPawnBoard & colHBoard) == 0L){
             deltaEval += 0.1;
         }
-        eval += deltaEval;
+        eval += deltaEval;*/
+
+        //doubled or isolated pawn evaluation
+        //iterate through all the white and black pawns and check if there are multiple or no pawns at all in a file
+        long whitePawnBoard = White.getBoard() & Pawn.getBoard();
+        long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
+
+        Integer[] whities = new Integer[8];
+        while (whitePawnBoard != 0L) {
+            whities[Long.numberOfTrailingZeros(whitePawnBoard)] += 1;
+            whitePawnBoard &= ~(Long.lowestOneBit(whitePawnBoard));
+        }
+        for (Integer whity : whities) {
+            if (whity > 1) {                                        //doubled pawn
+                eval -= 0.1;
+            }
+            if (whity < 1) {                                        //isolated pawn
+                eval -= 0.1;
+            }
+        }
+        Integer[] blackies = new Integer[8];
+        while (blackPawnBoard != 0L) {
+            blackies[Long.numberOfTrailingZeros(blackPawnBoard)] += 1;
+            blackPawnBoard &= ~(Long.lowestOneBit(blackPawnBoard));
+        }
+        for (Integer blacky : blackies) {
+            if (blacky > 1) {                                     //doubled pawn
+                eval += 0.1;
+            }
+            if (blacky < 1) {                                    //isolated pawn
+                eval += 0.1;
+            }
+        }
+
 
 
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
