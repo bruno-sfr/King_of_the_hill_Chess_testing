@@ -10,18 +10,10 @@ public class Chessboard {
     BitBoard Black, White, Pawn, Rook, King, Queen, Knight, Bishop;
     final BitBoard row1 = new BitBoard(0xffL);
     final BitBoard row2 = new BitBoard(0xff00L);
-    final BitBoard row3 = new BitBoard(0xff0000L);
-    final BitBoard row4 = new BitBoard(0xff000000L);
-    final BitBoard row5 = new BitBoard(0xff00000000L);
-    final BitBoard row6 = new BitBoard(0xff0000000000L);
     final BitBoard row7 = new BitBoard(0xff000000000000L);
     final BitBoard row8 = new BitBoard(0xff00000000000000L);
     final BitBoard colA = new BitBoard(0x101010101010101L);
     final BitBoard colB = new BitBoard(0x202020202020202L);
-    final BitBoard colC = new BitBoard(0x404040404040404L);
-    final BitBoard colD = new BitBoard(0x808080808080808L);
-    final BitBoard colE = new BitBoard(0x1010101010101010L);
-    final BitBoard colF = new BitBoard(0x2020202020202020L);
     final BitBoard colG = new BitBoard(0x4040404040404040L);
     final BitBoard colH = new BitBoard(0x8080808080808080L);
 
