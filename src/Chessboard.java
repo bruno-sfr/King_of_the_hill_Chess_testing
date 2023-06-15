@@ -1,6 +1,13 @@
 import java.util.LinkedList;
 
 public class Chessboard {
+    public static final double DoubledOrMissingPawnValue = 0.1;
+    public static final double AvailableMoveValue = 0.1;
+    public static final double RookCoveredValue = 0.3;
+    public static final double BishopCoveredValue = 0.3;
+    public static final double KnightCoveredValue = 0.3;
+    public static final double QueenCoveredValue = 0.9;
+    public static final double PawnCoveredValue = 0.1;
     //true means castle possible
     //Zobrist zob;
     Boolean BlackLeftCastle;
@@ -1295,8 +1302,8 @@ public class Chessboard {
         }*/
         LinkedList<Integer[]> whiteMoves = this.allMovesWithoutPieces(true);
         LinkedList<Integer[]> blackMoves = this.allMovesWithoutPieces(false);
-        eval += whiteMoves.size() * 0.1;
-        eval -= blackMoves.size() * 0.1;
+        eval += whiteMoves.size() * AvailableMoveValue;
+        eval -= blackMoves.size() * AvailableMoveValue;
 
         //eval king distance to middle but just subtracting bitboard values (TODO: IMPROVE THIS LATER!!!)
         if(white_king.allSetSquares().size()>0){
@@ -1323,65 +1330,6 @@ public class Chessboard {
             eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
         //pawn structure holes evaluation
-       /* long colABoard = colA.getBoard();
-        long colBBoard = colB.getBoard();
-        long colCBoard = colC.getBoard();
-        long colDBoard = colD.getBoard();
-        long colEBoard = colE.getBoard();
-        long colFBoard = colF.getBoard();
-        long colGBoard = colG.getBoard();
-        long colHBoard = colH.getBoard();
-        double deltaEval = 0.0;
-
-        if ((whitePawnBoard & colABoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colBBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colCBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colDBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colEBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colFBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colGBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((whitePawnBoard & colHBoard) == 0L){
-            deltaEval -= 0.1;
-        }
-        if ((blackPawnBoard & colABoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colBBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colCBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colDBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colEBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colFBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colGBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        if ((blackPawnBoard & colHBoard) == 0L){
-            deltaEval += 0.1;
-        }
-        eval += deltaEval;*/
 
         //doubled or isolated pawn evaluation
         //iterate through all the white and black pawns and check if there are multiple or no pawns at all in a file
@@ -1390,28 +1338,28 @@ public class Chessboard {
 
         Integer[] whities = new Integer[8];
         while (whitePawnBoard != 0L) {
-            whities[Long.numberOfTrailingZeros(whitePawnBoard)] += 1;
+            whities[Long.numberOfTrailingZeros(whitePawnBoard) % 8] += 1;
             whitePawnBoard &= ~(Long.lowestOneBit(whitePawnBoard));
         }
         for (Integer whity : whities) {
             if (whity > 1) {                                        //doubled pawn
-                eval -= 0.1;
+                eval -= DoubledOrMissingPawnValue;
             }
             if (whity < 1) {                                        //isolated pawn
-                eval -= 0.1;
+                eval -= DoubledOrMissingPawnValue;
             }
         }
         Integer[] blackies = new Integer[8];
         while (blackPawnBoard != 0L) {
-            blackies[Long.numberOfTrailingZeros(blackPawnBoard)] += 1;
+            blackies[Long.numberOfTrailingZeros(blackPawnBoard) % 8] += 1;
             blackPawnBoard &= ~(Long.lowestOneBit(blackPawnBoard));
         }
         for (Integer blacky : blackies) {
             if (blacky > 1) {                                     //doubled pawn
-                eval += 0.1;
+                eval += DoubledOrMissingPawnValue;
             }
             if (blacky < 1) {                                    //isolated pawn
-                eval += 0.1;
+                eval += DoubledOrMissingPawnValue;
             }
         }
 
@@ -1421,70 +1369,70 @@ public class Chessboard {
         LinkedList<Integer> wRookSquares = white_rook.allSetSquares();
         for (Integer pos:wRookSquares){
             if(check_if_covered(true,pos)){
-                eval+=0.3;
+                eval+= RookCoveredValue;
             }
         }
         //Black rooks sind gedeckt
         LinkedList<Integer> bRookSquares = black_rook.allSetSquares();
         for (Integer pos:bRookSquares){
             if(check_if_covered(true,pos)){
-                eval-=0.3;
+                eval-=RookCoveredValue;
             }
         }
         //White bishops sind gedeckt
         LinkedList<Integer> wBishopSquares = white_bishop.allSetSquares();
         for (Integer pos:wBishopSquares){
             if(check_if_covered(true,pos)){
-                eval+=0.3;
+                eval+=BishopCoveredValue;
             }
         }
         //Black bishops sind gedeckt
         LinkedList<Integer> bBishopSquares = black_bishop.allSetSquares();
         for (Integer pos:bBishopSquares){
             if(check_if_covered(true,pos)){
-                eval-=0.3;
+                eval-=BishopCoveredValue;
             }
         }
         //White knights sind gedeckt
         LinkedList<Integer> wKnightSquares = white_knights.allSetSquares();
         for (Integer pos:wKnightSquares){
             if(check_if_covered(true,pos)){
-                eval+=0.3;
+                eval+=KnightCoveredValue;
             }
         }
         //Black knights sind gedeckt
         LinkedList<Integer> bKnightSquares = black_knights.allSetSquares();
         for (Integer pos:bKnightSquares){
             if(check_if_covered(true,pos)){
-                eval-=0.3;
+                eval-=KnightCoveredValue;
             }
         }
         //White Queens sind gedeckt
         LinkedList<Integer> wQueenSquares = white_queen.allSetSquares();
         for (Integer pos:wQueenSquares){
             if(check_if_covered(true,pos)){
-                eval+=0.9;
+                eval+=QueenCoveredValue;
             }
         }
         //Black Queens sind gedeckt
         LinkedList<Integer> bQueenSquares = black_queen.allSetSquares();
         for (Integer pos:bQueenSquares){
             if(check_if_covered(true,pos)){
-                eval-=0.9;
+                eval-=QueenCoveredValue;
             }
         }
         //White pawns sind gedeckt
         LinkedList<Integer> wPawnsSquares = white_pawns.allSetSquares();
         for (Integer pos:wPawnsSquares){
             if(check_if_covered(true,pos)){
-                eval+=0.1;
+                eval+=PawnCoveredValue;
             }
         }
         //Black pawns sind gedeckt
         LinkedList<Integer> bPawnSquares = black_pawns.allSetSquares();
         for (Integer pos:bPawnSquares){
             if(check_if_covered(true,pos)){
-                eval-=0.1;
+                eval-=PawnCoveredValue;
             }
         }
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
