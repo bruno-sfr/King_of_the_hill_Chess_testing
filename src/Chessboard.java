@@ -1416,7 +1416,77 @@ public class Chessboard {
         }
 
 
-
+        //TODO Figuren decken sich gegenseitig
+        //White rooks sind gedeckt
+        LinkedList<Integer> wRookSquares = white_rook.allSetSquares();
+        for (Integer pos:wRookSquares){
+            if(check_if_covered(true,pos)){
+                eval+=0.3;
+            }
+        }
+        //Black rooks sind gedeckt
+        LinkedList<Integer> bRookSquares = black_rook.allSetSquares();
+        for (Integer pos:bRookSquares){
+            if(check_if_covered(true,pos)){
+                eval-=0.3;
+            }
+        }
+        //White bishops sind gedeckt
+        LinkedList<Integer> wBishopSquares = white_bishop.allSetSquares();
+        for (Integer pos:wBishopSquares){
+            if(check_if_covered(true,pos)){
+                eval+=0.3;
+            }
+        }
+        //Black bishops sind gedeckt
+        LinkedList<Integer> bBishopSquares = black_bishop.allSetSquares();
+        for (Integer pos:bBishopSquares){
+            if(check_if_covered(true,pos)){
+                eval-=0.3;
+            }
+        }
+        //White knights sind gedeckt
+        LinkedList<Integer> wKnightSquares = white_knights.allSetSquares();
+        for (Integer pos:wKnightSquares){
+            if(check_if_covered(true,pos)){
+                eval+=0.3;
+            }
+        }
+        //Black knights sind gedeckt
+        LinkedList<Integer> bKnightSquares = black_knights.allSetSquares();
+        for (Integer pos:bKnightSquares){
+            if(check_if_covered(true,pos)){
+                eval-=0.3;
+            }
+        }
+        //White Queens sind gedeckt
+        LinkedList<Integer> wQueenSquares = white_queen.allSetSquares();
+        for (Integer pos:wQueenSquares){
+            if(check_if_covered(true,pos)){
+                eval+=0.9;
+            }
+        }
+        //Black Queens sind gedeckt
+        LinkedList<Integer> bQueenSquares = black_queen.allSetSquares();
+        for (Integer pos:bQueenSquares){
+            if(check_if_covered(true,pos)){
+                eval-=0.9;
+            }
+        }
+        //White pawns sind gedeckt
+        LinkedList<Integer> wPawnsSquares = white_pawns.allSetSquares();
+        for (Integer pos:wPawnsSquares){
+            if(check_if_covered(true,pos)){
+                eval+=0.1;
+            }
+        }
+        //Black pawns sind gedeckt
+        LinkedList<Integer> bPawnSquares = black_pawns.allSetSquares();
+        for (Integer pos:bPawnSquares){
+            if(check_if_covered(true,pos)){
+                eval-=0.1;
+            }
+        }
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
             if(this.isCheck(true)){
@@ -1436,6 +1506,29 @@ public class Chessboard {
             }
         }*/
         return eval;
+    }
+
+    private boolean check_if_covered(boolean player, int pos){
+
+        if(player){
+            White.clearSquare(pos);
+            Black.setSquare(pos);
+            if(allMovesWithoutPieces(true).contains(pos)){
+                return true;
+            }
+            Black.clearSquare(pos);
+            White.setSquare(pos);
+        }else{
+            Black.clearSquare(pos);
+            White.setSquare(pos);
+            if(allMovesWithoutPieces(false).contains(pos)){
+                return true;
+            }
+            White.clearSquare(pos);
+            Black.setSquare(pos);
+        }
+
+        return false;
     }
 
     public double eval_func_withCheck(){
