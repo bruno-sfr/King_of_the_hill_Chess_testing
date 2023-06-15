@@ -1514,6 +1514,8 @@ public class Chessboard {
             White.clearSquare(pos);
             Black.setSquare(pos);
             if(allMovesWithoutPieces(true).contains(pos)){
+                Black.clearSquare(pos);
+                White.setSquare(pos);
                 return true;
             }
             Black.clearSquare(pos);
@@ -1522,6 +1524,8 @@ public class Chessboard {
             Black.clearSquare(pos);
             White.setSquare(pos);
             if(allMovesWithoutPieces(false).contains(pos)){
+                White.clearSquare(pos);
+                Black.setSquare(pos);
                 return true;
             }
             White.clearSquare(pos);
