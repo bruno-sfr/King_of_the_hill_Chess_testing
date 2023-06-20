@@ -24,7 +24,7 @@ public class Main {
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
             Starttime = System.nanoTime();
-            LinkedList<Integer[]> test2 = board.allMovesWithoutPieces(WhiteTurn);
+            LinkedList<Integer> test2 = board.allMovesWithoutPieces(WhiteTurn);
             endtime = System.nanoTime();
             System.out.println("Duration_Nico:" + (endtime-Starttime));
             System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));

@@ -1,6 +1,13 @@
 import java.util.LinkedList;
 
 public class Chessboard {
+    public static final double DoubledOrMissingPawnValue = 0.1;
+    public static final double AvailableMoveValue = 0.1;
+    public static final double RookCoveredValue = 0.4;
+    public static final double BishopCoveredValue = 0.3;
+    public static final double KnightCoveredValue = 0.3;
+    public static final double QueenCoveredValue = 0.9;
+    public static final double PawnCoveredValue = 0.1;
     //true means castle possible
     //Zobrist zob;
     Boolean BlackLeftCastle;
@@ -719,7 +726,7 @@ public class Chessboard {
         return true;
     }
 
-    public LinkedList<Integer[]> allMovesWithoutPieces(boolean whiteTurn){
+    public LinkedList<Integer> allMovesWithoutPieces(boolean whiteTurn){
         BitBoard Attacker;
         BitBoard Defender;
         if(whiteTurn){
@@ -730,7 +737,7 @@ public class Chessboard {
             Attacker = Black;
             Defender = White;
         }
-        LinkedList<Integer[]> possibleMoves = new LinkedList<>();
+        LinkedList<Integer> possibleMoves = new LinkedList<>();
         long pawnPositions = Attacker.getBoard() & Pawn.getBoard();
         for (int i = 0; i < 8; i++) {
             int from = Long.numberOfTrailingZeros(pawnPositions);             //get index of first piece
@@ -739,10 +746,8 @@ public class Chessboard {
             pawnPositions = pawnPositions & ~Long.lowestOneBit(pawnPositions);     //delete piece from board
             LinkedList<Integer> pawnTos = PawnMove(whiteTurn, from).allSetSquares();
 
-            for (int to : pawnTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(pawnTos);
         }
 
         long bishopPositions = Attacker.getBoard() & Bishop.getBoard();
@@ -753,10 +758,8 @@ public class Chessboard {
             bishopPositions = bishopPositions & ~Long.lowestOneBit(bishopPositions);     //delete piece from board
             LinkedList<Integer> bishopTos = BishopMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : bishopTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(bishopTos);
         }
 
         long rookPositions = Attacker.getBoard() & Rook.getBoard();
@@ -767,10 +770,8 @@ public class Chessboard {
             rookPositions = rookPositions & ~Long.lowestOneBit(rookPositions);     //delete piece from board
             LinkedList<Integer> rookTos = RookMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : rookTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(rookTos);
         }
 
         long knightPositions = Attacker.getBoard() & Knight.getBoard();
@@ -781,10 +782,8 @@ public class Chessboard {
             knightPositions = knightPositions & ~Long.lowestOneBit(knightPositions);     //delete piece from board
             LinkedList<Integer> knightTos = KnightMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : knightTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(knightTos);
         }
 
         long QueenPositions = Attacker.getBoard() & Queen.getBoard();
@@ -795,10 +794,8 @@ public class Chessboard {
             QueenPositions = QueenPositions & ~Long.lowestOneBit(QueenPositions);     //delete piece from board
             LinkedList<Integer> QueenTos = QueenMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : QueenTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(QueenTos);
         }
 
         long KingPositions = Attacker.getBoard() & King.getBoard();
@@ -809,10 +806,8 @@ public class Chessboard {
             KingPositions = KingPositions & ~Long.lowestOneBit(KingPositions);     //delete piece from board
             LinkedList<Integer> KingTos = KingMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : KingTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(KingTos);
         }
 
         return possibleMoves;
@@ -1347,6 +1342,79 @@ public class Chessboard {
         return white_king.allSetSquares().size()>0;
     }
 
+    public double eval_func_simple(){
+        double eval = 0.0;
+        //Black
+        BitBoard black_pawns = new BitBoard(Black.getBoard() & Pawn.getBoard());
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        BitBoard black_queen = new BitBoard(Black.getBoard() & Queen.getBoard());
+        BitBoard black_knights = new BitBoard(Black.getBoard() & Knight.getBoard());
+        BitBoard black_bishop = new BitBoard(Black.getBoard() & Bishop.getBoard());
+        BitBoard black_rook = new BitBoard(Black.getBoard() & Rook.getBoard());
+        //White
+        BitBoard white_pawns = new BitBoard(White.getBoard() & Pawn.getBoard());
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        BitBoard white_queen = new BitBoard(White.getBoard() & Queen.getBoard());
+        BitBoard white_knights = new BitBoard(White.getBoard() & Knight.getBoard());
+        BitBoard white_bishop = new BitBoard(White.getBoard() & Bishop.getBoard());
+        BitBoard white_rook = new BitBoard(White.getBoard() & Rook.getBoard());
+
+        //black value
+        eval = eval - black_pawns.allSetSquares().size();
+        eval = eval - black_bishop.allSetSquares().size() * 3;
+        eval = eval - black_knights.allSetSquares().size() * 3;
+        eval = eval - black_rook.allSetSquares().size() * 5;
+        eval = eval - black_queen.allSetSquares().size() * 9;
+        eval = eval - black_king.allSetSquares().size() * 100000;
+
+        //white value
+        eval = eval + white_pawns.allSetSquares().size();
+        eval = eval + white_bishop.allSetSquares().size() * 3;
+        eval = eval + white_knights.allSetSquares().size() * 3;
+        eval = eval + white_rook.allSetSquares().size() * 5;
+        eval = eval + white_queen.allSetSquares().size() * 9;
+        eval = eval + white_king.allSetSquares().size() * 100000;
+
+        //available moves
+        /*LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
+        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
+
+        for(int i=0; i<6; i++){
+            eval = eval + whiteMoves[i].size() * 0.1;
+            eval = eval - blackMoves[i].size() * 0.1;
+        }*/
+        LinkedList<Integer> whiteMoves = this.allMovesWithoutPieces(true);
+        LinkedList<Integer> blackMoves = this.allMovesWithoutPieces(false);
+        eval += whiteMoves.size() * AvailableMoveValue;
+        eval -= blackMoves.size() * AvailableMoveValue;
+
+        //eval king distance to middle but just subtracting bitboard values (TODO: IMPROVE THIS LATER!!!)
+        if(white_king.allSetSquares().size()>0){
+            LinkedList<Integer> _whiteKing = white_king.allSetSquares();
+            int whiteKingPos = _whiteKing.getFirst();
+            if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+                //white has won via king of the hill
+                eval = eval + 100000;
+            }
+            //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
+            //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
+            //System.out.println("white dis:" + ChessHelper.euclidDistanceToMiddle(whiteKingPos));
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
+        }
+        if(black_king.allSetSquares().size()>0) {
+            LinkedList<Integer> _blackKing = black_king.allSetSquares();
+            int blackKingPos = _blackKing.getFirst();
+            if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+                //black has won via king of the hill
+                eval = eval -100000;
+            }
+            //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
+            //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
+            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
+        }
+        return eval;
+    }
+
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1
     //knight and bishop have a value of 3
@@ -1389,15 +1457,19 @@ public class Chessboard {
         eval = eval + white_king.allSetSquares().size() * 100000;
 
         //available moves
-        LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
+        /*LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
         LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
 
         for(int i=0; i<6; i++){
             eval = eval + whiteMoves[i].size() * 0.1;
             eval = eval - blackMoves[i].size() * 0.1;
-        }
+        }*/
+        LinkedList<Integer> whiteMoves = this.allMovesWithoutPieces(true);
+        LinkedList<Integer> blackMoves = this.allMovesWithoutPieces(false);
+        eval += whiteMoves.size() * AvailableMoveValue;
+        eval -= blackMoves.size() * AvailableMoveValue;
 
-        //eval king distance to middle but just subtracting bitboard values (IMPROVE THIS LATER!!!)
+        //eval king distance to middle but just subtracting bitboard values (TODO: IMPROVE THIS LATER!!!)
         if(white_king.allSetSquares().size()>0){
             LinkedList<Integer> _whiteKing = white_king.allSetSquares();
             int whiteKingPos = _whiteKing.getFirst();
@@ -1421,7 +1493,112 @@ public class Chessboard {
             //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
             eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
+                        //pawn structure evaluation
 
+        //doubled or isolated pawn evaluation
+        //iterate through all the white and black pawns and check if there are multiple or no pawns at all in a file
+        long whitePawnBoard = White.getBoard() & Pawn.getBoard();
+        long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
+
+        Integer[] whities = new Integer[8];
+        while (whitePawnBoard != 0L) {
+            whities[Long.numberOfTrailingZeros(whitePawnBoard) % 8] += 1;
+            whitePawnBoard &= ~(Long.lowestOneBit(whitePawnBoard));
+        }
+        for (Integer whity : whities) {
+            if (whity > 1) {                                        //doubled pawn
+                eval -= DoubledOrMissingPawnValue;
+            }
+            if (whity < 1) {                                        //isolated pawn
+                eval -= DoubledOrMissingPawnValue;
+            }
+        }
+        Integer[] blackies = new Integer[8];
+        while (blackPawnBoard != 0L) {
+            blackies[Long.numberOfTrailingZeros(blackPawnBoard) % 8] += 1;
+            blackPawnBoard &= ~(Long.lowestOneBit(blackPawnBoard));
+        }
+        for (Integer blacky : blackies) {
+            if (blacky > 1) {                                     //doubled pawn
+                eval += DoubledOrMissingPawnValue;
+            }
+            if (blacky < 1) {                                    //isolated pawn
+                eval += DoubledOrMissingPawnValue;
+            }
+        }
+
+
+        //TODO Figuren decken sich gegenseitig
+        //White rooks sind gedeckt
+        LinkedList<Integer> wRookSquares = white_rook.allSetSquares();
+        for (Integer pos:wRookSquares){
+            if(check_if_covered(true,pos)){
+                eval+= RookCoveredValue;
+            }
+        }
+        //Black rooks sind gedeckt
+        LinkedList<Integer> bRookSquares = black_rook.allSetSquares();
+        for (Integer pos:bRookSquares){
+            if(check_if_covered(false,pos)){
+                eval-=RookCoveredValue;
+            }
+        }
+        //White bishops sind gedeckt
+        LinkedList<Integer> wBishopSquares = white_bishop.allSetSquares();
+        for (Integer pos:wBishopSquares){
+            if(check_if_covered(true,pos)){
+                eval+=BishopCoveredValue;
+            }
+        }
+        //Black bishops sind gedeckt
+        LinkedList<Integer> bBishopSquares = black_bishop.allSetSquares();
+        for (Integer pos:bBishopSquares){
+            if(check_if_covered(false,pos)){
+                eval-=BishopCoveredValue;
+            }
+        }
+        //White knights sind gedeckt
+        LinkedList<Integer> wKnightSquares = white_knights.allSetSquares();
+        for (Integer pos:wKnightSquares){
+            if(check_if_covered(true,pos)){
+                eval+=KnightCoveredValue;
+            }
+        }
+        //Black knights sind gedeckt
+        LinkedList<Integer> bKnightSquares = black_knights.allSetSquares();
+        for (Integer pos:bKnightSquares){
+            if(check_if_covered(false,pos)){
+                eval-=KnightCoveredValue;
+            }
+        }
+        //White Queens sind gedeckt
+        LinkedList<Integer> wQueenSquares = white_queen.allSetSquares();
+        for (Integer pos:wQueenSquares){
+            if(check_if_covered(true,pos)){
+                eval+=QueenCoveredValue;
+            }
+        }
+        //Black Queens sind gedeckt
+        LinkedList<Integer> bQueenSquares = black_queen.allSetSquares();
+        for (Integer pos:bQueenSquares){
+            if(check_if_covered(false,pos)){
+                eval-=QueenCoveredValue;
+            }
+        }
+        //White pawns sind gedeckt
+        LinkedList<Integer> wPawnsSquares = white_pawns.allSetSquares();
+        for (Integer pos:wPawnsSquares){
+            if(check_if_covered(true,pos)){
+                eval+=PawnCoveredValue;
+            }
+        }
+        //Black pawns sind gedeckt
+        LinkedList<Integer> bPawnSquares = black_pawns.allSetSquares();
+        for (Integer pos:bPawnSquares){
+            if(check_if_covered(false,pos)){
+                eval-=PawnCoveredValue;
+            }
+        }
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
             if(this.isCheck(true)){
@@ -1441,6 +1618,33 @@ public class Chessboard {
             }
         }*/
         return eval;
+    }
+
+    private boolean check_if_covered(boolean player, int pos){
+
+        if(player){
+            White.clearSquare(pos);
+            Black.setSquare(pos);
+            if(allMovesWithoutPieces(true).contains(pos)){
+                Black.clearSquare(pos);
+                White.setSquare(pos);
+                return true;
+            }
+            Black.clearSquare(pos);
+            White.setSquare(pos);
+        }else{
+            Black.clearSquare(pos);
+            White.setSquare(pos);
+            if(allMovesWithoutPieces(false).contains(pos)){
+                White.clearSquare(pos);
+                Black.setSquare(pos);
+                return true;
+            }
+            White.clearSquare(pos);
+            Black.setSquare(pos);
+        }
+
+        return false;
     }
 
     public double eval_func_withCheck(){
