@@ -3,7 +3,7 @@ import java.util.LinkedList;
 public class Chessboard {
     public static final double DoubledOrMissingPawnValue = 0.1;
     public static final double AvailableMoveValue = 0.1;
-    public static final double RookCoveredValue = 0.3;
+    public static final double RookCoveredValue = 0.4;
     public static final double BishopCoveredValue = 0.3;
     public static final double KnightCoveredValue = 0.3;
     public static final double QueenCoveredValue = 0.9;
@@ -1375,7 +1375,7 @@ public class Chessboard {
         //Black rooks sind gedeckt
         LinkedList<Integer> bRookSquares = black_rook.allSetSquares();
         for (Integer pos:bRookSquares){
-            if(check_if_covered(true,pos)){
+            if(check_if_covered(false,pos)){
                 eval-=RookCoveredValue;
             }
         }
@@ -1389,7 +1389,7 @@ public class Chessboard {
         //Black bishops sind gedeckt
         LinkedList<Integer> bBishopSquares = black_bishop.allSetSquares();
         for (Integer pos:bBishopSquares){
-            if(check_if_covered(true,pos)){
+            if(check_if_covered(false,pos)){
                 eval-=BishopCoveredValue;
             }
         }
@@ -1403,7 +1403,7 @@ public class Chessboard {
         //Black knights sind gedeckt
         LinkedList<Integer> bKnightSquares = black_knights.allSetSquares();
         for (Integer pos:bKnightSquares){
-            if(check_if_covered(true,pos)){
+            if(check_if_covered(false,pos)){
                 eval-=KnightCoveredValue;
             }
         }
@@ -1417,7 +1417,7 @@ public class Chessboard {
         //Black Queens sind gedeckt
         LinkedList<Integer> bQueenSquares = black_queen.allSetSquares();
         for (Integer pos:bQueenSquares){
-            if(check_if_covered(true,pos)){
+            if(check_if_covered(false,pos)){
                 eval-=QueenCoveredValue;
             }
         }
@@ -1431,7 +1431,7 @@ public class Chessboard {
         //Black pawns sind gedeckt
         LinkedList<Integer> bPawnSquares = black_pawns.allSetSquares();
         for (Integer pos:bPawnSquares){
-            if(check_if_covered(true,pos)){
+            if(check_if_covered(false,pos)){
                 eval-=PawnCoveredValue;
             }
         }
