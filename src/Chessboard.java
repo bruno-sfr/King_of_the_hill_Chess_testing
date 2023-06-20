@@ -1239,6 +1239,79 @@ public class Chessboard {
         return white_king.allSetSquares().size()>0;
     }
 
+    public double eval_func_simple(){
+        double eval = 0.0;
+        //Black
+        BitBoard black_pawns = new BitBoard(Black.getBoard() & Pawn.getBoard());
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        BitBoard black_queen = new BitBoard(Black.getBoard() & Queen.getBoard());
+        BitBoard black_knights = new BitBoard(Black.getBoard() & Knight.getBoard());
+        BitBoard black_bishop = new BitBoard(Black.getBoard() & Bishop.getBoard());
+        BitBoard black_rook = new BitBoard(Black.getBoard() & Rook.getBoard());
+        //White
+        BitBoard white_pawns = new BitBoard(White.getBoard() & Pawn.getBoard());
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        BitBoard white_queen = new BitBoard(White.getBoard() & Queen.getBoard());
+        BitBoard white_knights = new BitBoard(White.getBoard() & Knight.getBoard());
+        BitBoard white_bishop = new BitBoard(White.getBoard() & Bishop.getBoard());
+        BitBoard white_rook = new BitBoard(White.getBoard() & Rook.getBoard());
+
+        //black value
+        eval = eval - black_pawns.allSetSquares().size();
+        eval = eval - black_bishop.allSetSquares().size() * 3;
+        eval = eval - black_knights.allSetSquares().size() * 3;
+        eval = eval - black_rook.allSetSquares().size() * 5;
+        eval = eval - black_queen.allSetSquares().size() * 9;
+        eval = eval - black_king.allSetSquares().size() * 100000;
+
+        //white value
+        eval = eval + white_pawns.allSetSquares().size();
+        eval = eval + white_bishop.allSetSquares().size() * 3;
+        eval = eval + white_knights.allSetSquares().size() * 3;
+        eval = eval + white_rook.allSetSquares().size() * 5;
+        eval = eval + white_queen.allSetSquares().size() * 9;
+        eval = eval + white_king.allSetSquares().size() * 100000;
+
+        //available moves
+        /*LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
+        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
+
+        for(int i=0; i<6; i++){
+            eval = eval + whiteMoves[i].size() * 0.1;
+            eval = eval - blackMoves[i].size() * 0.1;
+        }*/
+        LinkedList<Integer> whiteMoves = this.allMovesWithoutPieces(true);
+        LinkedList<Integer> blackMoves = this.allMovesWithoutPieces(false);
+        eval += whiteMoves.size() * AvailableMoveValue;
+        eval -= blackMoves.size() * AvailableMoveValue;
+
+        //eval king distance to middle but just subtracting bitboard values (TODO: IMPROVE THIS LATER!!!)
+        if(white_king.allSetSquares().size()>0){
+            LinkedList<Integer> _whiteKing = white_king.allSetSquares();
+            int whiteKingPos = _whiteKing.getFirst();
+            if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+                //white has won via king of the hill
+                eval = eval + 100000;
+            }
+            //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
+            //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
+            //System.out.println("white dis:" + ChessHelper.euclidDistanceToMiddle(whiteKingPos));
+            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
+        }
+        if(black_king.allSetSquares().size()>0) {
+            LinkedList<Integer> _blackKing = black_king.allSetSquares();
+            int blackKingPos = _blackKing.getFirst();
+            if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+                //black has won via king of the hill
+                eval = eval -100000;
+            }
+            //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
+            //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
+            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
+        }
+        return eval;
+    }
+
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1
     //knight and bishop have a value of 3
