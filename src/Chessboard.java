@@ -623,7 +623,7 @@ public class Chessboard {
         return true;
     }
 
-    public LinkedList<Integer[]> allMovesWithoutPieces(boolean whiteTurn){
+    public LinkedList<Integer> allMovesWithoutPieces(boolean whiteTurn){
         BitBoard Attacker;
         BitBoard Defender;
         if(whiteTurn){
@@ -634,7 +634,7 @@ public class Chessboard {
             Attacker = Black;
             Defender = White;
         }
-        LinkedList<Integer[]> possibleMoves = new LinkedList<>();
+        LinkedList<Integer> possibleMoves = new LinkedList<>();
         long pawnPositions = Attacker.getBoard() & Pawn.getBoard();
         for (int i = 0; i < 8; i++) {
             int from = Long.numberOfTrailingZeros(pawnPositions);             //get index of first piece
@@ -643,10 +643,8 @@ public class Chessboard {
             pawnPositions = pawnPositions & ~Long.lowestOneBit(pawnPositions);     //delete piece from board
             LinkedList<Integer> pawnTos = PawnMove(whiteTurn, from).allSetSquares();
 
-            for (int to : pawnTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(pawnTos);
         }
 
         long bishopPositions = Attacker.getBoard() & Bishop.getBoard();
@@ -657,10 +655,8 @@ public class Chessboard {
             bishopPositions = bishopPositions & ~Long.lowestOneBit(bishopPositions);     //delete piece from board
             LinkedList<Integer> bishopTos = BishopMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : bishopTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(bishopTos);
         }
 
         long rookPositions = Attacker.getBoard() & Rook.getBoard();
@@ -671,10 +667,8 @@ public class Chessboard {
             rookPositions = rookPositions & ~Long.lowestOneBit(rookPositions);     //delete piece from board
             LinkedList<Integer> rookTos = RookMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : rookTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(rookTos);
         }
 
         long knightPositions = Attacker.getBoard() & Knight.getBoard();
@@ -685,10 +679,8 @@ public class Chessboard {
             knightPositions = knightPositions & ~Long.lowestOneBit(knightPositions);     //delete piece from board
             LinkedList<Integer> knightTos = KnightMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : knightTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(knightTos);
         }
 
         long QueenPositions = Attacker.getBoard() & Queen.getBoard();
@@ -699,10 +691,8 @@ public class Chessboard {
             QueenPositions = QueenPositions & ~Long.lowestOneBit(QueenPositions);     //delete piece from board
             LinkedList<Integer> QueenTos = QueenMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : QueenTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(QueenTos);
         }
 
         long KingPositions = Attacker.getBoard() & King.getBoard();
@@ -713,10 +703,8 @@ public class Chessboard {
             KingPositions = KingPositions & ~Long.lowestOneBit(KingPositions);     //delete piece from board
             LinkedList<Integer> KingTos = KingMove(from, Attacker, Defender).allSetSquares();
 
-            for (int to : KingTos) {                                //save discovered moves in possibleMoves
-                Integer[] move = new Integer[]{from, to};
-                possibleMoves.add(move);
-            }
+            //save discovered moves in possibleMoves
+            possibleMoves.addAll(KingTos);
         }
 
         return possibleMoves;
@@ -1300,8 +1288,8 @@ public class Chessboard {
             eval = eval + whiteMoves[i].size() * 0.1;
             eval = eval - blackMoves[i].size() * 0.1;
         }*/
-        LinkedList<Integer[]> whiteMoves = this.allMovesWithoutPieces(true);
-        LinkedList<Integer[]> blackMoves = this.allMovesWithoutPieces(false);
+        LinkedList<Integer> whiteMoves = this.allMovesWithoutPieces(true);
+        LinkedList<Integer> blackMoves = this.allMovesWithoutPieces(false);
         eval += whiteMoves.size() * AvailableMoveValue;
         eval -= blackMoves.size() * AvailableMoveValue;
 
@@ -1329,7 +1317,7 @@ public class Chessboard {
             //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
             eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
         }
-        //pawn structure holes evaluation
+                        //pawn structure evaluation
 
         //doubled or isolated pawn evaluation
         //iterate through all the white and black pawns and check if there are multiple or no pawns at all in a file
