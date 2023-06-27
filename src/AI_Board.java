@@ -6,6 +6,8 @@ public class AI_Board {
     Chessboard board;
     private ReturnObject_withStats lastResult_MTD;
     //private ReturnObject_withStats _lastResult;
+    private ReturnObject Result_MTD;
+    private ReturnObject Result_MTD_simple;
     private int Depth;
     private TranspositionTable table;
 
@@ -14,7 +16,7 @@ public class AI_Board {
     public AI_Board(Chessboard board) {
         zob = new Zobrist();
         this.board=board;
-        this.table=new TranspositionTable(1 << 26);     //1 << 28
+        this.table=new TranspositionTable(1 << 27);     //1 << 28
     }
 
     public void setBoard(Chessboard board) {
@@ -121,8 +123,76 @@ public class AI_Board {
         return lastResult;
     }
 
+    public ReturnObject iterativeDeepening_MTD_simple(boolean whiteTurn, long DURATION) {
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + DURATION;
+        Result_MTD_simple = new ReturnObject(0);
+        Depth = 1;
+
+        while (System.currentTimeMillis() < endTime) {
+            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
+                @Override
+                public ReturnObject call() throws Exception {
+                    //return randomMove(board,!board.lastPlayer);
+                    return MTDF_simple(Depth,whiteTurn,board, Result_MTD_simple.eval);
+                }
+            });
+            try {
+                //wait for result but with only the time that is left as a limit: endtime - current time
+                Result_MTD_simple = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                System.out.println("Depth is " + Depth);
+                Depth++;
+            } catch (TimeoutException f) {
+                future.cancel(true);
+                //throw new RuntimeException("Timeout", f);
+            } catch (ExecutionException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                executor.shutdownNow();
+            }
+        }
+
+        return Result_MTD_simple;
+    }
+
+    public ReturnObject iterativeDeepening_MTD(boolean whiteTurn, long DURATION) {
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + DURATION;
+        Result_MTD = new ReturnObject(0);
+        Depth = 1;
+
+        while (System.currentTimeMillis() < endTime) {
+            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
+                @Override
+                public ReturnObject call() throws Exception {
+                    //return randomMove(board,!board.lastPlayer);
+                    return MTDF_without_Check(Depth,whiteTurn,board, Result_MTD.eval);
+                }
+            });
+            try {
+                //wait for result but with only the time that is left as a limit: endtime - current time
+                Result_MTD = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                System.out.println("Depth is " + Depth);
+                Depth++;
+            } catch (TimeoutException f) {
+                future.cancel(true);
+                //throw new RuntimeException("Timeout", f);
+            } catch (ExecutionException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                executor.shutdownNow();
+            }
+        }
+
+        return Result_MTD;
+    }
+
     //current player and duration in ms
-    public ReturnObject_withStats iterativeDeepening_MTD(boolean whiteTurn, long DURATION) {
+    public ReturnObject_withStats iterativeDeepening_MTD_stats(boolean whiteTurn, long DURATION) {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + DURATION;
         lastResult_MTD = new ReturnObject_withStats(0);
@@ -1391,6 +1461,171 @@ public class AI_Board {
                 beta = g;
             }
             result = alphabeta_forMTD_without_Check(beta-increment, beta, lowerbound, upperbound, depthleft,player,board,new ReturnObject(0));
+            g = result.eval;
+
+            //g<beta
+            if(g<beta){
+                upperbound = g;
+            }else {
+                lowerbound = g;
+            }
+            //upperbound>lowerbound
+        }while ((upperbound - lowerbound) > tolerance);//Math.ulp(upperbound));//Double.longBitsToDouble(971l << 52));
+        MTD_result.eval = g;
+        MTD_result.moves = result.moves;
+        return MTD_result;
+    }
+
+    public ReturnObject alphabeta_forMTD_simple(double alpha, double beta, double lowerbound, double upperbound, int depthleft, boolean player, Chessboard board, ReturnObject object){
+        long boardhash = zob.generateHashKey(board,player);
+        HashEntry hash = table.probeEntry(boardhash);
+        if(hash != null){
+            if(hash.getDepth()>=depthleft) {
+                LinkedList<ChessMove> list = new LinkedList<>();
+                list.add(hash.getFlag());
+                return new ReturnObject(hash.getScore(), list);
+            }
+        }
+
+        /*if n.lowerbound >= beta then return n.lowerbound;
+        if n.upperbound <= alpha then return n.upperbound;
+        alpha := max(alpha, n.lowerbound);
+        beta := min(beta, n.upperbound);*/
+
+        if(lowerbound>=beta){return new ReturnObject(lowerbound,object.moves);}
+
+        if(upperbound<=alpha){return new ReturnObject(upperbound,object.moves);}
+
+        alpha = Math.max(alpha,lowerbound);
+        beta = Math.min(beta,upperbound);
+
+        if(depthleft==0){
+            double board_eval = board.eval_func_simple();
+            table.storeEntry(boardhash,depthleft,board_eval,object.moves.getFirst());
+            return new ReturnObject(board_eval, object.moves);
+        }
+
+        /*if(board.isCheckmate(player)){
+            if(player){
+                //white in checkmate
+                table.storeEntry(boardhash,depthleft,-100000,object.moves.getFirst());
+                return new ReturnObject(-100000,object.moves);
+            }else {
+                //black in checkmate
+                table.storeEntry(boardhash,depthleft,100000,object.moves.getFirst());
+                return new ReturnObject(100000,object.moves);
+            }
+        }*/
+
+        if(player){
+            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<ChessMove>());
+
+            LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(true);
+
+            for(LinkedList<ChessMove> moves:allMoves){
+                boolean breakstate=false;
+                for(ChessMove move:moves){
+
+                    Chessboard child = new Chessboard(board);
+                    child.makeMove(true,move.getFrom(),move.getTo());
+                    LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
+                    Movelist.add(move);
+
+                    ReturnObject eval=alphabeta_forMTD_simple(alpha,beta, lowerbound, upperbound, depthleft-1,false,child,new ReturnObject(object.eval,Movelist));
+
+                    if(eval.eval==maxEval.eval){
+                        int max = 2;
+                        int min = 1;
+                        int range = max - min + 1;
+                        int rand = (int)(Math.random() * range) + min;
+                        if(rand != 1) {
+                            maxEval = eval;
+                        }
+                    }else if(eval.eval>maxEval.eval){//maxEval=max(eval,maxEval);
+                        maxEval = eval;
+                    }
+
+                    alpha=Math.max(alpha,eval.eval);
+                    if(beta<=alpha){
+                        breakstate=true;
+                        break;
+                    }
+                }
+                if(breakstate)break;
+            }
+            if(object.moves.size()!=0) {
+                table.storeEntry(boardhash, depthleft, maxEval.eval, object.moves.getFirst());
+            }
+            return maxEval;
+
+        }else{
+
+            ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
+
+            LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(false);
+
+            for(LinkedList<ChessMove> moves:allMoves){
+                boolean breakstate=false;
+                for(ChessMove move:moves){
+
+                    Chessboard child = new Chessboard(board);
+                    child.makeMove(false,move.getFrom(),move.getTo());
+                    LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
+                    Movelist.add(move);
+
+                    ReturnObject eval=alphabeta_forMTD_simple(alpha,beta, lowerbound, upperbound,depthleft-1,true,child,new ReturnObject(object.eval,Movelist));
+
+                    if(eval.eval== minEval.eval){
+                        int max = 2;
+                        int min = 1;
+                        int range = max - min + 1;
+                        int rand = (int)(Math.random() * range) + min;
+                        if(rand != 1) {
+                            minEval = eval;
+                        }
+                    }else if(eval.eval< minEval.eval){//minEval=max(eval,minEval);
+                        minEval = eval;
+                    }
+
+                    beta=Math.min(beta,eval.eval);
+                    if(beta<=alpha){
+                        breakstate=true;
+                        break;
+                    }
+                }
+                if(breakstate)break;
+            }
+            if(object.moves.size()!=0) {
+                table.storeEntry(boardhash, depthleft, minEval.eval, object.moves.getFirst());
+            }
+            return minEval;
+        }
+        /* Traditional transposition table storing of bounds
+        Fail low result implies an upper bound
+        if g <= alpha then n.upperbound := g; store n.upperbound;
+        Found an accurate minimax value – will not occur if called with zero window
+        if g > alpha and g < beta then n.lowerbound := g; n.upperbound := g; store n.lowerbound, n.upperbound;
+        Fail high result implies a lower bound
+        if g >= beta then n.lowerbound := g; store n.lowerbound;*/
+    }
+
+    public ReturnObject MTDF_simple(int depthleft, boolean player, Chessboard board, double f){
+        double g = f;
+        ReturnObject result;
+        ReturnObject MTD_result = new ReturnObject(0);
+        double upperbound = Double.POSITIVE_INFINITY;
+        double lowerbound = Double.NEGATIVE_INFINITY;
+        double beta;
+        double increment = 20;
+        double tolerance = 1e-15;
+        do{
+            //g == lowerbound
+            if(Math.abs(g - lowerbound) <= tolerance){//Math.ulp(g)){
+                beta = g+increment;
+            }else {
+                beta = g;
+            }
+            result = alphabeta_forMTD_simple(beta-increment, beta, lowerbound, upperbound, depthleft,player,board,new ReturnObject(0));
             g = result.eval;
 
             //g<beta

@@ -1501,8 +1501,12 @@ public class Chessboard {
         long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
 
         Integer[] whities = new Integer[8];
+        for (int i = 0; i<8; i++){
+            whities[i] = 0;
+        }
         while (whitePawnBoard != 0L) {
-            whities[Long.numberOfTrailingZeros(whitePawnBoard) % 8] += 1;
+            int index = Long.numberOfTrailingZeros(whitePawnBoard) % 8;
+            whities[index] = whities[index] + 1;
             whitePawnBoard &= ~(Long.lowestOneBit(whitePawnBoard));
         }
         for (Integer whity : whities) {
@@ -1514,6 +1518,9 @@ public class Chessboard {
             }
         }
         Integer[] blackies = new Integer[8];
+        for (int i = 0; i<8; i++){
+            blackies[i] = 0;
+        }
         while (blackPawnBoard != 0L) {
             blackies[Long.numberOfTrailingZeros(blackPawnBoard) % 8] += 1;
             blackPawnBoard &= ~(Long.lowestOneBit(blackPawnBoard));

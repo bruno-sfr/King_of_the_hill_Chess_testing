@@ -264,12 +264,13 @@ class ChessboardTest {
         AI_Board game1_mtd = new AI_Board(Chessboard1);
         AI_Board game1_mtd_o = new AI_Board(Chessboard1);
         AI_Board game1_mtd_no_check = new AI_Board(Chessboard1);
+        AI_Board game1_mtd_simple = new AI_Board(Chessboard1);
         double best_guess = 0;
         double best_guess_o = 0;
         double best_guess_no_check = 0;
         System.out.println("Board 1:");
         Chessboard1.printBoard();
-        for(int i = 1; i<7; i++){
+        for(int i = 1; i<8; i++){
             System.out.println("Depth:" + i);
             System.out.println("----------------------------------------");
             /*System.out.println("Board 1:");
@@ -282,7 +283,7 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_minimax_1.eval);
             System.out.println("Best Move" + result_minimax_1.moves.getFirst());
             System.out.println();*/
-            System.out.println("Alpha-Beta:");
+            /*System.out.println("Alpha-Beta:");
             starttime = System.nanoTime();
             ReturnObject_withStats result_ab_1 = game1.alphabeta_withNumPostions(-9999999,9999999,i,true,Chessboard1,new ReturnObject(0));
             endtime = System.nanoTime();
@@ -329,7 +330,7 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Evaluation:" + result_ab_tt_1_o.eval);
             System.out.println("Best Move" + result_ab_tt_1_o.moves.getFirst());
-            System.out.println();
+            System.out.println();*/
             System.out.println("MTD(f) with Order:");
             starttime = System.nanoTime();
             ReturnObject result_mtd_1_o = game1_mtd_o.MTDF(i,true,Chessboard1,best_guess_o);
@@ -347,6 +348,14 @@ class ChessboardTest {
             System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
             System.out.println("Evaluation:" + result_mtd_1_no_check.eval);
             System.out.println("Best Move" + result_mtd_1_no_check.moves.getFirst());
+            System.out.println("MTD(f) Simple:");
+            starttime = System.nanoTime();
+            ReturnObject result_mtd_1_simple = game1_mtd_simple.MTDF_simple(i,true,Chessboard1,best_guess_no_check);
+            best_guess_no_check = result_mtd_1_simple.eval;
+            endtime = System.nanoTime();
+            System.out.println("Time taken in ms:" + (float)(endtime-starttime)/1000000);
+            System.out.println("Evaluation:" + result_mtd_1_simple.eval);
+            System.out.println("Best Move" + result_mtd_1_simple.moves.getFirst());
             System.out.println("----------------------------------------");
         }
     }
