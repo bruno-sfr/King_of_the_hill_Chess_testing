@@ -20,7 +20,7 @@ public class EvalFunctionBenchmarkTest {
         try {
             //JSONObject obj = (JSONObject) parser.parse(new FileReader("src\\test\\Stellungen.json"));
             timeBefore = System.nanoTime();
-            for (JSONObject stellung : (Iterable<JSONObject>) (JSONArray) ((JSONObject) parser.parse(new FileReader(".\\tests\\data23_wb.json"))).get("Stellungen")) {
+            for (JSONObject stellung : (Iterable<JSONObject>) (JSONArray) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
                 String FEN = (String) stellung.get("fen");
                 String[] arr = FEN.split(" ");
                 FEN = arr[0];
@@ -28,7 +28,8 @@ public class EvalFunctionBenchmarkTest {
                 boolean White = (boolean) stellung.get("white");
                 Chessboard board = new Chessboard(FEN);
                 //out.println(board);
-                double result = White ? board.eval_func() : -board.eval_func();
+                double result = board.eval_func();
+                if(!White) result = -result;
                 out.println("Index: " + stellung.get("id") +"  delta: " + result);
                 Object[] obj = ((String) stellung.get("eval")).split("#");
                 double eval = Double.parseDouble((String) obj[obj.length - 1]);
