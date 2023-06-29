@@ -41,7 +41,7 @@ public class BitBoard {
         long _board = board;
         for (int i = 0; i < 64; i++) {
             int index = Long.numberOfTrailingZeros(_board);             //get index of first piece
-            if (index == 64)
+            if (index == 64)         //that seems unnecessary? someone delete, mom Im scared
                 break;
             _board = _board & ~Long.lowestOneBit(_board);     //delete piece from board
             list.add(index);
