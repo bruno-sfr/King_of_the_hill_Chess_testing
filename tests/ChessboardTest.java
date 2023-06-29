@@ -39,6 +39,7 @@ class ChessboardTest {
         }
     }
 
+
     @Test
     void Alpha_Beta_Checkmate_Test() throws IOException{
         JSONParser parser = new JSONParser();
@@ -250,6 +251,18 @@ class ChessboardTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void MCTS_Test() {
+        Chessboard Chessboard1 = new Chessboard();
+        //Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
+        Chessboard1.printBoard();
+        MCTS mcts = new MCTS();
+        //ChessMove move = mcts.findBestMove(Chessboard1,true);
+        ChessMove move_2 = mcts.iterativeDeepening_MCTS(Chessboard1,true, 5000);
+        //System.out.println(move);
+        System.out.println(move_2);
     }
 
     @Test

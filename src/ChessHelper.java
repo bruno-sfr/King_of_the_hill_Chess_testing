@@ -53,5 +53,26 @@ public class ChessHelper {
         return Math.sqrt(Math.pow(xdistance, 2) + Math.pow(ydistance, 2));
     }
 
+    public static ChessMove randomMove(Chessboard chessboard, Boolean whiteTurn){
+        int MAX_ITERATIONS = 10;
+        LinkedList<ChessMove>[] list = chessboard.allMovesWithPieces(whiteTurn);
+        int random = ChessHelper.getRandomNumber(0, 5);
+        int i = 0;
+        while(list[random].size() == 0) {
+            //System.out.println("list size:" + list[random].size() + " random:" + random);
+            random = ChessHelper.getRandomNumber(0, 5);
+            i++;
+            if(i == MAX_ITERATIONS){
+                return null;
+            }
+        }
+        int random_2 = ChessHelper.getRandomNumber(0, list[random].size()-1);
+        //System.out.println("random2:" + random_2);
+        //System.out.println("list[random].size():" + list[random].size());
+        return list[random].get(random_2);
+    }
 
+    public static int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max + 1 - min)) + min);
+    }
 }

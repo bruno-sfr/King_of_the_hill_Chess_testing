@@ -1,4 +1,6 @@
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.LinkedList;
+import java.util.Spliterator;
 
 public class Chessboard {
 
@@ -1627,6 +1629,7 @@ public class Chessboard {
                 eval-=PawnCoveredValue;
             }
         }
+        ;
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
             if(this.isCheck(true)){
@@ -1798,6 +1801,10 @@ public class Chessboard {
             return true;
         }
         return false;
+    }
+
+    public boolean isGameOver_simple(){
+        return !(isBlackKing() && isWhiteKing());
     }
 
     /*public long hash_func(Boolean whiteTurn){
