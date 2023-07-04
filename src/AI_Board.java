@@ -235,7 +235,7 @@ public class AI_Board {
         System.out.println("Result: " + result);
         boolean whiteturn = true;
         for(ChessMove move: result.moves){
-            runner.board.makeMove(whiteturn, move.getFrom(), move.getTo());
+            runner.board.makeMove(whiteturn, move);
             whiteturn = !whiteturn;
         }
         runner.board.printBoard();
@@ -278,7 +278,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -317,7 +317,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -372,7 +372,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -405,7 +405,7 @@ public class AI_Board {
             for(LinkedList<ChessMove> moves:allMoves){
                 for(ChessMove move:moves){
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
                     ReturnObject_withStats eval=minimax(depthleft-1,true,child,new ReturnObject(object.eval,Movelist));
@@ -469,7 +469,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -514,7 +514,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -584,7 +584,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -629,7 +629,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -723,7 +723,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -776,7 +776,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -857,7 +857,7 @@ public class AI_Board {
                 for (ChessMove move : moves) {
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true, move.getFrom(), move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist = (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -900,7 +900,7 @@ public class AI_Board {
                 for (ChessMove move : moves) {
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false, move.getFrom(), move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist = (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1000,7 +1000,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1053,7 +1053,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1197,7 +1197,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1239,7 +1239,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1362,7 +1362,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1404,7 +1404,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1527,7 +1527,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(true,move.getFrom(),move.getTo());
+                    child.makeMove(true, move);
                     LinkedList<ChessMove> Movelist= (LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 
@@ -1569,7 +1569,7 @@ public class AI_Board {
                 for(ChessMove move:moves){
 
                     Chessboard child = new Chessboard(board);
-                    child.makeMove(false,move.getFrom(),move.getTo());
+                    child.makeMove(false, move);
                     LinkedList<ChessMove> Movelist=(LinkedList<ChessMove>) object.moves.clone();
                     Movelist.add(move);
 

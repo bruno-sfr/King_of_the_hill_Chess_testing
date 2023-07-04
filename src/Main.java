@@ -34,9 +34,10 @@ public class Main {
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
-            LinkedList<Integer> move = ChessHelper.calcPos(input);
+            LinkedList<Integer> foo = ChessHelper.calcPos(input);
+            ChessMove move = new ChessMove(foo.get(0), foo.get(1));
             try {
-                if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
+                if (board.makeMove(WhiteTurn, move)) {
                     board.printBoard();
                     WhiteTurn = !WhiteTurn;
                 } else {

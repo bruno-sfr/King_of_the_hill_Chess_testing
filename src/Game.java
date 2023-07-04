@@ -10,7 +10,7 @@ public class Game {
                 //ReturnObject_withStats result = Player.iterativeDeepening_MTD_stats(true,20000);
                 ReturnObject result = Player_1.iterativeDeepening_MTD(true,5000);
                 System.out.println(result.moves.getFirst());
-                if(!board.makeMove(true, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo())){
+                if(!board.makeMove(true, result.moves.getFirst())){
                     System.out.println("White wanted to play illeagl move");
                     break;
                 };
@@ -20,7 +20,7 @@ public class Game {
                 //ReturnObject result = Player_2.iterativeDeepening_MTD_simple(false,10000);
                 ReturnObject_withStats result = Player_2.iterativeDeepening_MTD_stats(false,5000);
                 System.out.println(result.moves.getFirst());
-                if(!board.makeMove(false, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo())){
+                if(!board.makeMove(false, result.moves.getFirst())){
                     System.out.println("Black wanted to play illeagl move");
                     break;
                 };;
