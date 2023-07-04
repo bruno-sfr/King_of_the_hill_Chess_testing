@@ -32,12 +32,9 @@ public class AI_Board {
 
         while (System.currentTimeMillis() < endTime) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<ReturnObject_withStats> future = executor.submit(new Callable<ReturnObject_withStats>() {
-                @Override
-                public ReturnObject_withStats call() throws Exception {
-                    //return randomMove(board,!board.lastPlayer);
-                    return alphabeta_withNumPostions(-9999999,9999999,Depth,whiteTurn,board, new ReturnObject(0));
-                }
+            Future<ReturnObject_withStats> future = executor.submit(() -> {
+                //return randomMove(board,!board.lastPlayer);
+                return alphabeta_withNumPostions(-9999999,9999999,Depth,whiteTurn,board, new ReturnObject(0));
             });
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
@@ -64,11 +61,11 @@ public class AI_Board {
 
         while (System.currentTimeMillis() < endTime) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<ReturnObject_withStats> future = executor.submit(new Callable<ReturnObject_withStats>() {
+            Future<ReturnObject_withStats> future = executor.submit(new Callable<>() {
                 @Override
                 public ReturnObject_withStats call() throws Exception {
                     //return randomMove(board,!board.lastPlayer);
-                    return alphabeta_withStatsAndTT(-9999999,9999999,Depth,whiteTurn,board, new ReturnObject(0));
+                    return alphabeta_withStatsAndTT(-9999999, 9999999, Depth, whiteTurn, board, new ReturnObject(0));
                 }
             });
             try {
@@ -130,14 +127,10 @@ public class AI_Board {
         Depth = 1;
 
         while (System.currentTimeMillis() < endTime) {
-            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
-                @Override
-                public ReturnObject call() throws Exception {
-                    //return randomMove(board,!board.lastPlayer);
-                    return MTDF_simple(Depth,whiteTurn,board, Result_MTD_simple.eval);
-                }
+            Future<ReturnObject> future = executor.submit(() -> {
+                //return randomMove(board,!board.lastPlayer);
+                return MTDF_simple(Depth,whiteTurn,board, Result_MTD_simple.eval);
             });
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
@@ -164,14 +157,10 @@ public class AI_Board {
         Depth = 1;
 
         while (System.currentTimeMillis() < endTime) {
-            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
-                @Override
-                public ReturnObject call() throws Exception {
-                    //return randomMove(board,!board.lastPlayer);
-                    return MTDF_without_Check(Depth,whiteTurn,board, Result_MTD.eval);
-                }
+            Future<ReturnObject> future = executor.submit(() -> {
+                //return randomMove(board,!board.lastPlayer);
+                return MTDF_without_Check(Depth,whiteTurn,board, Result_MTD.eval);
             });
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
@@ -199,14 +188,10 @@ public class AI_Board {
         Depth = 1;
 
         while (System.currentTimeMillis() < endTime) {
-            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<ReturnObject_withStats> future = executor.submit(new Callable<ReturnObject_withStats>() {
-                @Override
-                public ReturnObject_withStats call() throws Exception {
-                    //return randomMove(board,!board.lastPlayer);
-                    return MTDF_stats(Depth,whiteTurn,board, lastResult_MTD.eval);
-                }
+            Future<ReturnObject_withStats> future = executor.submit(() -> {
+                //return randomMove(board,!board.lastPlayer);
+                return MTDF_stats(Depth,whiteTurn,board, lastResult_MTD.eval);
             });
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
@@ -268,7 +253,7 @@ public class AI_Board {
         }*/
 
         if(player){
-            ReturnObject maxEval = new ReturnObject(-9999999,new LinkedList<ChessMove>());
+            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
@@ -307,7 +292,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
+            ReturnObject minEval = new ReturnObject(9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
@@ -364,7 +349,7 @@ public class AI_Board {
         }
 
         if(player){
-            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999,1,new LinkedList<ChessMove>());
+            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999,1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
 
@@ -400,7 +385,7 @@ public class AI_Board {
             return maxEval;
 
         }else{
-            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1,new LinkedList<ChessMove>());
+            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1, new LinkedList<>());
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
             for(LinkedList<ChessMove> moves:allMoves){
                 for(ChessMove move:moves){
@@ -459,7 +444,7 @@ public class AI_Board {
         }
 
         if(player){
-            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
+            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
@@ -504,7 +489,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1,new LinkedList<ChessMove>());
+            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
@@ -574,7 +559,7 @@ public class AI_Board {
         }
 
         if(player){
-            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
+            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(true);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
@@ -619,7 +604,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1,new LinkedList<ChessMove>());
+            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(false);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
@@ -713,7 +698,7 @@ public class AI_Board {
         }*/
 
         if(player){
-            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
+            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
@@ -766,7 +751,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1,new LinkedList<ChessMove>());
+            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
@@ -848,7 +833,7 @@ public class AI_Board {
         }
 
         if (player) {
-            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<ChessMove>());
+            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(true);
 
@@ -890,7 +875,7 @@ public class AI_Board {
 
         } else {
 
-            ReturnObject minEval = new ReturnObject(9999999, new LinkedList<ChessMove>());
+            ReturnObject minEval = new ReturnObject(9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(false);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
@@ -990,7 +975,7 @@ public class AI_Board {
         }*/
 
         if(player){
-            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1,new LinkedList<ChessMove>());
+            ReturnObject_withStats maxEval = new ReturnObject_withStats(-9999999, 1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(true);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(true);
@@ -1043,7 +1028,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1,new LinkedList<ChessMove>());
+            ReturnObject_withStats minEval = new ReturnObject_withStats(9999999,1, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesWithPieces(false);
             //LinkedList<ChessMove>[] allMoves = board.allMoves_withCheck(false);
@@ -1188,7 +1173,7 @@ public class AI_Board {
         }
 
         if(player){
-            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<ChessMove>());
+            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(true);
 
@@ -1230,7 +1215,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
+            ReturnObject minEval = new ReturnObject(9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(false);
 
@@ -1353,7 +1338,7 @@ public class AI_Board {
         }*/
 
         if(player){
-            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<ChessMove>());
+            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(true);
 
@@ -1395,7 +1380,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
+            ReturnObject minEval = new ReturnObject(9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(false);
 
@@ -1518,7 +1503,7 @@ public class AI_Board {
         }*/
 
         if(player){
-            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<ChessMove>());
+            ReturnObject maxEval = new ReturnObject(-9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(true);
 
@@ -1560,7 +1545,7 @@ public class AI_Board {
 
         }else{
 
-            ReturnObject minEval = new ReturnObject(9999999,new LinkedList<ChessMove>());
+            ReturnObject minEval = new ReturnObject(9999999, new LinkedList<>());
 
             LinkedList<ChessMove>[] allMoves = board.allMovesInOrder(false);
 

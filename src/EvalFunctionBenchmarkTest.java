@@ -7,20 +7,19 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
 
 import static java.lang.System.out;
 
 public class EvalFunctionBenchmarkTest {
     @Test
-    public void OGEvalFuncTest() throws FileNotFoundException {
+    public void OGEvalFuncTest() {
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
         try {
             //JSONObject obj = (JSONObject) parser.parse(new FileReader("src\\test\\Stellungen.json"));
             timeBefore = System.nanoTime();
-            for (JSONObject stellung : (Iterable<JSONObject>) (JSONArray) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
+            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
                 String FEN = (String) stellung.get("fen");
                 String[] arr = FEN.split(" ");
                 FEN = arr[0];
@@ -42,14 +41,14 @@ public class EvalFunctionBenchmarkTest {
         out.println("Score (seconds * delta): " + (timeAfter - timeBefore)/1000000000.0 * delta);
     }
 
-    public double EvalFuncScore(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue) throws FileNotFoundException {
+    public double EvalFuncScore(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue) {
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
         try {
             //JSONObject obj = (JSONObject) parser.parse(new FileReader("src\\test\\Stellungen.json"));
             timeBefore = System.nanoTime();
-            for (JSONObject stellung : (Iterable<JSONObject>) (JSONArray) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
+            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
                 String FEN = (String) stellung.get("fen");
                 String[] arr = FEN.split(" ");
                 FEN = arr[0];
@@ -71,20 +70,20 @@ public class EvalFunctionBenchmarkTest {
         return score;
     }
 
-    public double EvalFuncSimpleScore(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue) throws FileNotFoundException {
+    public double EvalFuncSimpleScore(double AvailableMoveValue) {
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
         try {
             //JSONObject obj = (JSONObject) parser.parse(new FileReader("src\\test\\Stellungen.json"));
             timeBefore = System.nanoTime();
-            for (JSONObject stellung : (Iterable<JSONObject>) (JSONArray) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
+            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
                 String FEN = (String) stellung.get("fen");
                 String[] arr = FEN.split(" ");
                 FEN = arr[0];
                 boolean White = (boolean) stellung.get("white");
                 Chessboard board = new Chessboard(FEN);
-                double result = board.eval_func_simple(DoubledOrMissingPawnValue, AvailableMoveValue, RookCoveredValue, BishopCoveredValue, KnightCoveredValue, QueenCoveredValue, PawnCoveredValue);
+                double result = board.eval_func_simple(AvailableMoveValue);
                 delta = adjustDelta(delta, stellung, White, result);
             }
         } catch (IOException | ParseException e) {
