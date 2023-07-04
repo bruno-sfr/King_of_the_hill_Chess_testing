@@ -9,6 +9,7 @@ public class Game {
                 System.out.println("MTD(f):");
                 //ReturnObject_withStats result = Player.iterativeDeepening_MTD_stats(true,20000);
                 ReturnObject result = Player_1.iterativeDeepening_MTD(true,5000);
+                //ReturnObject result = Player_1.MTDF_without_Check(5,true,board, 0.0);
                 System.out.println(result.moves.getFirst());
                 if(!board.makeMove(true, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo())){
                     System.out.println("White wanted to play illeagl move");
@@ -19,6 +20,7 @@ public class Game {
                 System.out.println("MTD(f) simple:");
                 //ReturnObject result = Player_2.iterativeDeepening_MTD_simple(false,10000);
                 ReturnObject_withStats result = Player_2.iterativeDeepening_MTD_stats(false,5000);
+                //ReturnObject_withStats result = Player_2.MTDF_stats(5,false,board, 0.0);
                 System.out.println(result.moves.getFirst());
                 if(!board.makeMove(false, result.moves.getFirst().getFrom(), result.moves.getFirst().getTo())){
                     System.out.println("Black wanted to play illeagl move");
@@ -32,5 +34,6 @@ public class Game {
             board.printBoard();
             whiteturn = !whiteturn;
         }
+        System.out.println("GAME OVER!!!");
     }
 }

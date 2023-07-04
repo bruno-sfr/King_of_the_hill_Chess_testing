@@ -177,6 +177,11 @@ public class AI_Board {
                 //wait for result but with only the time that is left as a limit: endtime - current time
                 Result_MTD = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
                 System.out.println("Depth is " + Depth);
+                /*if(Result_MTD.moves.size()>0) {
+                    System.out.println("Move:" + Result_MTD.moves.getFirst());
+                }else {
+                    System.out.println("no move");
+                }*/
                 Depth++;
             } catch (TimeoutException f) {
                 future.cancel(true);
@@ -212,6 +217,11 @@ public class AI_Board {
                 //wait for result but with only the time that is left as a limit: endtime - current time
                 lastResult_MTD = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
                 System.out.println("Depth is " + Depth);
+                /*if(lastResult_MTD.moves.size()>0) {
+                    System.out.println("Move:" + lastResult_MTD.moves.getFirst());
+                }else {
+                    System.out.println("no move");
+                }*/
                 Depth++;
             } catch (TimeoutException f) {
                 future.cancel(true);
@@ -936,12 +946,21 @@ public class AI_Board {
 
     public ReturnObject_withStats alphabeta_withStatsAndTTforMTD(double alpha, double beta, double lowerbound, double upperbound, int depthleft, boolean player, Chessboard board, ReturnObject object){
         long boardhash = zob.generateHashKey(board,player);
+
+        if(depthleft==0){
+            //object.eval=board.eval_func();
+            //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
+            table.storeEntry(boardhash,depthleft,board.eval_func_withCheck(),object.moves.getFirst());
+            return new ReturnObject_withStats(board.eval_func_withCheck(),1,0,object.moves);
+        }
+
         HashEntry hash = table.probeEntry(boardhash);
-        if(hash != null){
+        if(hash != null && object.moves.size()>0){
             if(hash.getDepth()>=depthleft) {
                 LinkedList<ChessMove> list = new LinkedList<>();
                 list.add(hash.getFlag());
-                return new ReturnObject_withStats(hash.getScore(), 1, 1, list);
+                //return new ReturnObject_withStats(hash.getScore(), 1, 1, list);
+                return new ReturnObject_withStats(hash.getScore(), 1, 1, object.moves);
             }
         }
 
@@ -957,12 +976,12 @@ public class AI_Board {
         alpha = Math.max(alpha,lowerbound);
         beta = Math.min(beta,upperbound);
 
-        if(depthleft==0){
+        /*if(depthleft==0){
             //object.eval=board.eval_func();
             //System.out.println("depth==0: returning: "+returnvalue[0]+","+returnvalue[1]+","+returnvalue[2]);
             table.storeEntry(boardhash,depthleft,board.eval_func_withCheck(),object.moves.getFirst());
             return new ReturnObject_withStats(board.eval_func_withCheck(),1,0,object.moves);
-        }/*else if(board.isCheckmate(player)){
+        }*//*else if(board.isCheckmate(player)){
             if(player){
                 return new ReturnObject(-100000,object.moves);
             }else {
@@ -1313,12 +1332,26 @@ public class AI_Board {
 
     public ReturnObject alphabeta_forMTD_without_Check(double alpha, double beta, double lowerbound, double upperbound, int depthleft, boolean player, Chessboard board, ReturnObject object){
         long boardhash = zob.generateHashKey(board,player);
+
+        if(depthleft==0){
+            double board_eval = board.eval_func();
+            table.storeEntry(boardhash,depthleft,board_eval,object.moves.getFirst());
+            if(object.moves.size()==0){
+                System.out.println("Depth 0 and moves = empty");
+            }
+            return new ReturnObject(board_eval, object.moves);
+        }
+
         HashEntry hash = table.probeEntry(boardhash);
-        if(hash != null){
+        if(hash != null && object.moves.size()>0){
             if(hash.getDepth()>=depthleft) {
                 LinkedList<ChessMove> list = new LinkedList<>();
                 list.add(hash.getFlag());
-                return new ReturnObject(hash.getScore(), list);
+                //return new ReturnObject(hash.getScore(), list);
+                if(object.moves.size()==0){
+                    System.out.println("Board found in hash and moves = empty");
+                }
+                return new ReturnObject(hash.getScore(), object.moves);
             }
         }
 
@@ -1334,11 +1367,11 @@ public class AI_Board {
         alpha = Math.max(alpha,lowerbound);
         beta = Math.min(beta,upperbound);
 
-        if(depthleft==0){
+        /*if(depthleft==0){
             double board_eval = board.eval_func();
             table.storeEntry(boardhash,depthleft,board_eval,object.moves.getFirst());
             return new ReturnObject(board_eval, object.moves);
-        }
+        }*/
 
         /*if(board.isCheckmate(player)){
             if(player){
@@ -1483,7 +1516,8 @@ public class AI_Board {
             if(hash.getDepth()>=depthleft) {
                 LinkedList<ChessMove> list = new LinkedList<>();
                 list.add(hash.getFlag());
-                return new ReturnObject(hash.getScore(), list);
+                //return new ReturnObject(hash.getScore(), list);
+                return new ReturnObject(hash.getScore(), object.moves);
             }
         }
 
