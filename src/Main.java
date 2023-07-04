@@ -30,13 +30,14 @@ public class Main {
             System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
             System.out.println("Is check? " + board.isCheck(WhiteTurn));
             System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
-            System.out.println("Eval:" + board.eval_func());
+            System.out.println("Eval:" + board.evalFuncCaller());
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
-            LinkedList<Integer> move = ChessHelper.calcPos(input);
+            LinkedList<Integer> foo = ChessHelper.calcPos(input);
+            ChessMove move = new ChessMove(foo.get(0), foo.get(1));
             try {
-                if (board.makeMove(WhiteTurn, move.get(0), move.get(1))) {
+                if (board.makeMove(WhiteTurn, move)) {
                     board.printBoard();
                     WhiteTurn = !WhiteTurn;
                 } else {
