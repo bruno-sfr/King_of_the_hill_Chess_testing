@@ -1,13 +1,7 @@
 import java.util.LinkedList;
 
 public class Chessboard {
-    public static final double DoubledOrMissingPawnValue = 0.1;
-    public static final double AvailableMoveValue = 0.1;
-    public static final double RookCoveredValue = 0.4;
-    public static final double BishopCoveredValue = 0.3;
-    public static final double KnightCoveredValue = 0.3;
-    public static final double QueenCoveredValue = 0.9;
-    public static final double PawnCoveredValue = 0.1;
+
     //true means castle possible
     //Zobrist zob;
     Boolean BlackLeftCastle;
@@ -1342,7 +1336,10 @@ public class Chessboard {
         return white_king.allSetSquares().size()>0;
     }
 
-    public double eval_func_simple(){
+    public double evalFuncSimpleCaller() {
+        return eval_func_simple(0.1,0.1, 0.4, 0.3, 0.3, 0.9, 0.1);
+    }
+    public double eval_func_simple(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue){
         double eval = 0.0;
         //Black
         BitBoard black_pawns = new BitBoard(Black.getBoard() & Pawn.getBoard());
@@ -1415,6 +1412,10 @@ public class Chessboard {
         return eval;
     }
 
+
+    public double evalFuncCaller() {
+        return eval_func(0.1,0.1, 0.4, 0.3, 0.3, 0.9, 0.1);
+    }
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1
     //knight and bishop have a value of 3
@@ -1423,7 +1424,13 @@ public class Chessboard {
     //king has insane high value
     //an available move is worth 0.1
     //and euclidean distance of king to center is valuable
-    public double eval_func(){
+    public double eval_func(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue){
+
+
+
+
+
+
         double eval = 0.0;
         //Black
         BitBoard black_pawns = new BitBoard(Black.getBoard() & Pawn.getBoard());

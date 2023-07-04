@@ -30,7 +30,7 @@ public class Main {
             System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
             System.out.println("Is check? " + board.isCheck(WhiteTurn));
             System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
-            System.out.println("Eval:" + board.eval_func());
+            System.out.println("Eval:" + board.evalFuncCaller());
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;

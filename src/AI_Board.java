@@ -1335,7 +1335,7 @@ public class AI_Board {
         beta = Math.min(beta,upperbound);
 
         if(depthleft==0){
-            double board_eval = board.eval_func();
+            double board_eval = board.evalFuncCaller();
             table.storeEntry(boardhash,depthleft,board_eval,object.moves.getFirst());
             return new ReturnObject(board_eval, object.moves);
         }
@@ -1500,7 +1500,7 @@ public class AI_Board {
         beta = Math.min(beta,upperbound);
 
         if(depthleft==0){
-            double board_eval = board.eval_func_simple();
+            double board_eval = board.evalFuncSimpleCaller();
             table.storeEntry(boardhash,depthleft,board_eval,object.moves.getFirst());
             return new ReturnObject(board_eval, object.moves);
         }
