@@ -205,7 +205,7 @@ public class MCTS {
         if(random_move == null){
             return node;
         }
-        childBoard.makeMove(node.whiteTurn, random_move.getFrom(), random_move.getTo());
+        childBoard.makeMove(node.whiteTurn, random_move);
         MCTS_Node expandedNode = new MCTS_Node(childBoard, !node.whiteTurn, random_move);
         expandedNode.parent = node;
         node.children.add(expandedNode);
@@ -218,7 +218,7 @@ public class MCTS {
         ai.setBoard(chessboard);
         ReturnObject result = ai.MTDF_simple(3,whiteTurn,chessboard,0.0);
         for(ChessMove move:result.moves){
-            chessboard.makeMove(whiteTurn, move.getFrom(), move.getTo());
+            chessboard.makeMove(whiteTurn, move);
         }
 
         while(!chessboard.isGameOver_simple()){
@@ -226,7 +226,7 @@ public class MCTS {
             if(randomMove == null){
                 return 0.0;
             }
-            chessboard.makeMove(whiteTurn, randomMove.getFrom(), randomMove.getTo());
+            chessboard.makeMove(whiteTurn, randomMove);
             whiteTurn = !whiteTurn;
         }
 
@@ -252,7 +252,7 @@ public class MCTS {
             if(randomMove == null){
                 return 0.0;
             }
-            chessboard.makeMove(whiteTurn, randomMove.getFrom(), randomMove.getTo());
+            chessboard.makeMove(whiteTurn, randomMove);
             whiteTurn = !whiteTurn;
         }
 
