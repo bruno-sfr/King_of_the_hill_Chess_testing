@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.concurrent.*;
 
 public class MCTS {
-    private static final int SIMULATION_COUNT = 1000;
+    private static final int SIMULATION_COUNT = 10000;
     private MCTS_Node _root;
 
     public ChessMove findBestMove(Chessboard initialState, boolean whiteTurn) {
@@ -24,6 +24,28 @@ public class MCTS {
 
         // Choose the best move based on the statistics
         //System.out.println(root.children.size());
+        //root.printTree();
+        return getBestMove(root);
+    }
+
+    public ChessMove findBestMove_AB(Chessboard initialState, boolean whiteTurn) {
+        MCTS_Node root = new MCTS_Node(initialState, whiteTurn, new ChessMove(0,0));
+        AI_Board ai = new AI_Board(initialState);
+        //root.state.printBoard();
+        // Set the initial game state as the root node
+
+        for (int i = 0; i < SIMULATION_COUNT; i++) {
+            MCTS_Node selectedNode = select(root);
+            //System.out.println("root visits:" + root.visits + " root score:" + root.score);
+            //System.out.println("select:" + selectedNode.move);
+            MCTS_Node expandedNode = expand(selectedNode);
+            //System.out.println("expand:" + expandedNode.move);
+            double score = simulate_AB(expandedNode, ai);
+            backpropagate(expandedNode, score);
+        }
+
+        // Choose the best move based on the statistics
+        System.out.println("root children: " + root.children.size());
         //root.printTree();
         return getBestMove(root);
     }
@@ -100,7 +122,7 @@ public class MCTS {
         //MCTS_Node bestNode = node;
 
         double C = Math.sqrt(2);
-        //double C = 0.0;
+        //double C = 2.0;
 
         if(node.children.size() == 0){
             //System.out.println("Children are null");
@@ -188,6 +210,35 @@ public class MCTS {
         expandedNode.parent = node;
         node.children.add(expandedNode);
         return expandedNode;
+    }
+
+    private double simulate_AB(MCTS_Node node, AI_Board ai){
+        Chessboard chessboard = new Chessboard(node.state);
+        boolean whiteTurn = node.whiteTurn;
+        ai.setBoard(chessboard);
+        ReturnObject result = ai.MTDF_simple(3,whiteTurn,chessboard,0.0);
+        for(ChessMove move:result.moves){
+            chessboard.makeMove(whiteTurn, move.getFrom(), move.getTo());
+        }
+
+        while(!chessboard.isGameOver_simple()){
+            ChessMove randomMove = ChessHelper.randomMove(chessboard,whiteTurn);
+            if(randomMove == null){
+                return 0.0;
+            }
+            chessboard.makeMove(whiteTurn, randomMove.getFrom(), randomMove.getTo());
+            whiteTurn = !whiteTurn;
+        }
+
+        double score;
+        if(chessboard.isCheckmate(!whiteTurn)){
+            score = 1.0;
+        }else {
+            score = 0.0;
+        }
+        return score;
+
+        //return result.eval;
     }
 
     private double simulate(MCTS_Node node) {

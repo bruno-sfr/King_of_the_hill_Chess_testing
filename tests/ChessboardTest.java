@@ -260,9 +260,9 @@ class ChessboardTest {
         Chessboard1.printBoard();
         MCTS mcts = new MCTS();
         //ChessMove move = mcts.findBestMove(Chessboard1,true);
-        ChessMove move_2 = mcts.iterativeDeepening_MCTS(Chessboard1,true, 5000);
-        //System.out.println(move);
-        System.out.println(move_2);
+        //ChessMove move = mcts.iterativeDeepening_MCTS(Chessboard1,true, 5000);
+        ChessMove move = mcts.findBestMove_AB(Chessboard1,true);
+        System.out.println(move);
     }
 
     @Test
