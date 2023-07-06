@@ -9,10 +9,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //Chessboard board = new Chessboard("kb5Q/p7/Pp6/1P6/4p3/4R3/4P1p1/6K1");
         Chessboard board = new Chessboard();
-        AI_Board ai = new AI_Board(board);
         System.out.println(board.isCheckmate(false));
         board.printBoard();
         WhiteTurn = true;
+        MCTS ai = new MCTS();
 
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -21,7 +21,7 @@ public class Main {
             ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
             ReturnObject result = game.alphabeta(-999999, 999999, 6, true, board, object);
             System.out.println(result);*/
-            /*long Starttime = System.nanoTime();
+            long Starttime = System.nanoTime();
             LinkedList<ChessMove>[] test = board.allMovesWithPieces(WhiteTurn);
             long endtime = System.nanoTime();
             System.out.println("Duration_Bruno:" + (endtime-Starttime));
@@ -32,20 +32,20 @@ public class Main {
             System.out.println("Whiteturn? " + board.isCheck(WhiteTurn));
             System.out.println("Is check? " + board.isCheck(WhiteTurn));
             System.out.println("Is checkmate? " + board.isCheckmate(WhiteTurn));
-            System.out.println("Eval:" + board.evalFuncCaller());*/
+            System.out.println("Eval:" + board.evalFuncCaller());
             String input = reader.readLine();
             if (input.equals("exit"))
                    break;
-            LinkedList<Integer> foo = ChessHelper.calcPos(input);
-            ChessMove move = new ChessMove(foo.get(0), foo.get(1));
+            LinkedList<Integer> move_ls = ChessHelper.calcPos(input);
+            ChessMove move = new ChessMove(move_ls.get(0), move_ls.get(1));
             try {
                 if (board.makeMove(WhiteTurn, move)) {
                     board.printBoard();
                     WhiteTurn = !WhiteTurn;
-                    ai.setBoard(board);
+                    //ai.setBoard(board);
                     System.out.println("Ai calculating");
-                    ReturnObject_withStats result = ai.iterativeDeepening_MTD_stats(WhiteTurn,5*60000);
-                    board.makeMove(WhiteTurn, result.moves.getFirst());
+                    ChessMove result = ai.iterativeDeepening_MCTS(board, WhiteTurn,5 * 60000);
+                    board.makeMove(WhiteTurn, result);
                     board.printBoard();
                     WhiteTurn = !WhiteTurn;
                 } else {
