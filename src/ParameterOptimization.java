@@ -1,26 +1,38 @@
 import io.jenetics.*;
 import io.jenetics.engine.*;
+import io.jenetics.util.Factory;
+
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class ParameterOptimization {
-    public static void main(String[] args) {
-        // Define your fitness function
-        Function<Genotype<IntegerGene>, Double> fitnessFunction = genotype -> {
-            // Your fitness calculation logic goes here
-            return 0.0;
-        };
+public static int iteration = 0;
 
-        // Define your genetic algorithm configuration
-        Engine<IntegerGene, Double> engine = Engine
-                .builder(fitnessFunction, IntegerChromosome.of(0, 10))
+    private static double eval(Genotype<DoubleGene> gt) {
+        iteration++;
+        System.out.println("Iteration: " + iteration);
+
+        ParameterCandidate candidate = new ParameterCandidate(gt.get(0).get(0).doubleValue(), gt.get(1).gene().doubleValue(), gt.get(2).gene().doubleValue(), gt.get(3).gene().doubleValue(), gt.get(4).gene().doubleValue(), gt.get(5).gene().doubleValue(), gt.get(6).gene().doubleValue());
+        return 1/EvalFunctionBenchmarkTest.EvalFuncScore(candidate);                                //we want to minimize the score but jenetics maximizes the eval value -> inverse
+    }
+
+
+    public static void main(String[] args) {
+        Factory<Genotype<DoubleGene>> gtf =
+                Genotype.of(DoubleChromosome.of(0.0, 10), DoubleChromosome.of(0.0, 10), DoubleChromosome.of(0.0, 10), DoubleChromosome.of(0.0, 10), DoubleChromosome.of(0.0, 10), DoubleChromosome.of(0.0, 10), DoubleChromosome.of(0.0, 10));
+
+
+        Engine<DoubleGene, Double> engine  = Engine
+                .builder(ParameterOptimization::eval, gtf)
                 .build();
 
-        // Run the genetic algorithm
-        Genotype<IntegerGene> result = engine.stream()
-                .limit(100)
+        Genotype<DoubleGene> result = engine.stream()
+                .limit(1)
                 .collect(EvolutionResult.toBestGenotype());
 
         // Print the best solution
-        System.out.println("Best solution: " + result.chromosome());
+        System.out.println("Best solution: " + result);
     }
 }

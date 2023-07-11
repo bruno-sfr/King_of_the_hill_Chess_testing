@@ -22,7 +22,7 @@ public class Game {
                 ReturnObject_withStats result = Player_2.iterativeDeepening_MTD_stats(false,5000);
                 System.out.println(result.moves.getFirst());
                 if(!board.makeMove(false, result.moves.getFirst())){
-                    System.out.println("Black wanted to play illeagl move");
+                    System.out.println("Black wanted to play illegal move");
                     break;
                 };;
                 System.out.println("Depth:"+result.moves.size());

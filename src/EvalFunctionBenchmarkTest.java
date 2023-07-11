@@ -11,8 +11,7 @@ import java.io.IOException;
 import static java.lang.System.out;
 
 public class EvalFunctionBenchmarkTest {
-    @Test
-    public void OGEvalFuncTest() {
+    public static void OGEvalFuncTest() {
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
@@ -41,7 +40,7 @@ public class EvalFunctionBenchmarkTest {
         out.println("Score (seconds * delta): " + (timeAfter - timeBefore)/1000000000.0 * delta);
     }
 
-    public double EvalFuncScore(ParameterCandidate candidate) {
+    public static double EvalFuncScore(ParameterCandidate candidate) {
         double DoubledOrMissingPawnValue = candidate.DoubledOrMissingPawnValue;
         double AvailableMoveValue = candidate.AvailableMoveValue;
         double RookCoveredValue = candidate.RookCoveredValue;
@@ -77,7 +76,8 @@ public class EvalFunctionBenchmarkTest {
         return score;
     }
 
-    public double EvalFuncSimpleScore(double AvailableMoveValue) {
+    public static double EvalFuncSimpleScore(ParameterCandidate candidate) {
+        double AvailableMoveValue = candidate.AvailableMoveValue;
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
@@ -104,7 +104,7 @@ public class EvalFunctionBenchmarkTest {
         return score;
     }
 
-    private double adjustDelta(double delta, JSONObject stellung, boolean white, double result) {
+    private static double adjustDelta(double delta, JSONObject stellung, boolean white, double result) {
         if(!white) result = -result;
         Object[] obj = ((String) stellung.get("eval")).split("#");
         double eval = Double.parseDouble((String) obj[obj.length - 1]);
