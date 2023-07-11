@@ -41,7 +41,14 @@ public class EvalFunctionBenchmarkTest {
         out.println("Score (seconds * delta): " + (timeAfter - timeBefore)/1000000000.0 * delta);
     }
 
-    public double EvalFuncScore(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue) {
+    public double EvalFuncScore(ParameterCandidate candidate) {
+        double DoubledOrMissingPawnValue = candidate.DoubledOrMissingPawnValue;
+        double AvailableMoveValue = candidate.AvailableMoveValue;
+        double RookCoveredValue = candidate.RookCoveredValue;
+        double BishopCoveredValue = candidate.BishopCoveredValue;
+        double KnightCoveredValue = candidate.KnightCoveredValue;
+        double QueenCoveredValue = candidate.QueenCoveredValue;
+        double PawnCoveredValue  = candidate.DoubledOrMissingPawnValue;
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
