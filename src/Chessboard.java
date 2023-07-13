@@ -841,6 +841,7 @@ public class Chessboard {
         //LinkedList<Integer[]> res = allPossibleMoves(whiteTurn, Attacker, Defender);
 
         boolean success = false;
+        boolean pawntoqueen = false;
         BitBoard figureboard = new BitBoard();   //reference to board of the figure that is to be moved, to change position later
         BitBoard possibleMoves;
         if(figAtFrom){
@@ -848,6 +849,9 @@ public class Chessboard {
                 possibleMoves = PawnMove(whiteTurn, from);
                 success = possibleMoves.isSquareSet(to);
                 figureboard = Pawn;
+                if(ChessHelper.isSouthBorder(to) || ChessHelper.isNorthBorder(to)){
+                    pawntoqueen = true;
+                }
             }
             else if(King.isSquareSet(from)){
                 if(whiteTurn){
@@ -979,6 +983,10 @@ public class Chessboard {
                 figureboard.clearSquare(from);
                 Attacker.setSquare(to);
                 figureboard.setSquare(to);
+            }
+            if(pawntoqueen){
+                Pawn.clearSquare(to);
+                Queen.setSquare(to);
             }
             return true;
         }else{

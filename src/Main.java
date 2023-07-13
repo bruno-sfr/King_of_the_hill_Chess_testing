@@ -11,7 +11,7 @@ public class Main {
         Chessboard board = new Chessboard();
         System.out.println(board.isCheckmate(false));
         board.printBoard();
-        WhiteTurn = true;
+        WhiteTurn = false;
         MCTS ai = new MCTS();
 
         BufferedReader reader = new BufferedReader(
@@ -44,7 +44,7 @@ public class Main {
                     WhiteTurn = !WhiteTurn;
                     //ai.setBoard(board);
                     System.out.println("Ai calculating");
-                    ChessMove result = ai.iterativeDeepening_MCTS(board, WhiteTurn,5 * 60000);
+                    ChessMove result = ai.iterativeDeepening_MCTS(board, WhiteTurn,100);
                     board.makeMove(WhiteTurn, result);
                     board.printBoard();
                     WhiteTurn = !WhiteTurn;
