@@ -54,7 +54,7 @@ public class EvalFunctionBenchmarkTest {
         try {
             //JSONObject obj = (JSONObject) parser.parse(new FileReader("src\\test\\Stellungen.json"));
             timeBefore = System.nanoTime();
-            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data23_wb.json"))).get("Stellungen")) {
+            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data_bigger.json"))).get("Stellungen")) {
                 String FEN = (String) stellung.get("fen");
                 String[] arr = FEN.split(" ");
                 FEN = arr[0];
@@ -69,11 +69,11 @@ public class EvalFunctionBenchmarkTest {
             throw new RuntimeException(e);
         }
         long timeAfter = System.nanoTime();
-        out.println("Time: " +  (timeAfter - timeBefore)/1000000L + "ms");
+        //out.println("Time: " +  (timeAfter - timeBefore)/1000000L + "ms");
         out.println("Delta: " + delta);
-        double score = (timeAfter - timeBefore) / 1000000000.0 * delta;
+        double score = ((timeAfter - timeBefore) / 1000000000.0) * delta;
         out.println("Score (seconds * delta): " + score);
-        return score;
+        return delta;
     }
 
     public static double EvalFuncSimpleScore(ParameterCandidate candidate) {
@@ -105,9 +105,16 @@ public class EvalFunctionBenchmarkTest {
     }
 
     private static double adjustDelta(double delta, JSONObject stellung, boolean white, double result) {
-        if(!white) result = -result;
+        //if(!white) result = -result;
         Object[] obj = ((String) stellung.get("eval")).split("#");
         double eval = Double.parseDouble((String) obj[obj.length - 1]);
+        if (((String) obj[0]).contains("#")) {
+            if (eval < 0) {
+                eval = -100;
+            } else {
+                eval = 100;
+            }
+        }
         delta += Math.abs(result - eval);
         return delta;
     }

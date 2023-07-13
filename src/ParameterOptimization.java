@@ -15,7 +15,7 @@ public static int iteration = 0;
         System.out.println("Iteration: " + iteration);
 
         ParameterCandidate candidate = new ParameterCandidate(gt.get(0).get(0).doubleValue(), gt.get(1).gene().doubleValue(), gt.get(2).gene().doubleValue(), gt.get(3).gene().doubleValue(), gt.get(4).gene().doubleValue(), gt.get(5).gene().doubleValue(), gt.get(6).gene().doubleValue());
-        return 1/EvalFunctionBenchmarkTest.EvalFuncScore(candidate);                                //we want to minimize the score but jenetics maximizes the eval value -> inverse
+        return 1000000/EvalFunctionBenchmarkTest.EvalFuncScore(candidate);                                //we want to minimize the score but jenetics maximizes the eval value -> inverse
     }
 
 
@@ -29,7 +29,7 @@ public static int iteration = 0;
                 .build();
 
         Genotype<DoubleGene> result = engine.stream()
-                .limit(1)
+                .limit(30)
                 .collect(EvolutionResult.toBestGenotype());
 
         // Print the best solution
