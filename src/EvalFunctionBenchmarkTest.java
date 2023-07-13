@@ -48,6 +48,11 @@ public class EvalFunctionBenchmarkTest {
         double KnightCoveredValue = candidate.KnightCoveredValue;
         double QueenCoveredValue = candidate.QueenCoveredValue;
         double PawnCoveredValue  = candidate.DoubledOrMissingPawnValue;
+        double PawnValue = candidate.PawnValue;
+        double KnightValue = candidate.KnightValue;
+        double BishopValue = candidate.BishopValue;
+        double RookValue = candidate.RookValue;
+        double QueenValue = candidate.QueenValue;
         JSONParser parser = new JSONParser();
         long timeBefore;
         double delta = 0;
@@ -62,7 +67,7 @@ public class EvalFunctionBenchmarkTest {
                 boolean White = (boolean) stellung.get("white");
                 Chessboard board = new Chessboard(FEN);
                 //out.println(board);
-                double result = board.eval_func(DoubledOrMissingPawnValue, AvailableMoveValue, RookCoveredValue, BishopCoveredValue, KnightCoveredValue, QueenCoveredValue, PawnCoveredValue);
+                double result = board.eval_func(DoubledOrMissingPawnValue, AvailableMoveValue, RookCoveredValue, BishopCoveredValue, KnightCoveredValue, QueenCoveredValue, PawnCoveredValue, PawnValue, KnightValue, BishopValue, RookValue, QueenValue);
                 delta = adjustDelta(delta, stellung, White, result);
             }
         } catch (IOException | ParseException e) {

@@ -1430,7 +1430,8 @@ public class Chessboard {
 
 
     public double evalFuncCaller() {
-        return eval_func(0.1,0.1, 0.4, 0.3, 0.3, 0.9, 0.1);
+        return eval_func(0.1,0.1, 0.4, 0.3, 0.3, 0.9,
+                0.1, 1, 3, 3, 5, 9);
     }
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1
@@ -1439,8 +1440,10 @@ public class Chessboard {
     //queen has a value of 9
     //king has insane high value
     //an available move is worth 0.1
-    //and euclidean distance of king to center is valuable
-    public double eval_func(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue, double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue){
+    //and Euclidean distance of king to center is valuable
+    public double eval_func(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue,
+                            double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue, double PawnValue, double KnightValue,
+                            double BishopValue, double RookValue, double QueenValue){
 
 
 
