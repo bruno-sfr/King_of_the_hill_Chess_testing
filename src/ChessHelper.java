@@ -46,10 +46,10 @@ public class ChessHelper {
         /*float x = Pos%8;
         float y = (float)Pos/8;
         return Math.sqrt(Math.pow(x-3.5, 2) + Math.pow(y-3.5, 2));*/
-        float x = Pos % 8;
+        double x = Pos % 8;
         int y = Pos / 8;
-        double xdistance = Math.abs(x-3.5);
-        double ydistance = Math.abs(y-3.5);
+        double xdistance = Math.abs(x - 3.5);
+        double ydistance = Math.abs(((double) y) - 3.5);
         return Math.sqrt(Math.pow(xdistance, 2) + Math.pow(ydistance, 2));
     }
 

@@ -1431,7 +1431,7 @@ public class Chessboard {
 
     public double evalFuncCaller() {
         return eval_func(0.1,0.1, 0.4, 0.3, 0.3, 0.9,
-                0.1, 1, 3, 3, 5, 9);
+                0.1, 1, 3, 3, 5, 9, 1, 10);
     }
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1
@@ -1443,7 +1443,7 @@ public class Chessboard {
     //and Euclidean distance of king to center is valuable
     public double eval_func(double DoubledOrMissingPawnValue, double AvailableMoveValue,double RookCoveredValue, double BishopCoveredValue,
                             double KnightCoveredValue, double QueenCoveredValue, double PawnCoveredValue, double PawnValue, double KnightValue,
-                            double BishopValue, double RookValue, double QueenValue){
+                            double BishopValue, double RookValue, double QueenValue, double param1, double param2){
 
 
 
@@ -1467,35 +1467,28 @@ public class Chessboard {
         BitBoard white_rook = new BitBoard(White.getBoard() & Rook.getBoard());
 
         //black value
-        eval = eval - black_pawns.allSetSquares().size();
-        eval = eval - black_bishop.allSetSquares().size() * 3;
-        eval = eval - black_knights.allSetSquares().size() * 3;
-        eval = eval - black_rook.allSetSquares().size() * 5;
-        eval = eval - black_queen.allSetSquares().size() * 9;
+        eval = eval - black_pawns.allSetSquares().size() * PawnValue;
+        eval = eval - black_bishop.allSetSquares().size() * BishopValue;
+        eval = eval - black_knights.allSetSquares().size() * KnightValue;
+        eval = eval - black_rook.allSetSquares().size() * RookValue;
+        eval = eval - black_queen.allSetSquares().size() * QueenValue;
         eval = eval - black_king.allSetSquares().size() * 100000;
 
         //white value
-        eval = eval + white_pawns.allSetSquares().size();
-        eval = eval + white_bishop.allSetSquares().size() * 3;
-        eval = eval + white_knights.allSetSquares().size() * 3;
-        eval = eval + white_rook.allSetSquares().size() * 5;
-        eval = eval + white_queen.allSetSquares().size() * 9;
+        eval = eval + white_pawns.allSetSquares().size() * PawnValue;
+        eval = eval + white_bishop.allSetSquares().size() * BishopValue;
+        eval = eval + white_knights.allSetSquares().size() * KnightValue;
+        eval = eval + white_rook.allSetSquares().size() * RookValue;
+        eval = eval + white_queen.allSetSquares().size() * QueenValue;
         eval = eval + white_king.allSetSquares().size() * 100000;
 
         //available moves
-        /*LinkedList<ChessMove>[] whiteMoves = this.allMovesWithPieces(true);
-        LinkedList<ChessMove>[] blackMoves = this.allMovesWithPieces(false);
-
-        for(int i=0; i<6; i++){
-            eval = eval + whiteMoves[i].size() * 0.1;
-            eval = eval - blackMoves[i].size() * 0.1;
-        }*/
         LinkedList<Integer> whiteMoves = this.allMovesWithoutPieces(true);
         LinkedList<Integer> blackMoves = this.allMovesWithoutPieces(false);
         eval += whiteMoves.size() * AvailableMoveValue;
         eval -= blackMoves.size() * AvailableMoveValue;
 
-        //eval king distance to middle but just subtracting bitboard values (TODO: IMPROVE THIS LATER!!!)
+        //eval king distance to middle
         if(white_king.allSetSquares().size()>0){
             LinkedList<Integer> _whiteKing = white_king.allSetSquares();
             int whiteKingPos = _whiteKing.getFirst();
@@ -1503,11 +1496,9 @@ public class Chessboard {
                 //white has won via king of the hill
                 eval = eval + 100000;
             }
-            //TODO: change scaling off distance evaluation to grow exponentially with how close u are to the center
-            //int white_distance = (Math.abs(whiteKingPos - 27) + Math.abs(whiteKingPos - 28) + Math.abs(whiteKingPos - 35) + Math.abs(whiteKingPos - 36))/4;
-            //System.out.println("white dis:" + ChessHelper.euclidDistanceToMiddle(whiteKingPos));
-            eval = eval - ChessHelper.euclidDistanceToMiddle(whiteKingPos);
+            eval += expoFunc(ChessHelper.euclidDistanceToMiddle(whiteKingPos), param1, param2);
         }
+
         if(black_king.allSetSquares().size()>0) {
             LinkedList<Integer> _blackKing = black_king.allSetSquares();
             int blackKingPos = _blackKing.getFirst();
@@ -1515,10 +1506,9 @@ public class Chessboard {
                 //black has won via king of the hill
                 eval = eval -100000;
             }
-            //int black_distance = (Math.abs(blackKingPos - 27) + Math.abs(blackKingPos - 28) + Math.abs(blackKingPos - 35) + Math.abs(blackKingPos - 36))/4;
-            //System.out.println("black dis:" + ChessHelper.euclidDistanceToMiddle(blackKingPos));
-            eval = eval + (ChessHelper.euclidDistanceToMiddle(blackKingPos));
+            eval -= expoFunc(ChessHelper.euclidDistanceToMiddle(blackKingPos), param1, param2);
         }
+
                         //pawn structure evaluation
 
         //doubled or isolated pawn evaluation
@@ -1527,35 +1517,35 @@ public class Chessboard {
         long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
 
         Integer[] whities = new Integer[8];
-        for (int i = 0; i<8; i++){
+        /*
+        for (int i = 0; i < 8; i++){
             whities[i] = 0;
-        }
+        }*/
         while (whitePawnBoard != 0L) {
-            int index = Long.numberOfTrailingZeros(whitePawnBoard) % 8;
-            whities[index] = whities[index] + 1;
+            whities[Long.numberOfTrailingZeros(whitePawnBoard) % 8]++;
             whitePawnBoard &= ~(Long.lowestOneBit(whitePawnBoard));
         }
         for (Integer whity : whities) {
             if (whity > 1) {                                        //doubled pawn
                 eval -= DoubledOrMissingPawnValue;
             }
-            if (whity < 1) {                                        //isolated pawn
+            if (whity < 1) {                                        //missing pawn
                 eval -= DoubledOrMissingPawnValue;
             }
         }
         Integer[] blackies = new Integer[8];
-        for (int i = 0; i<8; i++){
+        for (int i = 0; i < 8; i++){
             blackies[i] = 0;
         }
         while (blackPawnBoard != 0L) {
-            blackies[Long.numberOfTrailingZeros(blackPawnBoard) % 8] += 1;
+            blackies[Long.numberOfTrailingZeros(blackPawnBoard) % 8]++;
             blackPawnBoard &= ~(Long.lowestOneBit(blackPawnBoard));
         }
         for (Integer blacky : blackies) {
             if (blacky > 1) {                                     //doubled pawn
                 eval += DoubledOrMissingPawnValue;
             }
-            if (blacky < 1) {                                    //isolated pawn
+            if (blacky < 1) {                                    //missing pawn
                 eval += DoubledOrMissingPawnValue;
             }
         }
@@ -1652,6 +1642,9 @@ public class Chessboard {
             }
         }*/
         return eval;
+    }
+    private static double expoFunc(double distance, double param, double param2) {
+        return param2 * Math.exp(-param*distance);
     }
 
     private boolean check_if_covered(boolean player, int pos){
