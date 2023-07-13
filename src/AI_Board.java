@@ -16,7 +16,7 @@ public class AI_Board {
     public AI_Board(Chessboard board) {
         zob = new Zobrist();
         this.board=board;
-        this.table=new TranspositionTable(1 << 27);     //1 << 28
+        this.table=new TranspositionTable(1 << 20);     //1 << 28
     }
 
     public void setBoard(Chessboard board) {
@@ -56,7 +56,7 @@ public class AI_Board {
         return _lastResult;
     }
 
-    public ReturnObject_withStats iterativeDeepening_withTT(boolean whiteTurn, long DURATION) {
+    public ReturnObject_withStats iterativeDeepening_withTTandStats(boolean whiteTurn, long DURATION) {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + DURATION;
         ReturnObject_withStats _lastResult = new ReturnObject_withStats(0);
@@ -74,7 +74,40 @@ public class AI_Board {
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
                 _lastResult = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-                System.out.println("Depth is " + Depth);
+                //System.out.println("Depth is " + Depth);
+                Depth++;
+            } catch (TimeoutException f) {
+                future.cancel(true);
+                //throw new RuntimeException("Timeout", f);
+            } catch (ExecutionException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                executor.shutdownNow();
+            }
+        }
+
+        return _lastResult;
+    }
+
+    public ReturnObject iterativeDeepening_withTT(boolean whiteTurn, long DURATION) {
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + DURATION;
+        ReturnObject _lastResult = new ReturnObject(0);
+        Depth = 1;
+
+        while (System.currentTimeMillis() < endTime) {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
+                @Override
+                public ReturnObject call() throws Exception {
+                    //return randomMove(board,!board.lastPlayer);
+                    return alphabeta_withTT(-9999999,9999999,Depth,whiteTurn,board, new ReturnObject(0));
+                }
+            });
+            try {
+                //wait for result but with only the time that is left as a limit: endtime - current time
+                _lastResult = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                //System.out.println("Depth is " + Depth);
                 Depth++;
             } catch (TimeoutException f) {
                 future.cancel(true);
@@ -170,13 +203,47 @@ public class AI_Board {
                 @Override
                 public ReturnObject call() throws Exception {
                     //return randomMove(board,!board.lastPlayer);
+                    return MTDF(Depth,whiteTurn,board, Result_MTD.eval);
+                }
+            });
+            try {
+                //wait for result but with only the time that is left as a limit: endtime - current time
+                Result_MTD = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                //System.out.println("Depth is " + Depth);
+                Depth++;
+            } catch (TimeoutException f) {
+                future.cancel(true);
+                //throw new RuntimeException("Timeout", f);
+            } catch (ExecutionException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                executor.shutdownNow();
+            }
+        }
+
+        return Result_MTD;
+    }
+
+    public ReturnObject iterativeDeepening_MTD_without_Check(boolean whiteTurn, long DURATION) {
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + DURATION;
+        Result_MTD = new ReturnObject(0);
+        Depth = 1;
+
+        while (System.currentTimeMillis() < endTime) {
+            ReturnObject object = new ReturnObject(0, new LinkedList<ChessMove>());
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<ReturnObject> future = executor.submit(new Callable<ReturnObject>() {
+                @Override
+                public ReturnObject call() throws Exception {
+                    //return randomMove(board,!board.lastPlayer);
                     return MTDF_without_Check(Depth,whiteTurn,board, Result_MTD.eval);
                 }
             });
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
                 Result_MTD = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-                System.out.println("Depth is " + Depth);
+                //System.out.println("Depth is " + Depth);
                 Depth++;
             } catch (TimeoutException f) {
                 future.cancel(true);
@@ -672,12 +739,12 @@ public class AI_Board {
     public ReturnObject_withStats alphabeta_withStatsAndTT(double alpha, double beta, int depthleft, boolean player, Chessboard board, ReturnObject object){
         long boardhash = zob.generateHashKey(board,player);
         HashEntry hash = table.probeEntry(boardhash);
-        if(hash != null){
+        if(hash != null ){
             //somehow when >= it is wrong in minimal cases
-            if(hash.getDepth()>=depthleft) {
-                LinkedList<ChessMove> list = new LinkedList<>();
-                list.add(hash.getFlag());
-                return new ReturnObject_withStats(hash.getScore(), 1, 1, list);
+            if(hash.getDepth()>=depthleft && object.moves.size()>0) {
+                //LinkedList<ChessMove> list = new LinkedList<>();
+                //list.add(hash.getFlag());
+                return new ReturnObject_withStats(hash.getScore(), 1, 1, object.moves);
             }
         }
         if(depthleft==0){
@@ -822,12 +889,12 @@ public class AI_Board {
     public ReturnObject alphabeta_withTT(double alpha, double beta, int depthleft, boolean player, Chessboard board, ReturnObject object) {
         long boardhash = zob.generateHashKey(board, player);
         HashEntry hash = table.probeEntry(boardhash);
-        if (hash != null) {
+        if (hash != null  && object.moves.size() > 0) {
             //somehow when >= it is wrong in minimal cases
             if (hash.getDepth() >= depthleft) {
-                LinkedList<ChessMove> list = new LinkedList<>();
-                list.add(hash.getFlag());
-                return new ReturnObject(hash.getScore(), list);
+                /*LinkedList<ChessMove> list = new LinkedList<>();
+                list.add(hash.getFlag());*/
+                return new ReturnObject(hash.getScore(), object.moves);
             }
         }
         if (depthleft == 0) {
@@ -932,7 +999,6 @@ public class AI_Board {
             return minEval;
         }
     }
-
 
     public ReturnObject_withStats alphabeta_withStatsAndTTforMTD(double alpha, double beta, double lowerbound, double upperbound, int depthleft, boolean player, Chessboard board, ReturnObject object){
         long boardhash = zob.generateHashKey(board,player);
@@ -1150,11 +1216,11 @@ public class AI_Board {
     public ReturnObject alphabeta_forMTD(double alpha, double beta, double lowerbound, double upperbound, int depthleft, boolean player, Chessboard board, ReturnObject object){
         long boardhash = zob.generateHashKey(board,player);
         HashEntry hash = table.probeEntry(boardhash);
-        if(hash != null){
+        if(hash != null && object.moves.size() > 0){
             if(hash.getDepth()>=depthleft) {
-                LinkedList<ChessMove> list = new LinkedList<>();
-                list.add(hash.getFlag());
-                return new ReturnObject(hash.getScore(), list);
+                /*LinkedList<ChessMove> list = new LinkedList<>();
+                list.add(hash.getFlag());*/
+                return new ReturnObject(hash.getScore(), object.moves);
             }
         }
 

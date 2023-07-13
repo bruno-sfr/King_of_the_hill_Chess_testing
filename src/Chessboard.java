@@ -1430,7 +1430,7 @@ public class Chessboard {
 
 
     public double evalFuncCaller() {
-        return eval_func(0.102,0.198, 1.341, 0.386, 0.142, 1.310, 9.305);
+        return eval_func(0.1,0.1, 0.4, 0.3, 0.3, 0.9, 0.1);
     }
     //postive value means white has the advantage and negative means black has the advantage
     //pawn has a value of 1

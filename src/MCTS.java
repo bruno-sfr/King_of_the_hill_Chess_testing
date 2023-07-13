@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.*;
 
 public class MCTS {
@@ -54,27 +51,28 @@ public class MCTS {
     public ChessMove iterativeDeepening_MCTS(Chessboard initialState, boolean whiteTurn, long DURATION) {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + DURATION;
-        MCTS_Node root = new MCTS_Node(initialState, whiteTurn, new ChessMove(0,0));
+        _root = new MCTS_Node(initialState, whiteTurn, new ChessMove(0,0));
+        int i = 0;
 
         while (System.currentTimeMillis() < endTime) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<MCTS_Node> future = executor.submit(new Callable<MCTS_Node>() {
+            Future<Void> future = executor.submit(new Callable<Void>() {
                 @Override
-                public MCTS_Node call() throws Exception {
+                public Void call() throws Exception {
                     //return randomMove(board,!board.lastPlayer);
-                    MCTS_Node selectedNode = select(root);
+                    MCTS_Node selectedNode = select(_root);
                     //System.out.println("root visits:" + root.visits + " root score:" + root.score);
                     //System.out.println("select:" + selectedNode.move);
                     MCTS_Node expandedNode = expand(selectedNode);
                     //System.out.println("expand:" + expandedNode.move);
                     double score = simulate(expandedNode);
                     backpropagate(expandedNode, score);
-                    return root;
+                    return null;
                 }
             });
             try {
                 //wait for result but with only the time that is left as a limit: endtime - current time
-                _root = future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                future.get(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
             } catch (TimeoutException f) {
                 future.cancel(true);
                 //throw new RuntimeException("Timeout", f);
@@ -286,8 +284,8 @@ public class MCTS {
                 bestNode = child;
             }
         }
-        System.out.println("Root visits:" + root.visits + " Root score:" + root.score);
-        System.out.println("best move visits:" + bestNode.visits + " score:" + bestNode.score);
+        //System.out.println("Root visits:" + root.visits + " Root score:" + root.score);
+        //System.out.println("best move visits:" + bestNode.visits + " score:" + bestNode.score);
         ChessMove bestMove = bestNode.move;
         return bestMove;
     }
