@@ -1,6 +1,4 @@
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.LinkedList;
-import java.util.Spliterator;
 
 public class Chessboard {
 
@@ -11,14 +9,8 @@ public class Chessboard {
     Boolean WhiteLeftCastle;
     Boolean WhiteRightCastle;
     BitBoard Black, White, Pawn, Rook, King, Queen, Knight, Bishop;
-    final BitBoard row1 = new BitBoard(0xffL);
     final BitBoard row2 = new BitBoard(0xff00L);
     final BitBoard row7 = new BitBoard(0xff000000000000L);
-    final BitBoard row8 = new BitBoard(0xff00000000000000L);
-    final BitBoard colA = new BitBoard(0x101010101010101L);
-    final BitBoard colB = new BitBoard(0x202020202020202L);
-    final BitBoard colG = new BitBoard(0x4040404040404040L);
-    final BitBoard colH = new BitBoard(0x8080808080808080L);
 
 
     public Chessboard(){
@@ -133,7 +125,7 @@ public class Chessboard {
         }
     }
 
-    public Chessboard(String fen, boolean _BlackLeftCastle, boolean _BlackRightCastle, boolean _WhiteLeftCastle, boolean _WhiteRightCastle){
+/*    public Chessboard(String fen, boolean _BlackLeftCastle, boolean _BlackRightCastle, boolean _WhiteLeftCastle, boolean _WhiteRightCastle){
         Black = new BitBoard();
         White = new BitBoard();
         Pawn = new BitBoard();
@@ -209,7 +201,7 @@ public class Chessboard {
                 }
             }
         }
-    }
+    }*/
 
     public LinkedList<ChessMove>[] allMovesInOrder(boolean WhiteTurn){
         //Moves in Order Attack / figure / pawn
@@ -865,7 +857,7 @@ public class Chessboard {
                 possibleMoves = KingMove(from, Attacker);
                 success = possibleMoves.isSquareSet(to);
                 if(success) {
-                    //white king moves so set castle flags and check if its a castle
+                    //white king moves so set castle flags and check if it's a castle
                     if(Attacker == White) {
                         if(from == 4) {
                             if (to == 2 & WhiteLeftCastle) {
@@ -1517,10 +1509,10 @@ public class Chessboard {
         long blackPawnBoard = Black.getBoard() & Pawn.getBoard();
 
         Integer[] whities = new Integer[8];
-        /*
+
         for (int i = 0; i < 8; i++){
             whities[i] = 0;
-        }*/
+        }
         while (whitePawnBoard != 0L) {
             whities[Long.numberOfTrailingZeros(whitePawnBoard) % 8]++;
             whitePawnBoard &= ~(Long.lowestOneBit(whitePawnBoard));
@@ -1622,7 +1614,7 @@ public class Chessboard {
                 eval-=PawnCoveredValue;
             }
         }
-        ;
+
         /*if(white_king.allSetSquares().size()>0 & black_king.allSetSquares().size()>0) {
             //System.out.println("checking checkmate in eval");
             if(this.isCheck(true)){

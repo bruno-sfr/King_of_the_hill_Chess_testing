@@ -34,7 +34,7 @@ public static int iteration = 0;
                 .build();
 
         Genotype<DoubleGene> result = engine.stream()
-                .limit(20)
+                .limit(200)
                 .collect(EvolutionResult.toBestGenotype());
 
         // Print the best solution

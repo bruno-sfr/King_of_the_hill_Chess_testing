@@ -61,7 +61,7 @@ public class EvalFunctionBenchmarkTest {
         try {
             //JSONObject obj = (JSONObject) parser.parse(new FileReader("src\\test\\Stellungen.json"));
             timeBefore = System.nanoTime();
-            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data_bigger.json"))).get("Stellungen")) {
+            for (JSONObject stellung : (Iterable<JSONObject>) ((JSONObject) parser.parse(new FileReader("./tests/data_new.json"))).get("Stellungen")) {
                 String FEN = (String) stellung.get("fen");
                 String[] arr = FEN.split(" ");
                 FEN = arr[0];
