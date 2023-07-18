@@ -1140,7 +1140,7 @@ public class AI_Board {
             LinkedList<ChessMove> move = new LinkedList<>();
             move.add(lib.getMove());
             //Chessboard tempboard = new Chessboard(board);
-            if(board.makeMove(player,move.getFirst())) {
+            if(board.makeMove(player,move.getFirst()) && move.size()>0) {
                 //System.out.println("Libary entry used");
                 if (player) {
                     ReturnObject libresult = new ReturnObject(1000, move);
