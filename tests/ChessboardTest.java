@@ -269,8 +269,8 @@ class ChessboardTest {
     void Comparison_Benchmarks_1(){
         long starttime;
         long endtime;
-        //Chessboard Chessboard1 = new Chessboard();
-        Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
+        Chessboard Chessboard1 = new Chessboard();
+        //Chessboard Chessboard1 = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
         //Chessboard Chessboard1 = new Chessboard("r3r1k1/p4ppp/2Q1b3/4N3/5q2/4RP2/PPB3PP/R5K1 ");
         AI_Board game1 = new AI_Board(Chessboard1);
         AI_Board game1_tt = new AI_Board(Chessboard1);
@@ -305,7 +305,7 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_ab_1.eval);
             System.out.println("Best Move" + result_ab_1.moves.getFirst());
             System.out.println();*/
-            System.out.println("Alpha-Beta with Move Order:");
+            /*System.out.println("Alpha-Beta with Move Order:");
             starttime = System.nanoTime();
             ReturnObject_withStats result_ab_1_O = game1.alphabeta_withNumPostionsAndInOrder(-9999999,9999999,i,true,Chessboard1,new ReturnObject(0));
             endtime = System.nanoTime();
@@ -323,7 +323,7 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_ab_tt_1.eval);
             System.out.println("Best Move" + result_ab_tt_1.moves.getFirst());
             System.out.println("Transpotion uses:" + result_ab_tt_1.NumHashs);
-            System.out.println();
+            System.out.println();*/
             /*System.out.println("MTD(f):");
             starttime = System.nanoTime();
             ReturnObject_withStats result_mtd_1 = game1_mtd.MTDF_stats(i,true,Chessboard1,best_guess);
@@ -344,7 +344,7 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_ab_tt_1_o.eval);
             System.out.println("Best Move" + result_ab_tt_1_o.moves.getFirst());
             System.out.println();
-            /*System.out.println("MTD(f) with Order:");
+            System.out.println("MTD(f) with Order:");
             starttime = System.nanoTime();
             ReturnObject result_mtd_1_o = game1_mtd_o.MTDF(i,true,Chessboard1,best_guess_o);
             best_guess_o = result_mtd_1_o.eval;
@@ -435,12 +435,13 @@ class ChessboardTest {
     void Comparison_Benchmarks_3() {
         long starttime;
         long endtime;
-        Chessboard Chessboard = new Chessboard();
-        //Chessboard Chessboard = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
+        //Chessboard Chessboard = new Chessboard();
+        Chessboard Chessboard = new Chessboard("r1b2rk1/4qpp1/4p2R/p2pP3/2pP2QP/4P1P1/PqB4K/8");
+        Chessboard.printBoard();
         //Chessboard Chessboard = new Chessboard("r3r1k1/p4ppp/2Q1b3/4N3/5q2/4RP2/PPB3PP/R5K1 ");
-        AI_Board game1 = new AI_Board(Chessboard);
+        AI_Board game1 = new AI_Board(Chessboard, true);
         AI_Board game2 = new AI_Board(Chessboard);
-        for (int i = 1; i < 15; i++) {
+        for (int i = 1; i <10; i++) {
             System.out.println("Depth:" + i);
             System.out.println("----------------------------------------");
             System.out.println("Alpha-Beta Libary:");
@@ -451,14 +452,14 @@ class ChessboardTest {
             System.out.println("Evaluation:" + result_ab_1.eval);
             System.out.println("Best Move" + result_ab_1.moves.getFirst());
             System.out.println("----------------------------------------");
-            System.out.println("Alpha-Beta TT:");
+            /*System.out.println("Alpha-Beta TT:");
             starttime = System.nanoTime();
             ReturnObject result_ab_2 = game2.alphabeta_withTT(-9999999, 9999999, i, true, Chessboard, new ReturnObject(0));
             endtime = System.nanoTime();
             System.out.println("Time taken in ms:" + (float) (endtime - starttime) / 1000000);
             System.out.println("Evaluation:" + result_ab_2.eval);
             System.out.println("Best Move" + result_ab_2.moves.getFirst());
-            System.out.println("----------------------------------------");
+            System.out.println("----------------------------------------");*/
 
         }
     }

@@ -6,7 +6,7 @@ import java.util.*;
 import com.opencsv.CSVWriter;
 
 public class MCTS {
-    private static final int SIMULATION_COUNT = 100000;
+    private static final int SIMULATION_COUNT = 200000;
     private MCTS_Node _root;
 
     public static void main(String[] args) {
@@ -23,6 +23,9 @@ public class MCTS {
         _root = root;
 
         for (int i = 0; i < SIMULATION_COUNT; i++) {
+            if(i%100000 == 0){
+                System.out.println(i/100000 + "%");
+            }
             MCTS_Node selectedNode = select(root);
             //System.out.println("root visits:" + root.visits + " root score:" + root.score);
             //System.out.println("select:" + selectedNode.move);
@@ -32,7 +35,7 @@ public class MCTS {
             backpropagate(expandedNode, score);
         }
         LinkedList<LibEntry> list = new LinkedList<>();
-        propgateLibary(root,7, list);
+        propgateLibary(root,10, list);
         safeLibToFile(list);
         System.out.println(list);
         root.printTree();
