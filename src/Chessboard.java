@@ -1806,12 +1806,43 @@ public class Chessboard {
         return false;
     }
 
+    public boolean isGameOver_noCheckmate(){
+        BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+        BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+        if(!this.isBlackKing()){
+            return true;
+        }
+        if(!this.isWhiteKing()){
+            return true;
+        }
+        int whiteKingPos = white_king.allSetSquares().getFirst();
+        if(whiteKingPos == 27 | whiteKingPos == 28 | whiteKingPos == 35 | whiteKingPos == 36){
+            //white has won via king of the hill
+            if(!this.isCheck(true)) {
+                return true;
+            }
+        }
+        int blackKingPos = black_king.allSetSquares().getFirst();
+        if(blackKingPos == 27 | blackKingPos == 28 | blackKingPos == 35 | blackKingPos == 36){
+            //white has won via king of the hill
+            if(!this.isCheck(false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isGameOver_simple(){
         return !(isBlackKing() && isWhiteKing());
     }
 
     public boolean whiteHasWon(){
         BitBoard white_king = new BitBoard(White.getBoard() & King.getBoard());
+
+        if(!this.isWhiteKing()){
+            return false;
+        }
+
         if (this.isCheckmate(false)) {
             //black in checkmade
             return true;
@@ -1832,6 +1863,11 @@ public class Chessboard {
 
     public boolean blackHasWon(){
         BitBoard black_king = new BitBoard(Black.getBoard() & King.getBoard());
+
+        if(!this.isBlackKing()){
+            return false;
+        }
+
         if (this.isCheckmate(true)) {
             //white in checkmade
             return true;
@@ -1849,6 +1885,7 @@ public class Chessboard {
         }
         return false;
     }
+
 
     /*public long hash_func(Boolean whiteTurn){
         long hash = 0;
